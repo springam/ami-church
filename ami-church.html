@@ -1,0 +1,367 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AMI 교회</title>
+    <link rel="stylesheet" href="css/common.css">
+    <link rel="stylesheet" href="css/church.css">
+</head>
+<body>
+    <header>
+        <a href="index.html" class="logo">
+            <img src="images/logo1.png" alt="AMI 교회 로고">
+        </a>
+        <nav>
+            <a href="ami-church.html">AMI 교회</a>
+            <a href="#mission">선교 센터</a>
+            <a href="#sermon">설교 영상</a>
+            <a href="#international">International</a>
+        </nav>
+        <div class="search-icon">
+            <svg width="32" height="32" viewBox="0 0 32 32" fill="none">
+                <circle cx="14" cy="14" r="9" stroke="#fff" stroke-width="2"/>
+                <path d="M21 21L27 27" stroke="#fff" stroke-width="2" stroke-linecap="round"/>
+            </svg>
+        </div>
+    </header>
+
+    <section class="hero">
+        <h1>AMI 교회</h1>
+    </section>
+
+    <div class="content">
+        <div class="content-wrapper">
+            <nav class="lnb">
+                <ul>
+                    <li><a href="#greeting" data-page="greeting" data-file="greeting.html" class="active">인사말</a></li>
+                    <li><a href="#intro" data-page="intro" data-file="intro.html">교회 소개</a></li>
+                    <li><a href="#schedule" data-page="schedule" data-file="schedule.html">예배 시간</a></li>
+                    <li><a href="#location" data-page="location" data-file="location.html">오시는 길</a></li>
+                </ul>
+            </nav>
+            
+            <div class="content-area" id="contentArea">
+                <div class="loading">컨텐츠를 불러오는 중...</div>
+            </div>
+        </div>
+    </div>
+
+    <footer>
+        <div class="footer-content">
+            <div>
+                <div class="footer-logo">
+                    <img src="images/logo_footer.png" alt="AMI 교회 로고">
+                </div>
+                <div class="footer-info">
+                    <p>Tel : 82-31-265-1455, 82-31-263-7450</p>
+                    <p>Fax : 82-31-266-7450</p>
+                    <p>187, Dongchun-Dong, Suji-Gu, Yongin-City, Kyunggi-Do, Korea</p>
+                    <p style="margin-top:20px;">© Copyrights 2025 AMI Missions International. All rights reserved.</p>
+                </div>
+            </div>
+            
+            <div class="footer-nav">
+                <div class="footer-section">
+                    <h3><a href="#greeting" data-page="greeting" data-file="greeting.html">AMI 교회</a></h3>
+                    <ul>
+                        <li><a href="#greeting" data-page="greeting" data-file="greeting.html">인사말</a></li>
+                        <li><a href="#intro" data-page="intro" data-file="intro.html">교회 소개</a></li>
+                        <li><a href="#schedule" data-page="schedule" data-file="schedule.html">예배 시간</a></li>
+                        <li><a href="#location" data-page="location" data-file="location.html">오시는 길</a></li>
+                    </ul>
+                </div>
+                
+                <div class="footer-section">
+                    <h3><a href="#">선교 센터</a></h3>
+                    <ul>
+                        <li><a href="#">센터 소개</a></li>
+                        <li><a href="#">섬기는 사람들</a></li>
+                    </ul>
+                </div>
+                
+                <div class="footer-section">
+                    <h3><a href="#">설교 영상</a></h3>
+                    <ul>
+                        <li><a href="#">한국 예배</a></li>
+                        <li><a href="#">ABA</a></li>
+                        <li><a href="#">AVS</a></li>
+                        <li><a href="#">AVCK</a></li>
+                    </ul>
+                </div>
+                
+                <div class="footer-section">
+                    <h3><a href="#">International</a></h3>
+                </div>
+            </div>
+            
+            <div class="scroll-top" onclick="window.scrollTo({top: 0, behavior: 'smooth'})">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
+                    <path d="M12 20V4M12 4L6 10M12 4L18 10" stroke="#000" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                </svg>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        /* ========================================
+           1. 페이지 설정 - 각 메뉴와 HTML 파일 매핑
+           ======================================== */
+        // 페이지 이름(키)과 실제 HTML 파일명(값)을 연결하는 객체
+        // 예: 'greeting' 메뉴 클릭 시 → 'greeting.html' 파일 로드
+        const pageFiles = {
+            greeting: 'greeting.html',    // 인사말 페이지
+            intro: 'intro.html',          // 교회 소개 페이지
+            schedule: 'schedule.html',    // 예배 시간 페이지
+            location: 'location.html'     // 오시는 길 페이지
+        };
+
+        /* ========================================
+           2. 외부 HTML 파일 로드 함수
+           ======================================== */
+        /**
+         * 외부 HTML 파일의 전체 내용을 그대로 가져오는 비동기 함수
+         * @param {string} filename - 로드할 HTML 파일명 (예: 'greeting.html')
+         * @returns {Promise<string>} - HTML 컨텐츠 문자열
+         */
+        async function loadContentFromFile(filename) {
+            try {
+                // STEP 1: Fetch API를 사용하여 외부 HTML 파일 요청
+                // await: 파일 다운로드가 완료될 때까지 대기
+                const response = await fetch(filename);
+                
+                // STEP 2: HTTP 응답 상태 확인 (404, 500 등의 에러 체크)
+                if (!response.ok) {
+                    throw new Error(`파일을 불러올 수 없습니다: ${filename}`);
+                }
+                
+                // STEP 3: 응답 본문을 텍스트(HTML 문자열)로 변환하고 그대로 반환
+                // 파일에는 순수 컨텐츠만 있으므로 파싱 없이 그대로 사용
+                const html = await response.text();
+                return html;
+                
+            } catch (error) {
+                // STEP 4: 에러 발생 시 콘솔에 로그 출력 및 에러 메시지 HTML 반환
+                console.error('Error loading content:', error);
+                return `
+                    <div class="error-message">
+                        <h3>컨텐츠를 불러올 수 없습니다</h3>
+                        <p>${error.message}</p>
+                        <p>로컬 서버 환경에서 실행해주세요. (예: Live Server, Python HTTP Server 등)</p>
+                    </div>
+                `;
+            }
+        }
+
+        /* ========================================
+           3. 컨텐츠 로드 및 화면 전환 함수
+           ======================================== */
+        /**
+         * 지정된 페이지의 컨텐츠를 로드하고 화면에 표시하는 비동기 함수
+         * @param {string} page - 로드할 페이지 이름 (예: 'greeting', 'intro')
+         * @param {boolean} shouldScroll - 스크롤 여부 (기본값: true, 초기 로드 시 false)
+         */
+        async function loadContent(page, shouldScroll = true) {
+            // STEP 1: 컨텐츠를 표시할 DOM 요소 가져오기
+            const contentArea = document.getElementById('contentArea');
+            // STEP 2: pageFiles 객체에서 페이지 이름에 해당하는 파일명 찾기
+            const filename = pageFiles[page];
+            
+            // STEP 3: 유효하지 않은 페이지 이름인 경우 에러 메시지 표시
+            if (!filename) {
+                contentArea.innerHTML = '<p>페이지를 찾을 수 없습니다.</p>';
+                return;
+            }
+            
+            // STEP 4: 페이드 아웃 효과 시작
+            // 'fade-out' 클래스 추가 → CSS transition으로 opacity: 1 → 0
+            contentArea.classList.add('fade-out');
+            
+            // STEP 5: 300ms 후에 실행 (페이드 아웃 애니메이션 완료 대기)
+            setTimeout(async () => {
+                // STEP 6: 로딩 중 메시지 표시
+                contentArea.innerHTML = '<div class="loading">컨텐츠를 불러오는 중...</div>';
+                
+                // STEP 7: 외부 파일에서 컨텐츠 로드 (비동기)
+                const content = await loadContentFromFile(filename);
+                
+                // STEP 8: 로드된 컨텐츠를 DOM에 삽입
+                // innerHTML: 기존 내용을 완전히 새로운 HTML로 교체
+                contentArea.innerHTML = content;
+
+                // STEP 8-1: intro 페이지인 경우 타임라인 초기화
+                if (page === 'intro') {
+                    initTimeline();
+                }
+                
+                // STEP 9: 페이드 인 효과 (fade-out 클래스 제거)
+                // 클래스 제거 → CSS transition으로 opacity: 0 → 1
+                contentArea.classList.remove('fade-out');
+                
+                // STEP 10: 메뉴 클릭 시에만 컨텐츠 영역으로 스크롤 (초기 로드 시에는 스크롤 안 함)
+                if (shouldScroll) {
+                    const contentSection = document.querySelector('.content');
+                    if (contentSection) {
+                        contentSection.scrollIntoView({ 
+                            behavior: 'smooth',  // 부드러운 스크롤
+                            block: 'start'       // 요소의 상단이 보이도록
+                        });
+                    }
+                }
+            }, 300);  // 페이드 아웃 애니메이션 시간과 동일
+        }
+
+        /* ========================================
+           4. 메뉴 활성화 상태 관리 함수
+           ======================================== */
+        /**
+         * 현재 선택된 메뉴를 시각적으로 하이라이트 표시
+         * @param {string} page - 활성화할 페이지 이름
+         */
+        function setActiveMenu(page) {
+            // STEP 1: LNB와 푸터의 모든 메뉴 링크에서 'active' 클래스 제거
+            // querySelectorAll: 조건에 맞는 모든 요소를 NodeList로 반환
+            // forEach: 각 요소에 대해 반복 작업 수행
+            document.querySelectorAll('.lnb a, .footer-section a').forEach(link => {
+                link.classList.remove('active');
+            });
+            
+            // STEP 2: 현재 페이지와 일치하는 data-page 속성을 가진 모든 링크에 'active' 클래스 추가
+            // 템플릿 리터럴로 동적 선택자 생성: [data-page="greeting"]
+            // LNB와 푸터에 있는 같은 메뉴가 모두 활성화됨
+            document.querySelectorAll(`[data-page="${page}"]`).forEach(link => {
+                link.classList.add('active');  // 파란색 배경 + 흰색 글씨 스타일 적용
+            });
+        }
+
+        /* ========================================
+           5. 이벤트 리스너 등록 (페이지 로드 시 실행)
+           ======================================== */
+        // DOMContentLoaded: HTML 문서 파싱이 완료되면 실행 (이미지 등 리소스 로드 전)
+        document.addEventListener('DOMContentLoaded', () => {
+            
+            /* ----- 5-1. 초기 페이지 로드 ----- */
+            // URL의 해시(#greeting, #intro 등)를 확인하여 초기 페이지 결정
+            // window.location.hash: 현재 URL의 # 뒤 부분 (예: "#greeting")
+            // substring(1): # 제거 (예: "#greeting" → "greeting")
+            // || 'greeting': 해시가 없으면 기본값으로 'greeting' 사용
+            const hash = window.location.hash.substring(1) || 'greeting';
+            // pageFiles 객체에 해당 키가 있는지 확인 (유효성 검사)
+            const initialPage = pageFiles[hash] ? hash : 'greeting';
+            // 초기 컨텐츠 로드 (shouldScroll = false로 스크롤 안 함)
+            loadContent(initialPage, false);
+            setActiveMenu(initialPage);
+            
+            /* ----- 5-2. LNB(왼쪽 네비게이션) 메뉴 클릭 이벤트 ----- */
+            // data-page 속성을 가진 모든 LNB 링크에 이벤트 리스너 등록
+            document.querySelectorAll('.lnb a[data-page]').forEach(link => {
+                link.addEventListener('click', (e) => {
+                    // 기본 링크 동작 방지 (페이지 새로고침 방지)
+                    e.preventDefault();
+                    // 클릭된 링크의 data-page 속성 값 가져오기
+                    const page = link.getAttribute('data-page');
+                    // 해당 페이지 컨텐츠 로드 (shouldScroll 기본값 true 사용 - 스크롤됨)
+                    loadContent(page);
+                    // 메뉴 활성화 상태 업데이트
+                    setActiveMenu(page);
+                    // URL 해시 업데이트 (브라우저 히스토리에 추가)
+                    // 예: ami-church.html#intro
+                    window.location.hash = page;
+                });
+            });
+            
+            /* ----- 5-3. 푸터 메뉴 클릭 이벤트 ----- */
+            // data-page 속성을 가진 모든 푸터 링크에 이벤트 리스너 등록
+            document.querySelectorAll('.footer-section a[data-page]').forEach(link => {
+                link.addEventListener('click', (e) => {
+                    e.preventDefault();  // 기본 동작 방지
+                    const page = link.getAttribute('data-page');
+                    loadContent(page);   // 컨텐츠 로드 (스크롤됨)
+                    setActiveMenu(page); // 메뉴 활성화
+                    window.location.hash = page;  // URL 업데이트
+                    
+                    // 푸터는 페이지 하단에 있으므로 페이지 최상단으로 스크롤
+                    window.scrollTo({ 
+                        top: 0,              // 페이지 맨 위로
+                        behavior: 'smooth'   // 부드러운 스크롤
+                    });
+                });
+            });
+            
+            /* ----- 5-4. 브라우저 뒤로가기/앞으로가기 버튼 지원 ----- */
+            // hashchange: URL의 해시(#)가 변경될 때 발생하는 이벤트
+            // 뒤로가기/앞으로가기 버튼 클릭 시에도 작동
+            window.addEventListener('hashchange', () => {
+                // 변경된 해시에서 페이지 이름 추출
+                const hash = window.location.hash.substring(1) || 'greeting';
+                const page = pageFiles[hash] ? hash : 'greeting';
+                // 해당 페이지로 컨텐츠 변경 (스크롤됨)
+                loadContent(page);
+                setActiveMenu(page);
+            });
+        });
+
+        /* intro.html script */
+
+        /* ========================================
+            6. 타임라인 데이터 및 생성 함수
+         ======================================== */
+
+        // 타임라인 데이터 배열
+        const timelineData = [
+            { year: '1999', date: '10.10', content: '한빛교회 창립예배' },
+            { year: '2000', date: '08.25', content: '조준호 선교 기념관 기공예배' },
+            { year: '2001', date: '10.28', content: '조준호 선교 기념관(AMI CENTER OPEN) 개관' },
+            { year: '2004', date: '10.10', content: '한빛교회 창립 5주년 기념 예배<br>(안착자) 권사 : 김자영, 문경자, 박귀경, 신만영' },
+            { year: '2005', date: '09', content: 'AMI교회로 교회명 변경' },
+            { year: '', date: '11.13', content: 'AMI교회 당회순수 기념 예배<br>(안착자) 장로 : 김동우, 이봉국, 이임남<br>권사 : 김성애, 정애선' },
+            { year: '2006', date: '11.19', content: '(안착자) 권사 : 이미란, 조영숙<br>안수집사 : 박관식' },
+            { year: '2007', date: '10.08', content: '(안착자) 권사 : 김성자, 안욱영, 이은숙, 이홍희, 정경희<br>안수집사 : 김국철, 김은일, 김종태, 이경숙, 이명택, 이영기, 전태산' },
+            { year: '2009', date: '10.11', content: '(안착자) 장로 : 김종태, 이영기<br>권사 : 김순연, 김혜주, 소복녀, 조영숙, 오진자, 유금자, 정회주, 조숙진<br>안수집사 : 김문택, 김정녀, 이영진' },
+            { year: '2010', date: '10.10', content: '(안착자) 권사 : 김소라, 손영나, 유미순, 이종옥, 임혜경<br>재임명 권사 : 계영희, 남명자<br>안수집사 : 계순화, 이석봉, 임승주, 황희<br>재임명 안수집사 : 이문규' },
+            { year: '2011', date: '10.16', content: '(안착자) 장로 : 김성남<br>권사 : 강정희, 박현숙<br>재임명 권사 : 김혜숙<br>안수집사 : 김대만' },
+            { year: '2012', date: '10.07', content: '(안착자) 명예장로 : 박경식, 이영진<br>장로 : 김국철, 김대만, 김정녀, 김종욱, 이영숙, 이명택, 이문규, 정승숙<br>권사 : 김은정, 박미라, 박선영, 양기순, 이은숙, 전영숙, 한은미<br>재임명 권사 : 김은정, 이경자<br>안수집사 : 이광렬, 정숙경, 임춘식' },
+            { year: '2013', date: '10.20', content: '(안착자) 장로 : 김순영, 이용길<br>권사 : 김명희, 임민섭, 정영희<br>재임명 권사 : 김선영, 김순영, 이재영, 이태리<br>안수집사 : 박병철, 박종희, 최상필, 최성일, 표선경, 허성흥' },
+            { year: '2014', date: '10.12', content: '(안착자) 권사 : 한은경, 한진환<br>재임명 권사 : 박영희, 임승순' },
+            { year: '2016', date: '10.02', content: '(안착자) 권사 : 강정화, 김명주, 김혜신, 남은숙, 이지현, 지미경<br>재임명 권사 : 김종림, 백덕선, 성기영, 이경희, 박은경<br>안수집사 : 김효린, 김재기, 이성욱, 전유근, 최병수<br>재임명 안수집사 : 이문규, 이동헌, 이승엽' },
+            { year: '2018', date: '04.15', content: '(안착자) 장로 : 김명도, 김재기, 박병철, 허성흥<br>재임명 장로 : 정진호<br>권사 : 김경숙, 김정숙, 김정연, 김명섭, 박수진, 서현숙, 서혜란, 송민숙<br>이영숙, 이정민, 이진연, 전숙, 조선미, 최덕순, 최영미, 최영임<br>재임명 권사 : 김석범, 강건영, 전금호, 박순숙<br>안수집사 : 공영호, 김덕종, 박흥순, 이은자<br>안수집사 : 공상돈, 김승석, 최승호<br>재임명 안수집사 : 홍성돈' },
+            { year: '2021', date: '10.10', content: '(안착자) 안수집사 : 이현붕 정명희 장동화<br>권사 : 박순임, 박해숙, 서원님, 서정민, 이정순, 이경희, 이영숙, 이현옥, 이문옥<br>한남숙, 정선섭, 정명숙' },
+            { year: '2022', date: '10.09', content: '(안착자) 장로 : 성영석, 황희' },
+            { year: '2023', date: '10.22', content: '(안착자) 장로 : 양순식, 이소선, 이민택, 전임남<br>안수 집사 : 고광택, 권혜우, 김혜우, 유상섭, 유은일, 윤영태, 이용석, 이종호' },
+            { year: '', date: '11.05', content: '(안착자) 명예장로 : 최갑순' }
+        ];
+
+        /**
+         * 타임라인 HTML 생성 함수
+         * @param {Array} data - 타임라인 데이터 배열
+         * @returns {string} - 생성된 HTML 문자열
+         */
+        function createTimeline(data) {
+            return data.map((item, index) => `
+                <div class="timeline-item">
+                    <div class="timeline-year">${item.year}</div>
+                    <div class="timeline-line">
+                        <div class="timeline-dot"></div>
+                    </div>
+                    <div class="timeline-content">
+                        <div class="timeline-date">${item.date}</div>
+                        <div class="timeline-text">${item.content}</div>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        /**
+         * 타임라인 초기화 함수
+         * intro.html이 로드되면 타임라인을 생성
+         */
+        function initTimeline() {
+            const timelineContainer = document.getElementById('timeline');
+            if (timelineContainer) {
+                timelineContainer.innerHTML = createTimeline(timelineData);
+            }
+        }
+
+    </script>
+</body>
+</html>
