@@ -4,18 +4,18 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>AMI 교회</title>
-    <link rel="stylesheet" href="css/common.css">
-    <link rel="stylesheet" href="css/church.css">
+    <link rel="stylesheet" href="assets/css/common.css">
+    <link rel="stylesheet" href="assets/css/church.css">
 </head>
 <body>
     <header>
         <a href="index.html" class="logo">
-            <img src="images/logo1.png" alt="AMI 교회 로고">
+            <img src="assets/images/logo1.png" alt="AMI 교회 로고">
         </a>
         <nav>
             <a href="ami-church.html">AMI 교회</a>
             <a href="#mission">선교 센터</a>
-            <a href="#sermon">설교 영상</a>
+            <a href="sermon-video.html">설교 영상</a>
             <a href="#international">International</a>
         </nav>
         <div class="search-icon">
@@ -51,7 +51,7 @@
         <div class="footer-content">
             <div>
                 <div class="footer-logo">
-                    <img src="images/logo_footer.png" alt="AMI 교회 로고">
+                    <img src="assets/images/logo_footer.png" alt="AMI 교회 로고">
                 </div>
                 <div class="footer-info">
                     <p>Tel : 82-31-265-1455, 82-31-263-7450</p>
@@ -63,12 +63,12 @@
             
             <div class="footer-nav">
                 <div class="footer-section">
-                    <h3><a href="#greeting" data-page="greeting" data-file="greeting.html">AMI 교회</a></h3>
+                    <h3><a href="#greeting" data-page="greeting" data-file="pages/greeting.html">AMI 교회</a></h3>
                     <ul>
-                        <li><a href="#greeting" data-page="greeting" data-file="greeting.html">인사말</a></li>
-                        <li><a href="#intro" data-page="intro" data-file="intro.html">교회 소개</a></li>
-                        <li><a href="#schedule" data-page="schedule" data-file="schedule.html">예배 시간</a></li>
-                        <li><a href="#location" data-page="location" data-file="location.html">오시는 길</a></li>
+                        <li><a href="#greeting" data-page="greeting" data-file="pages/greeting.html">인사말</a></li>
+                        <li><a href="#intro" data-page="intro" data-file="pages/intro.html">교회 소개</a></li>
+                        <li><a href="#schedule" data-page="schedule" data-file="pages/schedule.html">예배 시간</a></li>
+                        <li><a href="#location" data-page="location" data-file="pages/location.html">오시는 길</a></li>
                     </ul>
                 </div>
                 
@@ -110,10 +110,10 @@
         // 페이지 이름(키)과 실제 HTML 파일명(값)을 연결하는 객체
         // 예: 'greeting' 메뉴 클릭 시 → 'greeting.html' 파일 로드
         const pageFiles = {
-            greeting: 'greeting.html',    // 인사말 페이지
-            intro: 'intro.html',          // 교회 소개 페이지
-            schedule: 'schedule.html',    // 예배 시간 페이지
-            location: 'location.html'     // 오시는 길 페이지
+            greeting: 'pages/greeting.html',    // 인사말 페이지
+            intro: 'pages/intro.html',          // 교회 소개 페이지
+            schedule: 'pages/schedule.html',    // 예배 시간 페이지
+            location: 'pages/location.html'     // 오시는 길 페이지
         };
 
         /* ========================================

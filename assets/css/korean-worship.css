@@ -1,0 +1,436 @@
+/* ========================================
+   한국 예배 페이지 스타일
+   ======================================== */
+
+/* 헤더 영역 */
+.worship-header {
+    margin-bottom: 40px;
+}
+
+.worship-header h2 {
+    font-size: 48px;
+    font-weight: 700;
+    color: #1a1a1a;
+    margin-bottom: 30px;
+}
+
+/* 탭 네비게이션 */
+.worship-tabs {
+    display: flex;
+    gap: 60px;
+    margin-bottom: 40px;
+    padding: 24px 32px;
+    border-radius: 8px;
+    background: #EEF3F8;
+}
+
+.worship-tab {
+    font-size: 18px;
+    font-weight: 500;
+    color: #000;
+    cursor: pointer;
+    border-bottom: 3px solid transparent;
+    transition: all 0.3s ease;
+    position: relative;
+    bottom: -2px;
+}
+
+.worship-tab:hover {
+    color: #1a1a1a;
+}
+
+.worship-tab.active {
+    color: #0066cc;
+    border-bottom-color: #005CB2;
+    font-weight: 700;
+}
+
+/* 비디오 그리드 */
+.video-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 30px;
+    margin-bottom: 60px;
+    min-height: 400px;
+}
+
+/* 비디오 카드 */
+.video-card {
+    background: #fff;
+    border-radius: 12px;
+    overflow: hidden;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+}
+
+.video-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
+}
+
+.video-card.featured {
+    background: linear-gradient(135deg, #0066cc 0%, #004d99 100%);
+    color: white;
+}
+
+/* 썸네일 */
+.video-thumbnail {
+    width: 100%;
+    height: 200px;
+    object-fit: cover;
+    background: #f0f0f0;
+}
+
+.video-card.featured .video-thumbnail {
+    opacity: 0.9;
+}
+
+/* 카드 콘텐츠 */
+.video-content {
+    padding: 24px;
+}
+
+.video-title {
+    font-size: 18px;
+    font-weight: 600;
+    color: #1a1a1a;
+    line-height: 1.5;
+    margin-bottom: 12px;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+}
+
+.video-card.featured .video-title {
+    color: white;
+}
+
+.video-info {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: 12px;
+    padding-top: 12px;
+    border-top: 1px solid #e0e0e0;
+}
+
+.video-card.featured .video-info {
+    border-top-color: rgba(255, 255, 255, 0.3);
+}
+
+.video-preacher {
+    font-size: 14px;
+    color: #666;
+    font-weight: 500;
+}
+
+.video-card.featured .video-preacher {
+    color: rgba(255, 255, 255, 0.9);
+}
+
+.video-date {
+    font-size: 13px;
+    color: #999;
+}
+
+.video-card.featured .video-date {
+    color: rgba(255, 255, 255, 0.8);
+}
+
+/* 페이지네이션 */
+.pagination {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 10px;
+    margin-top: 40px;
+}
+
+.pagination-btn {
+    width: 40px;
+    height: 40px;
+    border: 1px solid #e0e0e0;
+    background: white;
+    border-radius: 4px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 14px;
+    color: #666;
+    transition: all 0.3s ease;
+}
+
+.pagination-btn:hover:not(.active):not(:disabled) {
+    border-color: #0066cc;
+    color: #0066cc;
+}
+
+.pagination-btn.active {
+    background: #0066cc;
+    color: white;
+    border-color: #0066cc;
+}
+
+.pagination-btn:disabled {
+    opacity: 0.3;
+    cursor: not-allowed;
+}
+
+/* 로딩 및 빈 상태 */
+.loading {
+    text-align: center;
+    padding: 60px 20px;
+    color: #666;
+    font-size: 16px;
+    grid-column: 1 / -1;
+}
+
+.empty-state {
+    text-align: center;
+    padding: 80px 20px;
+    color: #999;
+    grid-column: 1 / -1;
+}
+
+.empty-state-icon {
+    font-size: 48px;
+    margin-bottom: 20px;
+}
+
+.empty-state-text {
+    font-size: 16px;
+}
+
+/* ========================================
+   비디오 모달
+   ======================================== */
+
+.video-modal {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.9);
+    z-index: 10000;
+    align-items: center;
+    justify-content: center;
+}
+
+.video-modal.active {
+    display: flex;
+}
+
+.video-modal-content {
+    width: 90%;
+    max-width: 1200px;
+    background: white;
+    border-radius: 12px;
+    overflow: hidden;
+    position: relative;
+    animation: modalFadeIn 0.3s ease;
+}
+
+@keyframes modalFadeIn {
+    from {
+        opacity: 0;
+        transform: scale(0.95);
+    }
+    to {
+        opacity: 1;
+        transform: scale(1);
+    }
+}
+
+.video-modal-header {
+    padding: 24px;
+    border-bottom: 1px solid #e0e0e0;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.video-modal-title {
+    font-size: 24px;
+    font-weight: 700;
+    color: #1a1a1a;
+    margin: 0;
+    flex: 1;
+    padding-right: 20px;
+}
+
+.video-modal-close {
+    background: none;
+    border: none;
+    font-size: 32px;
+    color: #666;
+    cursor: pointer;
+    width: 40px;
+    height: 40px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+    transition: all 0.3s ease;
+    flex-shrink: 0;
+}
+
+.video-modal-close:hover {
+    background: #f0f0f0;
+    color: #000;
+}
+
+.video-modal-body {
+    padding: 0;
+    background: #000;
+}
+
+.video-modal-iframe {
+    width: 100%;
+    height: 600px;
+    border: none;
+    display: block;
+}
+
+.video-modal-info {
+    padding: 24px;
+    background: #f8f8f8;
+}
+
+.video-modal-meta {
+    display: flex;
+    gap: 24px;
+    margin-bottom: 16px;
+    color: #666;
+    font-size: 14px;
+}
+
+.video-modal-description {
+    color: #333;
+    line-height: 1.6;
+    font-size: 15px;
+    white-space: pre-wrap;
+}
+
+/* ========================================
+   반응형 디자인
+   ======================================== */
+
+/* 태블릿 */
+@media (max-width: 1024px) {
+    .video-grid {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 24px;
+    }
+
+    .worship-header h2 {
+        font-size: 40px;
+    }
+
+    .worship-tabs {
+        gap: 40px;
+        padding: 20px 24px;
+    }
+
+    .video-modal-iframe {
+        height: 400px;
+    }
+}
+
+/* 모바일 */
+@media (max-width: 768px) {
+    .video-grid {
+        grid-template-columns: 1fr;
+        gap: 20px;
+    }
+
+    .worship-header h2 {
+        font-size: 32px;
+        margin-bottom: 20px;
+    }
+
+    .worship-tabs {
+        gap: 20px;
+        padding: 16px 20px;
+        overflow-x: auto;
+        -webkit-overflow-scrolling: touch;
+    }
+
+    .worship-tab {
+        white-space: nowrap;
+        font-size: 16px;
+    }
+
+    .video-content {
+        padding: 20px;
+    }
+
+    .video-title {
+        font-size: 16px;
+    }
+
+    .video-modal-content {
+        width: 95%;
+        margin: 20px;
+    }
+
+    .video-modal-header {
+        padding: 16px;
+    }
+
+    .video-modal-title {
+        font-size: 18px;
+    }
+
+    .video-modal-iframe {
+        height: 250px;
+    }
+
+    .video-modal-info {
+        padding: 16px;
+    }
+
+    .video-modal-meta {
+        flex-direction: column;
+        gap: 8px;
+    }
+
+    .pagination {
+        gap: 6px;
+    }
+
+    .pagination-btn {
+        width: 36px;
+        height: 36px;
+        font-size: 13px;
+    }
+}
+
+/* 작은 모바일 */
+@media (max-width: 480px) {
+    .worship-header h2 {
+        font-size: 28px;
+    }
+
+    .worship-tabs {
+        gap: 16px;
+        padding: 12px 16px;
+    }
+
+    .worship-tab {
+        font-size: 14px;
+    }
+
+    .video-thumbnail {
+        height: 180px;
+    }
+
+    .video-modal-iframe {
+        height: 200px;
+    }
+}
