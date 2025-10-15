@@ -1,4 +1,38 @@
-// korean-worship.js
+/**
+ * 비디오 모달 생성
+ */
+function createVideoModal() {
+    // 기존 모달이 있으면 제거
+    const existingModal = document.getElementById('videoModal');
+    if (existingModal) {
+        existingModal.remove();
+    }
+
+    // 모달 HTML 생성
+    const modalHTML = `
+        <div id="videoModal" class="video-modal">
+            <div class="video-modal-content">
+                <div class="video-modal-header">
+                    <h3 class="video-modal-title" id="modalTitle"></h3>
+                    <button class="video-modal-close" onclick="closeVideoModal()">&times;</button>
+                </div>
+                <div class="video-modal-body">
+                    <iframe id="modalIframe" class="video-modal-iframe" allowfullscreen></iframe>
+                </div>
+                <div class="video-modal-info">
+                    <div class="video-modal-meta">
+                        <span id="modalPreacher"></span>
+                        <span id="modalDate"></span>
+                    </div>
+                    <div class="video-modal-description" id="modalDescription"></div>
+                </div>
+            </div>
+        </div>
+    `;
+
+    // body에 모달 추가
+    document.body.insertAdjacentHTML('beforeend', modalHTML);
+}// korean-worship.js
 import { initializeApp } from "https://www.gstatic.com/firebasejs/12.4.0/firebase-app.js";
 import { getAnalytics } from "https://www.gstatic.com/firebasejs/12.4.0/firebase-analytics.js";
 import { getFirestore, collection, query, where, orderBy, getDocs } from "https://www.gstatic.com/firebasejs/12.4.0/firebase-firestore.js";
@@ -183,11 +217,10 @@ function renderVideos(videos, page = 1) {
         const isFeatured = index === 4 && pageVideos.length > 4;
         return `
             <div class="video-card ${isFeatured ? 'featured' : ''}" onclick='playVideo(${JSON.stringify(video).replace(/'/g, "&apos;")})'>
-                <img src="${video.thumbnail}" alt="${video.title}" class="video-thumbnail" onerror="this.src='assets/images/thumbnails/default-thumbnail.png'">
                 <div class="video-content">
                     <div class="video-title">${video.title}</div>
+                    ${video.description ? `<div class="video-description">${video.description}</div>` : ''}
                     <div class="video-info">
-                        ${video.preacher ? `<div class="video-preacher">${video.preacher}</div>` : '<div></div>'}
                         <div class="video-date">${video.date}</div>
                     </div>
                 </div>

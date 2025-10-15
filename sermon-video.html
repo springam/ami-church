@@ -6,6 +6,7 @@
     <title>AMI 교회</title>
     <link rel="stylesheet" href="assets/css/common.css">
     <link rel="stylesheet" href="assets/css/church.css">
+    <link rel="stylesheet" href="assets/css/korean-worship.css">
 </head>
 <body>
     <header>
@@ -199,7 +200,7 @@
                     
                     const script = document.createElement('script');
                     script.type = 'module';
-                    script.src = '../assets/js/korean-worship.js';
+                    script.src = 'assets/js/korean-worship.js';
                     script.onload = async () => {
                         console.log('✅ korean-worship.js 로드 완료');
                         const module = await import('./assets/js/korean-worship.js');

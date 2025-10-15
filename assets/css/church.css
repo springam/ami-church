@@ -3,7 +3,7 @@
    ========================================== */
 .hero {
     position: relative;
-    height: 480px;
+    height: 340px;
     overflow: hidden;
     margin: 0;
     background-image: url('../images/bg_church.png');
@@ -34,7 +34,7 @@
    ========================================== */
 .hero-sermon {
     position: relative;
-    height: 480px;
+    height: 340px;
     overflow: hidden;
     margin: 0;
     background-image: url('../images/bg_sermon.png');

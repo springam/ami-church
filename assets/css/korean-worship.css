@@ -62,6 +62,12 @@
     cursor: pointer;
     transition: all 0.3s ease;
     box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+    padding: 32px 24px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    aspect-ratio: 1 / 1;  /* 정사각형 */
+    position: relative;
 }
 
 .video-card:hover {
@@ -74,66 +80,72 @@
     color: white;
 }
 
-/* 썸네일 */
+/* 썸네일 제거 */
 .video-thumbnail {
-    width: 100%;
-    height: 200px;
-    object-fit: cover;
-    background: #f0f0f0;
-}
-
-.video-card.featured .video-thumbnail {
-    opacity: 0.9;
+    display: none;
 }
 
 /* 카드 콘텐츠 */
 .video-content {
-    padding: 24px;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    height: 100%;
 }
 
 .video-title {
-    font-size: 18px;
+    font-size: 20px;
     font-weight: 600;
     color: #1a1a1a;
     line-height: 1.5;
     margin-bottom: 12px;
     display: -webkit-box;
-    -webkit-line-clamp: 2;
-    line-clamp: 2;
+    -webkit-line-clamp: 3;
+    line-clamp: 3;
     -webkit-box-orient: vertical;
     overflow: hidden;
+    flex-shrink: 0;
 }
 
 .video-card.featured .video-title {
     color: white;
 }
 
-.video-info {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin-top: 12px;
-    padding-top: 12px;
-    border-top: 1px solid #e0e0e0;
+.video-description {
+    font-size: 14px;
+    color: #666;
+    line-height: 1.6;
+    margin-bottom: auto;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+    background: #E3DFF5;
+    border-radius: 4px;
+    padding: 12px 16px;
 }
 
-.video-card.featured .video-info {
-    border-top-color: rgba(255, 255, 255, 0.3);
+.video-card.featured .video-description {
+    color: #fff;
+    background: rgba(255, 255, 255, 0.2);
+}
+
+.video-info {
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+    margin-top: 16px;
 }
 
 .video-preacher {
-    font-size: 14px;
-    color: #666;
-    font-weight: 500;
-}
-
-.video-card.featured .video-preacher {
-    color: rgba(255, 255, 255, 0.9);
+    display: none;
 }
 
 .video-date {
     font-size: 13px;
     color: #999;
+    font-weight: 500;
 }
 
 .video-card.featured .video-date {
@@ -214,16 +226,19 @@
     position: fixed;
     top: 0;
     left: 0;
-    width: 100%;
-    height: 100%;
+    right: 0;
+    bottom: 0;
+    width: 100vw;
+    height: 100vh;
     background: rgba(0, 0, 0, 0.9);
-    z-index: 10000;
+    z-index: 999999;
     align-items: center;
     justify-content: center;
+    padding: 20px;
 }
 
 .video-modal.active {
-    display: flex;
+    display: flex !important;
 }
 
 .video-modal-content {
@@ -337,6 +352,14 @@
         padding: 20px 24px;
     }
 
+    .video-card {
+        padding: 28px 20px;
+    }
+
+    .video-title {
+        font-size: 18px;
+    }
+
     .video-modal-iframe {
         height: 400px;
     }
@@ -366,12 +389,18 @@
         font-size: 16px;
     }
 
-    .video-content {
-        padding: 20px;
+    .video-card {
+        padding: 24px 20px;
     }
 
     .video-title {
-        font-size: 16px;
+        font-size: 18px;
+        margin-bottom: 12px;
+    }
+
+    .video-description {
+        font-size: 13px;
+        padding: 10px 14px;
     }
 
     .video-modal-content {
@@ -426,8 +455,21 @@
         font-size: 14px;
     }
 
-    .video-thumbnail {
-        height: 180px;
+    .video-card {
+        padding: 20px 16px;
+    }
+
+    .video-title {
+        font-size: 16px;
+    }
+
+    .video-description {
+        font-size: 12px;
+        padding: 8px 12px;
+    }
+
+    .video-date {
+        font-size: 12px;
     }
 
     .video-modal-iframe {
