@@ -219,7 +219,11 @@ function renderVideos(videos, page = 1) {
             <div class="video-card ${isFeatured ? 'featured' : ''}" onclick='playVideo(${JSON.stringify(video).replace(/'/g, "&apos;")})'>
                 <div class="video-content">
                     <div class="video-title">${video.title}</div>
-                    ${video.description ? `<div class="video-description">${video.description}</div>` : ''}
+                    ${video.description ? `
+                        <div class="video-description-wrapper">
+                            <span class="video-description">${video.description}</span>
+                        </div>
+                    ` : ''}
                     <div class="video-info">
                         <div class="video-date">${video.date}</div>
                     </div>
