@@ -34,6 +34,15 @@ const itemsPerPage = 9;
 let totalPages = 1;
 let allVideos = [];
 let currentVideoIndex = -1;
+let currentSubCategory = null; // ⭐ 현재 선택된 서브카테고리
+
+// ⭐ 카테고리별 서브카테고리 설정 (나중에 쉽게 변경 가능)
+const SUB_CATEGORIES = {
+    scripture: ['옵기서', '요나서', '마태복음 5장', '마태복음 13장', '마태복음 16장', '누가복음', '요한복음', '사도행전', '로마서', '로마서 9장~11장', '고린도전서', '빌립보서', '빌레몬서', '야고보서'],
+    topic: ['옵기서', '요나서', '미가서', '나훔서', '하박국서', '스바냐서', '학개서', '스가랴서', '말라기서', '마태복음', '마가복음', '누가복음', '요한복음', '야고보서'],
+    column: ['옵기서', '요나서', '미가서', '나훔서', '하박국서', '스바냐서', '학개서', '스가랴서', '말라기서', '마태복음', '마가복음', '누가복음', '요한복음', '야고보서'],
+    weekly: [] // 이번주 설교는 서브메뉴 없음
+};
 
 /**
  * YouTube URL을 임베드 URL로 변환
@@ -128,6 +137,7 @@ async function fetchVideos(category) {
                 category: data.category,
                 preacher: data.preacher || '',
                 description: data.description || '',
+                subCategory: data.subCategory || '', // ⭐ subCategory 추가
                 thumbnail: data.thumbnail || 'assets/images/thumbnails/default-thumbnail.jpg',
                 videoUrl: data.videoUrl || ''
             });
@@ -163,9 +173,15 @@ function renderVideos(videos, page = 1) {
         return;
     }
 
+    // ⭐ 서브카테고리 필터링
+    let filteredVideos = videos;
+    if (currentSubCategory) {
+        filteredVideos = videos.filter(video => video.subCategory === currentSubCategory);
+    }
+
     const startIndex = (page - 1) * itemsPerPage;
     const endIndex = startIndex + itemsPerPage;
-    const pageVideos = videos.slice(startIndex, endIndex);
+    const pageVideos = filteredVideos.slice(startIndex, endIndex);
 
     if (pageVideos.length === 0) {
         videoGrid.innerHTML = `
@@ -180,10 +196,13 @@ function renderVideos(videos, page = 1) {
     videoGrid.innerHTML = pageVideos.map((video, index) => {
         const isFeatured = index === 4 && pageVideos.length > 4;
         const backgroundStyle = video.thumbnail ? `style="background-image: url('${video.thumbnail}');"` : '';
+        // ⭐ weekly가 아닐 때만 subCategory 표시
+        const showSubCategory = currentCategory !== 'weekly' && video.subCategory;
         
         return `
             <div class="video-card ${isFeatured ? 'featured' : ''}" ${backgroundStyle} onclick='playVideo(${JSON.stringify(video).replace(/'/g, "&apos;")})'>
                 <div class="video-content">
+                    ${showSubCategory ? `<div class="video-subcategory">${video.subCategory}</div>` : ''}
                     <div class="video-title">${video.title}</div>
                     ${video.description ? `
                         <div class="video-description-wrapper">
@@ -197,6 +216,77 @@ function renderVideos(videos, page = 1) {
             </div>
         `;
     }).join('');
+    
+    // ⭐ 필터링된 결과로 페이지네이션 업데이트
+    renderPagination(filteredVideos.length, page);
+}
+
+/**
+ * 서브메뉴 생성 (weekly 제외한 모든 카테고리)
+ */
+function renderSubMenu() {
+    const subMenu = document.getElementById('subMenu');
+    const subMenuItems = document.getElementById('subMenuItems');
+    const worshipTabs = document.querySelector('.worship-tabs');
+    
+    if (!subMenu || !subMenuItems || !worshipTabs) return;
+    
+    // ⭐ weekly는 서브메뉴 없음
+    if (currentCategory === 'weekly') {
+        subMenu.style.display = 'none';
+        worshipTabs.classList.remove('has-submenu');
+        console.log('✅ 서브메뉴 숨김 - has-submenu 제거됨');
+        return;
+    }
+    
+    // ⭐ 현재 카테고리의 고정 서브카테고리 목록 가져오기
+    const subCategories = SUB_CATEGORIES[currentCategory] || [];
+    
+    if (subCategories.length === 0) {
+        subMenu.style.display = 'none';
+        worshipTabs.classList.remove('has-submenu');
+        console.log('✅ 서브카테고리 없음 - has-submenu 제거됨');
+        return;
+    }
+    
+    // 서브메뉴 표시
+    subMenu.style.display = 'block';
+    worshipTabs.classList.add('has-submenu');
+    console.log('✅ 서브메뉴 표시 - has-submenu 추가됨');
+    
+    // ⭐ 서브메뉴 아이템 생성 ('전체' 버튼 제거)
+    let subMenuHTML = '';
+    
+    subCategories.forEach(subCategory => {
+        subMenuHTML += `
+            <div class="sub-menu-item ${currentSubCategory === subCategory ? 'active' : ''}" 
+                 onclick="filterBySubCategory('${subCategory}')">
+                ${subCategory}
+            </div>
+        `;
+    });
+    
+    subMenuItems.innerHTML = subMenuHTML;
+}
+
+/**
+ * 서브카테고리로 필터링
+ */
+window.filterBySubCategory = function(subCategory) {
+    currentSubCategory = subCategory;
+    currentPage = 1; // 페이지 초기화
+    
+    renderVideos(allVideos, currentPage);
+    renderSubMenu(); // ⭐ 파라미터 제거
+    
+    // 스크롤 위치 조정
+    const worshipContainer = document.querySelector('.worship-container');
+    if (worshipContainer) {
+        worshipContainer.scrollIntoView({ 
+            behavior: 'smooth', 
+            block: 'start' 
+        });
+    }
 }
 
 /**
@@ -246,7 +336,6 @@ window.changePage = function(page) {
     if (page < 1 || page > totalPages) return;
     currentPage = page;
     renderVideos(allVideos, currentPage);
-    renderPagination(allVideos.length, currentPage);
     
     const worshipContainer = document.querySelector('.worship-container');
     if (worshipContainer) {
@@ -264,10 +353,9 @@ window.playVideo = function(video) {
     // 현재 비디오의 인덱스 찾기
     currentVideoIndex = allVideos.findIndex(v => v.id === video.id);
     
-    // 그리드 뷰 숨기기
+    // ⭐ 그리드 뷰와 헤더 모두 숨기기
     const videoGrid = document.getElementById('videoGrid');
     const pagination = document.getElementById('pagination');
-    // ⭐ 그리드 뷰와 헤더 모두 숨기기
     const worshipHeader = document.querySelector('.worship-header');
     
     if (videoGrid) videoGrid.style.display = 'none';
@@ -292,8 +380,6 @@ window.playVideo = function(video) {
     
     // 상세 뷰 HTML 생성
     detailView.innerHTML = `
-        
-        
         <div class="video-detail-header">
             <h2 class="video-detail-title">${video.title}</h2>
             <div class="video-detail-meta">
@@ -336,14 +422,12 @@ window.playVideo = function(video) {
 
         <div class="back-to-list-container">
             <button class="back-to-list" onclick="backToList()">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                <path d="M19 12H5M5 12L12 19M5 12L12 5"/>
-            </svg>
-            목록으로
-        </button>
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M19 12H5M5 12L12 19M5 12L12 5"/>
+                </svg>
+                목록으로
+            </button>
         </div>
-
-        
     `;
     
     detailView.style.display = '';  // 인라인 스타일 초기화
@@ -372,6 +456,7 @@ window.backToList = function() {
         detailView.classList.remove('active');
     }
     
+    // ⭐ 헤더와 그리드 뷰 다시 표시
     if (videoGrid) videoGrid.style.display = 'grid';
     if (pagination) pagination.style.display = 'flex';
     if (worshipHeader) worshipHeader.style.display = 'block';
@@ -394,6 +479,7 @@ async function changeCategory(category) {
 
     currentCategory = category;
     currentPage = 1;
+    currentSubCategory = null; // ⭐ 서브카테고리 필터 초기화
 
     document.querySelectorAll('.worship-tab').forEach(tab => {
         tab.classList.remove('active');
@@ -417,7 +503,7 @@ async function changeCategory(category) {
 
     allVideos = await fetchVideos(category);
     renderVideos(allVideos, currentPage);
-    renderPagination(allVideos.length, currentPage);
+    renderSubMenu(); // ⭐ 파라미터 제거
 }
 
 /**
@@ -441,7 +527,7 @@ export async function initKoreanWorship() {
     console.log('📦 로드된 비디오:', allVideos);
     
     renderVideos(allVideos, currentPage);
-    renderPagination(allVideos.length, currentPage);
+    renderSubMenu(); // ⭐ 파라미터 제거
     
     console.log('✅ 초기화 완료!');
 }

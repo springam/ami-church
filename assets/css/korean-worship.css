@@ -4,7 +4,7 @@
 
 /* 헤더 영역 */
 .worship-header {
-    margin-bottom: 40px;
+    margin-bottom: 0px;
 }
 
 .worship-header h2 {
@@ -18,10 +18,21 @@
 .worship-tabs {
     display: flex;
     gap: 60px;
-    margin-bottom: 40px;
+    margin-bottom: 0;
     padding: 24px 32px;
     border-radius: 8px;
     background: #EEF3F8;
+}
+
+/* 서브메뉴가 없을 때만 하단 마진 추가 */
+.worship-tabs:not(.has-submenu) {
+    margin-bottom: 40px;
+}
+
+/* 서브메뉴가 있을 때 하단 radius 제거 */
+.worship-tabs.has-submenu {
+    border-bottom-left-radius: 0 !important;
+    border-bottom-right-radius: 0 !important;
 }
 
 .worship-tab {
@@ -43,6 +54,51 @@
     color: #0066cc;
     border-bottom-color: #005CB2;
     font-weight: 700;
+}
+
+/* 서브메뉴 */
+.sub-menu {
+    margin-top: 0;
+    margin-bottom: 0;
+    padding: 16px 32px;
+    background: #fff;
+    border: 1px solid #EAEAEA;
+    border-top: none;
+    border-radius: 0 0 8px 8px;
+}
+
+/* 서브메뉴 아래에 여백 추가 */
+.worship-header:has(.sub-menu[style*="display: block"]) {
+    margin-bottom: 40px;
+}
+
+.sub-menu-items {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 12px;
+}
+
+.sub-menu-item {
+    padding: 4px 8px;
+    background: #fff;
+    border-radius: 2px;
+    font-size: 16px;
+    font-weight: 400;
+    color: #666;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    gap: 20px
+}
+
+.sub-menu-item:hover {
+    border-color: #0066cc;
+    color: #0066cc;
+}
+
+.sub-menu-item.active {
+    background: #EEF3F8;
+    color: #00479D;
+    border-color: #EEF3F8;
 }
 
 /* 비디오 그리드 */
@@ -93,6 +149,13 @@
     height: 100%;
 }
 
+.video-subcategory {
+    font-size: 16px;
+    font-weight: 700;
+    color: #000;
+    margin-bottom: 8px;
+}
+
 .video-title {
     font-size: 20px;
     font-weight: 400;
@@ -125,6 +188,11 @@
 .video-card.featured .video-description {
     color: #fff;
     background: rgba(255, 255, 255, 0.2);
+}
+
+/* featured 카드에서는 흰색 */
+.video-card.featured .video-subcategory {
+    color: rgba(255, 255, 255, 0.9);
 }
 
 .video-description-wrapper {
@@ -273,24 +341,12 @@
 }
 
 .video-nav-card.prev .video-nav-title {
-    /* text-align: right; */
-    text-decoration-line: underline;
-}
-
-.video-nav-card.prev .video-nav-title {
-    /* text-align: right; */
     text-decoration-line: underline;
 }
 
 .back-to-list-container {
     text-align: center;
     margin-top: 40px;
-
-    /* display: flex;
-    justify-content: center;
-    margin-top: 40px;
-    padding-top: 40px;
-    border-top: 1px solid #e0e0e0; */
 }
 
 .back-to-list {
@@ -403,6 +459,18 @@
         padding: 20px 24px;
     }
 
+    .worship-tabs:not(.has-submenu) {
+        margin-bottom: 30px;
+    }
+
+    .worship-header:has(.sub-menu[style*="display: block"]) {
+        margin-bottom: 30px;
+    }
+
+    .sub-menu {
+        margin-bottom: 0;
+    }
+
     .video-card {
         padding: 28px 20px;
     }
@@ -447,9 +515,31 @@
         -webkit-overflow-scrolling: touch;
     }
 
+    .worship-tabs:not(.has-submenu) {
+        margin-bottom: 20px;
+    }
+
+    .worship-header:has(.sub-menu[style*="display: block"]) {
+        margin-bottom: 20px;
+    }
+
     .worship-tab {
         white-space: nowrap;
         font-size: 16px;
+    }
+
+    .sub-menu {
+        padding: 16px 20px;
+        margin-bottom: 0;
+    }
+
+    .sub-menu-items {
+        gap: 8px;
+    }
+
+    .sub-menu-item {
+        padding: 6px 16px;
+        font-size: 13px;
     }
 
     .video-card {
@@ -516,8 +606,26 @@
         padding: 12px 16px;
     }
 
+    .worship-tabs:not(.has-submenu) {
+        margin-bottom: 20px;
+    }
+
+    .worship-header:has(.sub-menu[style*="display: block"]) {
+        margin-bottom: 20px;
+    }
+
     .worship-tab {
         font-size: 14px;
+    }
+
+    .sub-menu {
+        padding: 12px 16px;
+        margin-bottom: 0;
+    }
+
+    .sub-menu-item {
+        padding: 5px 14px;
+        font-size: 12px;
     }
 
     .video-card {
