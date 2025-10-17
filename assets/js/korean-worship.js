@@ -5,7 +5,7 @@ import { getFirestore, collection, query, where, orderBy, getDocs } from "https:
 
 console.log('🎯 korean-worship.js 로드됨!');
 
-// Firebase 설정
+// Firebase 설정 
 const firebaseConfig = {
     apiKey: "AIzaSyDovIYMknqYQeSpveyEfugar-yQ1PUeL9A",
     authDomain: "ami-church.firebaseapp.com",
