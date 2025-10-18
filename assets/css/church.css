@@ -64,7 +64,7 @@
    ========================================== */
 .content {
     min-height: 600px;
-    padding: 80px 0;
+    padding-top: 40px;
     background: #FFF;
     display: flex;
     justify-content: center;
@@ -79,7 +79,7 @@
     grid-template-areas: 
         "title title"
         "lnb content";
-    gap: 40px;
+    gap: 80px;
 }
 
 .page-title {
@@ -144,7 +144,7 @@
 .content-area {
     grid-area: content;
     background: #fff;
-    padding: 0 60px 60px 60px;
+    padding: 0 0px 60px 0px;
     min-height: 500px;
     opacity: 1;
     transition: opacity 0.3s ease-in-out;
