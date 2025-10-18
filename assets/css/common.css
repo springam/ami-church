@@ -8,7 +8,7 @@
 }
 
 body {
-    font-family: 'Noto Sans KR', Arial, sans-serif;
+    font-family: "Pretendard Variable", Pretendard, -apple-system, BlinkMacSystemFont, system-ui, Roboto, "Helvetica Neue", "Segoe UI", "Apple SD Gothic Neo", "Noto Sans KR", "Malgun Gothic", "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", sans-serif;
     color: #333;
 }
 
@@ -81,17 +81,18 @@ nav a:hover {
    3. Footer (공통)
    ========================================== */
 footer {
-    background: #091D33;
+    background: #FFF;
     color: #FFF;
     padding: 60px 0;
     display: flex;
     justify-content: center;
     position: relative;
+    border-top: #EAEAEA 1px solid;
 }
 
 .footer-content {
     display: grid;
-    grid-template-columns: 1fr 1fr;
+    grid-template-columns: 2fr 3fr;
     gap: 60px;
     width: 1260px;
     max-width: 1260px;
@@ -113,9 +114,10 @@ footer {
 }
 
 .footer-info {
-    font-size: 14px;
+    font-size: 16px;
+    font-weight: 400;
     line-height: 24px;
-    color: #FFF;
+    color: #000;
 }
 
 .footer-info p:last-child {
@@ -131,14 +133,14 @@ footer {
 .footer-section h3,
 .footer-nav-column h4 {
     color: #FFF;
-    font-size: 16px;
+    font-size: 20px;
     font-weight: 700;
     margin-bottom: 20px;
 }
 
 .footer-section h3 a,
 .footer-nav-column h4 a {
-    color: #FFF;
+    color: #000;
     text-decoration: none;
     transition: color 0.3s;
 }
@@ -155,9 +157,10 @@ footer {
 
 .footer-section a,
 .footer-nav-column li a {
-    color: #6B7785;
+    color: #666;
     text-decoration: none;
-    font-size: 14px;
+    font-size: 16px;
+    font-weight: 400;
     transition: color 0.3s;
     cursor: pointer;
 }
@@ -173,7 +176,7 @@ footer {
     bottom: 0;
     width: 60px;
     height: 60px;
-    background: #FFF;
+    background: #000;
     border-radius: 50%;
     display: flex;
     align-items: center;
@@ -187,7 +190,7 @@ footer {
 }
 
 .scroll-top svg path {
-    stroke: #000;
+    stroke: #FFF;
 }
 
 /* ==========================================
