@@ -96,9 +96,9 @@
 }
 
 .sub-menu-item.active {
-    background: #0066cc;
-    color: #fff;
-    border-color: #0066cc;
+    border-color: #EEF3F8;
+    background-color: #EEF3F8;
+    color: #00479D;
 }
 
 /* 비디오 그리드 */
