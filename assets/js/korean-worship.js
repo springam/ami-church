@@ -39,8 +39,8 @@ let currentSubCategory = null; // ⭐ 현재 선택된 서브카테고리
 // ⭐ 카테고리별 서브카테고리 설정 (나중에 쉽게 변경 가능)
 const SUB_CATEGORIES = {
     scripture: ['옵기서', '요나서', '마태복음 5장', '마태복음 13장', '마태복음 16장', '누가복음', '요한복음', '사도행전', '로마서', '로마서 9장~11장', '고린도전서', '빌립보서', '빌레몬서', '야고보서'],
-    topic: ['옵기서', '요나서', '미가서', '나훔서', '하박국서', '스바냐서', '학개서', '스가랴서', '말라기서', '마태복음', '마가복음', '누가복음', '요한복음', '야고보서'],
-    column: ['옵기서', '요나서', '미가서', '나훔서', '하박국서', '스바냐서', '학개서', '스가랴서', '말라기서', '마태복음', '마가복음', '누가복음', '요한복음', '야고보서'],
+    topic: ['옵기서', '요나서', '마태복음 5장', '마태복음 13장', '마태복음 16장', '누가복음', '요한복음', '사도행전', '로마서', '로마서 9장~11장', '고린도전서', '빌립보서', '빌레몬서', '야고보서'],
+    column: ['23년', '24년', '25년'],
     weekly: [] // 이번주 설교는 서브메뉴 없음
 };
 
@@ -95,6 +95,52 @@ function formatDate(timestamp) {
     }
     
     return '';
+}
+
+/**
+ * Firestore에서 목회자 컬럼 데이터 가져오기
+ */
+async function fetchColumns() {
+    try {
+        console.log('=== 목회자 컬럼 데이터 가져오기 시작 ===');
+        
+        const columnsRef = collection(db, 'column');
+        const querySnapshot = await getDocs(columnsRef);
+        
+        console.log('컬럼 문서 개수:', querySnapshot.size);
+        
+        const columns = [];
+        
+        querySnapshot.forEach((doc) => {
+            const data = doc.data();
+            
+            columns.push({
+                id: doc.id,
+                title: data.title || '제목 없음',
+                date: formatDate(data.date),
+                dateObj: data.date,
+                year: data.year ? data.year.toString() : '',
+                category: data.category || '',
+                downloadUrl: data.downloadUrl || ''
+            });
+        });
+
+        // 날짜 역순 정렬
+        columns.sort((a, b) => {
+            const dateA = a.dateObj?.toDate ? a.dateObj.toDate() : new Date(a.dateObj);
+            const dateB = b.dateObj?.toDate ? b.dateObj.toDate() : new Date(b.dateObj);
+            return dateB - dateA;
+        });
+        
+        console.log('로드된 컬럼:', columns);
+        console.log('=== 목회자 컬럼 데이터 가져오기 완료 ===\n');
+        
+        return columns;
+        
+    } catch (error) {
+        console.error('❌ 컬럼 데이터 오류:', error);
+        return [];
+    }
 }
 
 /**
@@ -164,6 +210,69 @@ async function fetchVideos(category) {
 }
 
 /**
+ * 목회자 컬럼 리스트 렌더링
+ */
+function renderColumnList(columns, page = 1) {
+    const videoGrid = document.getElementById('videoGrid');
+    if (!videoGrid) return;
+
+    // ⭐ 연도 필터링
+    let filteredColumns = columns;
+    if (currentSubCategory) {
+        const yearOnly = currentSubCategory.replace('년', '');
+        filteredColumns = columns.filter(column => column.year === yearOnly);
+    }
+
+    const startIndex = (page - 1) * itemsPerPage;
+    const endIndex = startIndex + itemsPerPage;
+    const pageColumns = filteredColumns.slice(startIndex, endIndex);
+
+    if (pageColumns.length === 0) {
+        videoGrid.innerHTML = `
+            <div class="empty-state">
+                <div class="empty-state-icon">📄</div>
+                <div class="empty-state-text">아직 등록된 컬럼이 없습니다.</div>
+            </div>
+        `;
+        return;
+    }
+
+    // ⭐ 리스트 형식으로 렌더링
+    videoGrid.innerHTML = `
+        <div class="column-list">
+            ${pageColumns.map((column, index) => `
+                <div class="column-item ${index === 2 ? 'featured' : ''}">
+                    <div class="column-number">${String(startIndex + index + 1).padStart(2, '0')}.</div>
+                    <div class="column-title">${column.title}</div>
+                    <button class="column-download-btn" onclick="downloadColumn('${column.downloadUrl}', '${column.title}')">
+                        다운받기
+                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="none">
+                            <path d="M6.66699 10.0003L10.0003 13.3337M10.0003 13.3337L13.3337 10.0003M10.0003 13.3337V6.66699M18.3337 10.0003C18.3337 14.6027 14.6027 18.3337 10.0003 18.3337C5.39795 18.3337 1.66699 14.6027 1.66699 10.0003C1.66699 5.39795 5.39795 1.66699 10.0003 1.66699C14.6027 1.66699 18.3337 5.39795 18.3337 10.0003Z" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                        </svg>
+                    </button>
+                </div>
+            `).join('')}
+        </div>
+    `;
+
+    // ⭐ 페이지네이션 업데이트
+    renderPagination(filteredColumns.length, page);
+}
+
+/**
+ * 컬럼 다운로드
+ */
+window.downloadColumn = function(url, title) {
+    if (!url) {
+        alert('다운로드 URL이 없습니다.');
+        return;
+    }
+    
+    // 새 창에서 열기 (다운로드)
+    window.open(url, '_blank');
+}
+
+/**
  * 비디오 그리드 렌더링
  */
 function renderVideos(videos, page = 1) {
@@ -196,6 +305,7 @@ function renderVideos(videos, page = 1) {
     videoGrid.innerHTML = pageVideos.map((video, index) => {
         const isFeatured = index === 4 && pageVideos.length > 4;
         const backgroundStyle = video.thumbnail ? `style="background-image: url('${video.thumbnail}');"` : '';
+        
         // ⭐ weekly가 아닐 때만 subCategory 표시
         const showSubCategory = currentCategory !== 'weekly' && video.subCategory;
         
@@ -276,7 +386,13 @@ window.filterBySubCategory = function(subCategory) {
     currentSubCategory = subCategory;
     currentPage = 1; // 페이지 초기화
     
-    renderVideos(allVideos, currentPage);
+    // ⭐ column일 때는 리스트 렌더링
+    if (currentCategory === 'column') {
+        renderColumnList(allVideos, currentPage);
+    } else {
+        renderVideos(allVideos, currentPage);
+    }
+    
     renderSubMenu(); // ⭐ 파라미터 제거
     
     // 스크롤 위치 조정
@@ -335,7 +451,13 @@ function renderPagination(totalItems, currentPage) {
 window.changePage = function(page) {
     if (page < 1 || page > totalPages) return;
     currentPage = page;
-    renderVideos(allVideos, currentPage);
+    
+    // ⭐ column일 때는 리스트 렌더링
+    if (currentCategory === 'column') {
+        renderColumnList(allVideos, currentPage);
+    } else {
+        renderVideos(allVideos, currentPage);
+    }
     
     const worshipContainer = document.querySelector('.worship-container');
     if (worshipContainer) {
@@ -501,8 +623,15 @@ async function changeCategory(category) {
         pagination.innerHTML = '';
     }
 
-    allVideos = await fetchVideos(category);
-    renderVideos(allVideos, currentPage);
+    // ⭐ 목회자 컬럼은 다른 데이터 소스 사용
+    if (category === 'column') {
+        allVideos = await fetchColumns();
+        renderColumnList(allVideos, currentPage);
+    } else {
+        allVideos = await fetchVideos(category);
+        renderVideos(allVideos, currentPage);
+    }
+    
     renderSubMenu(); // ⭐ 파라미터 제거
 }
 
@@ -523,10 +652,18 @@ export async function initKoreanWorship() {
     });
 
     console.log('🔥 초기 데이터 로드 시작...');
-    allVideos = await fetchVideos(currentCategory);
-    console.log('📦 로드된 비디오:', allVideos);
     
-    renderVideos(allVideos, currentPage);
+    // ⭐ 초기 카테고리에 따라 다른 데이터 로드
+    if (currentCategory === 'column') {
+        allVideos = await fetchColumns();
+        renderColumnList(allVideos, currentPage);
+    } else {
+        allVideos = await fetchVideos(currentCategory);
+        renderVideos(allVideos, currentPage);
+    }
+    
+    console.log('📦 로드된 데이터:', allVideos);
+    
     renderSubMenu(); // ⭐ 파라미터 제거
     
     console.log('✅ 초기화 완료!');

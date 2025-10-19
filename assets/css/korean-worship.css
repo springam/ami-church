@@ -4,7 +4,7 @@
 
 /* 헤더 영역 */
 .worship-header {
-    margin-bottom: 0px;
+    margin-bottom: 0;
 }
 
 .worship-header h2 {
@@ -24,9 +24,9 @@
     background: #EEF3F8;
 }
 
-/* 서브메뉴가 없을 때만 하단 마진 추가 */
+/* 서브메뉴가 없을 때만 탭에 하단 마진 추가 */
 .worship-tabs:not(.has-submenu) {
-    margin-bottom: 40px;
+    margin-bottom: 40px !important;
 }
 
 /* 서브메뉴가 있을 때 하단 radius 제거 */
@@ -75,30 +75,30 @@
 .sub-menu-items {
     display: flex;
     flex-wrap: wrap;
-    gap: 12px;
+    gap: 20px;
 }
 
 .sub-menu-item {
     padding: 4px 8px;
     background: #fff;
+    border: 1px solid #fff;
     border-radius: 2px;
-    font-size: 16px;
-    font-weight: 400;
+    font-size: 14px;
     color: #666;
     cursor: pointer;
     transition: all 0.3s ease;
-    gap: 20px
 }
 
 .sub-menu-item:hover {
-    border-color: #0066cc;
-    color: #0066cc;
+    border-color: #EEF3F8;
+    background-color: #EEF3F8;
+    color: #00479D;
 }
 
 .sub-menu-item.active {
-    background: #EEF3F8;
-    color: #00479D;
-    border-color: #EEF3F8;
+    background: #0066cc;
+    color: #fff;
+    border-color: #0066cc;
 }
 
 /* 비디오 그리드 */
@@ -109,6 +109,116 @@
     margin-bottom: 60px;
     min-height: 400px;
 }
+
+/* ========================================
+   목회자 컬럼 리스트 스타일
+   ======================================== */
+
+.column-list {
+    grid-column: 1 / -1;  /* ⭐ 추가: 그리드 전체 너비 차지 */
+    display: flex;
+    flex-direction: column;
+    gap: 0;
+    width: 100%;
+}
+
+.column-item {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    padding: 24px 20px;
+    background: #fff;
+    border-bottom: 1px solid #EAEAEA;
+    transition: all 0.3s ease;
+}
+
+.column-item:first-child {
+    border-top: 1px solid #EAEAEA;
+}
+
+/* .column-item:hover {
+    background: #f8f8f8;
+} */
+
+.column-item.featured {
+    background: #0066cc;
+}
+
+.column-item.featured .column-number,
+.column-item.featured .column-title {
+    color: #fff;
+}
+
+.column-item.featured .column-download-btn {
+    background: #fff;
+    color: #0066cc;
+    border-color: #fff;
+}
+
+.column-item.featured .column-download-btn:hover {
+    background: rgba(255, 255, 255, 0.9);
+}
+
+.column-item.featured .column-download-btn:hover svg {
+    stroke: #fff;  /* ⭐ 더 진한 파란색 */
+    fill: #00479D;    /* ⭐ 더 진한 파란색 */
+}
+
+.column-number {
+    font-size: 18px;
+    font-weight: 400;
+    color: #000;
+    display: inline-block  ;
+    /* min-width: 40px; */
+    flex-shrink: 0;
+}
+
+.column-title {
+    flex: 1;
+    font-size: 18px;
+    font-weight: 400;
+    color: #000;
+    line-height: 1.5;
+}
+
+.column-download-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    padding: 8px 16px;
+    background: #fff;
+    color: #000;
+    border: 1px solid #DFDFDF;
+    border-radius: 4px;
+    font-size: 16px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    flex-shrink: 0;
+}
+
+.column-download-btn:hover {
+    background: #00479D;
+    color: #fff;
+}
+
+.column-download-btn svg {
+    width: 20px;
+    height: 20px;
+    stroke: #00479D;
+    fill: #fff;
+    transition: all 0.3s ease;  /* ⭐ 부드러운 전환 */
+}
+
+.column-download-btn:hover svg {
+    stroke: #fff;  /* ⭐ SVG stroke 파란색 */
+    fill: #00479D;    /* ⭐ SVG fill 파란색 */
+}
+
+/* ========================================
+   비디오 카드 스타일
+   ======================================== */
+
 
 /* 비디오 카드 */
 .video-card {
@@ -151,13 +261,20 @@
 
 .video-subcategory {
     font-size: 16px;
+    font-style: normal;
     font-weight: 700;
     color: #000;
     margin-bottom: 8px;
+    flex-shrink: 0;
+}
+
+.video-card.featured .video-subcategory {
+    color: rgba(255, 255, 255, 0.9);
 }
 
 .video-title {
     font-size: 20px;
+    font-style: normal;
     font-weight: 400;
     color: #000;
     line-height: 1.5;
@@ -178,7 +295,7 @@
     display: inline;
     font-size: 14px;
     font-weight: 400;
-    color: #666;
+    color: #333;
     line-height: 1.6;
     background: #E3DFF5;
     border-radius: 4px;
@@ -188,11 +305,6 @@
 .video-card.featured .video-description {
     color: #fff;
     background: rgba(255, 255, 255, 0.2);
-}
-
-/* featured 카드에서는 흰색 */
-.video-card.featured .video-subcategory {
-    color: rgba(255, 255, 255, 0.9);
 }
 
 .video-description-wrapper {
@@ -460,7 +572,7 @@
     }
 
     .worship-tabs:not(.has-submenu) {
-        margin-bottom: 30px;
+        margin-bottom: 30px !important;
     }
 
     .worship-header:has(.sub-menu[style*="display: block"]) {
@@ -473,6 +585,11 @@
 
     .video-card {
         padding: 28px 20px;
+    }
+
+    .video-subcategory {
+        font-size: 13px;
+        margin-bottom: 6px;
     }
 
     .video-title {
@@ -493,6 +610,19 @@
 
     .video-nav-card {
         padding: 24px 28px;
+    }
+
+    .column-item {
+        padding: 20px 28px;
+        gap: 16px;
+    }
+
+    .column-number {
+        font-size: 16px;
+    }
+
+    .column-title {
+        font-size: 16px;
     }
 }
 
@@ -516,7 +646,7 @@
     }
 
     .worship-tabs:not(.has-submenu) {
-        margin-bottom: 20px;
+        margin-bottom: 20px !important;
     }
 
     .worship-header:has(.sub-menu[style*="display: block"]) {
@@ -544,6 +674,11 @@
 
     .video-card {
         padding: 24px 20px;
+    }
+
+    .video-subcategory {
+        font-size: 13px;
+        margin-bottom: 6px;
     }
 
     .video-title {
@@ -584,6 +719,27 @@
         text-align: left;
     }
 
+    .column-item {
+        padding: 20px 24px;
+        gap: 16px;
+        flex-direction: column;
+        align-items: flex-start;
+    }
+
+    .column-number {
+        font-size: 16px;
+    }
+
+    .column-title {
+        font-size: 16px;
+        width: 100%;
+    }
+
+    .column-download-btn {
+        width: 100%;
+        justify-content: center;
+    }
+
     .pagination {
         gap: 6px;
     }
@@ -607,7 +763,7 @@
     }
 
     .worship-tabs:not(.has-submenu) {
-        margin-bottom: 20px;
+        margin-bottom: 20px !important;
     }
 
     .worship-header:has(.sub-menu[style*="display: block"]) {
@@ -630,6 +786,11 @@
 
     .video-card {
         padding: 20px 16px;
+    }
+
+    .video-subcategory {
+        font-size: 12px;
+        margin-bottom: 4px;
     }
 
     .video-title {
@@ -659,5 +820,23 @@
 
     .video-nav-title {
         font-size: 16px;
+    }
+
+    .column-item {
+        padding: 16px 20px;
+        gap: 12px;
+    }
+
+    .column-number {
+        font-size: 14px;
+    }
+
+    .column-title {
+        font-size: 14px;
+    }
+
+    .column-download-btn {
+        font-size: 13px;
+        padding: 8px 16px;
     }
 }
