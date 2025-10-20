@@ -84,7 +84,7 @@
    ========================================== */
 .text-section {
     padding: 80px 0;
-    background: #0052A3;
+    background: #182B8C;
     display: flex;
     justify-content: center;
     align-items: center;
@@ -106,7 +106,7 @@
    ========================================== */
 .media-section {
     padding: 0 0 120px 0;
-    background: linear-gradient(to bottom, #0052A3 60%, #fff 60%);
+    background: linear-gradient(to bottom, #182B8C 60%, #fff 60%);
     display: flex;
     justify-content: center;
 }

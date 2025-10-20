@@ -131,7 +131,7 @@
 }
 
 .lnb a.active {
-    background: #0052A3;
+    background: #182B8C;
     color: #fff;
     font-weight: 700;
     padding-left: 20px;
@@ -346,10 +346,10 @@
 .timeline-dot {
     width: 14px;
     height: 14px;
-    background: #0052A3;
+    background: #182B8C;
     border-radius: 50%;
     border: 3px solid #fff;
-    box-shadow: 0 0 0 2px #0052A3;
+    box-shadow: 0 0 0 2px #182B8C;
     position: relative;
     z-index: 1;
 }

@@ -51,8 +51,8 @@
 }
 
 .worship-tab.active {
-    color: #0066cc;
-    border-bottom-color: #005CB2;
+    color: #182B8C;
+    border-bottom-color: #182B8C;
     font-weight: 700;
 }
 
@@ -92,13 +92,13 @@
 .sub-menu-item:hover {
     border-color: #EEF3F8;
     background-color: #EEF3F8;
-    color: #00479D;
+    color: #182B8C;
 }
 
 .sub-menu-item.active {
     border-color: #EEF3F8;
     background-color: #EEF3F8;
-    color: #00479D;
+    color: #182B8C;
 }
 
 /* 비디오 그리드 */
@@ -161,7 +161,7 @@
 
 .column-item.featured .column-download-btn:hover svg {
     stroke: #fff;  /* ⭐ 더 진한 파란색 */
-    fill: #00479D;    /* ⭐ 더 진한 파란색 */
+    fill: #182B8C;    /* ⭐ 더 진한 파란색 */
 }
 
 .column-number {
@@ -198,21 +198,21 @@
 }
 
 .column-download-btn:hover {
-    background: #00479D;
+    background: #182B8C;
     color: #fff;
 }
 
 .column-download-btn svg {
     width: 20px;
     height: 20px;
-    stroke: #00479D;
+    stroke: #182B8C;
     fill: #fff;
     transition: all 0.3s ease;  /* ⭐ 부드러운 전환 */
 }
 
 .column-download-btn:hover svg {
     stroke: #fff;  /* ⭐ SVG stroke 파란색 */
-    fill: #00479D;    /* ⭐ SVG fill 파란색 */
+    fill: #182B8C;    /* ⭐ SVG fill 파란색 */
 }
 
 /* ========================================
@@ -466,7 +466,7 @@
     align-items: center;
     gap: 8px;
     padding: 16px 20px;
-    background: #0066cc;
+    background: #182B8C;
     color: white;
     border: none;
     border-radius: 6px;

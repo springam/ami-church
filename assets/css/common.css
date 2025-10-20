@@ -115,13 +115,14 @@ footer {
 
 .footer-info {
     font-size: 16px;
+    font-style: normal;
     font-weight: 400;
     line-height: 24px;
     color: #000;
 }
 
 .footer-info p:last-child {
-    color: #6B7785;
+    color: #959595;
 }
 
 .footer-nav {
