@@ -3,6 +3,8 @@
    ========================================== */
 .hero {
     position: relative;
+    width: 100%;
+    max-width: 100%;
     height: 764px;
     overflow: hidden;
     margin: 0;
@@ -189,34 +191,102 @@
    ========================================== */
 
 
-/* ==========================================
-   반응형 (home 전용)
-   ========================================== */
+/* 기존 반응형 섹션 수정 및 추가 */
 @media (max-width: 768px) {
+    .hero {
+        height: 100vh;
+        min-height: 600px;
+        width: 100vw;
+        left: 0;
+        margin: 0;
+        padding: 0;
+    }
+
+    .hero-bg {
+        width: 100vw;
+        height: 100%;
+        object-fit: cover;
+    }
+
+    .hero-content {
+        width: 100%;
+        padding: 0 20px;
+    }
+    
     .hero h1 {
-        font-size: 36px;
-        line-height: 48px;
-    }
-    
-    .text-section {
-        padding: 40px 20px;
-    }
-    
-    .section-title {
+        font-size: 32px;
+        line-height: 44px;
+        padding: 0 20px;
         width: 100%;
     }
     
+    .hero-indicators {
+        bottom: 120px;
+    }
+    
+    .text-section {
+        padding: 60px 20px;
+        width: 100vw;
+    }
+    
+    .section-title {
+        font-size: 28px;
+        line-height: 40px;
+        width: 100%;
+        padding: 0 20px;
+    }
+    
     .media-section {
-        padding: 40px 20px;
+        padding: 0 20px 60px; /* 수정 */
+        width: 100vw; /* 추가 */
+        background: linear-gradient(to bottom, #182B8C 40%, #fff 40%);
     }
     
     .media-container {
         width: 100%;
+        max-width: 100%; /* 추가 */
+        padding: 0;
+    }
+
+    .media-video {
+        width: 100%; /* 추가 */
     }
     
     .media-text {
         position: static;
-        max-width: 100%;
-        margin-top: 20px;
+        padding: 20px 0;
+        color: #000;
+    }
+    
+    .media-title {
+        font-size: 20px;
+        line-height: 28px;
+        color: #000;
+    }
+    
+    .media-meta,
+    .media-date {
+        color: #666;
+        font-size: 14px;
+    }
+    
+    .play-button {
+        width: 80px;
+        height: 80px;
+    }
+    
+    footer .footer-content {
+        flex-direction: column;
+        gap: 40px;
+    }
+    
+    .footer-nav {
+        flex-direction: column;
+        gap: 30px;
+        width: 100%;
+    }
+    
+    .footer-nav-column {
+        width: 100%;
     }
 }

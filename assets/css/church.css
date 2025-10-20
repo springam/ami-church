@@ -1,4 +1,23 @@
 /* ==========================================
+   1. Header (공통)
+   ========================================== */
+header {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    max-width: 100%; /* 추가 */
+    height: 80px;
+    background: transparent;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0 40px;
+    z-index: 100;
+    box-sizing: border-box; /* 추가 */
+}
+
+/* ==========================================
    Hero Section (Church)
    ========================================== */
 .hero {
@@ -490,32 +509,111 @@
 /* ==========================================
    반응형 (church 전용)
    ========================================== */
+/* church.css와 korean-worship.css 각각에 추가 */
+
 @media (max-width: 768px) {
-    .hero h1 {
-        font-size: 36px;
-        line-height: 48px;
-    }
-
-    .content-wrapper {
-        grid-template-columns: 1fr;
-        grid-template-areas: 
-            "title"
-            "lnb"
-            "content";
-        gap: 20px;
-    }
-
-    .info-grid,
-    .transport-info {
-        grid-template-columns: 1fr;
-    }
-
-    .pastor-info {
-        flex-direction: column;
-        text-align: center;
+    .hero,
+    .hero-sermon {
+        height: 200px;
     }
     
-    .ministry-section {
+    .hero h1,
+    .hero-sermon h1 {
+        font-size: 28px;
+    }
+    
+    .content-wrapper {
+        flex-direction: column;
+    }
+    
+    .lnb {
+        width: 100%;
+        margin-bottom: 20px;
+        border-right: none;
+        border-bottom: 1px solid #ddd;
+    }
+    
+    .lnb ul {
+        display: flex;
+        overflow-x: auto;
+        white-space: nowrap;
+        padding-bottom: 10px;
+    }
+    
+    .lnb ul li {
+        display: inline-block;
+    }
+    
+    .lnb ul li a {
+        padding: 10px 20px;
+        display: inline-block;
+    }
+    
+    .content-area {
+        width: 100%;
+        padding: 20px;
+    }
+    
+    /* 한국예배 비디오 그리드 */
+    .video-grid {
         grid-template-columns: 1fr;
+        gap: 20px;
+    }
+    
+    .video-card.featured {
+        grid-column: auto;
+        grid-row: auto;
+        height: 250px;
+    }
+    
+    .worship-tabs {
+        flex-wrap: wrap;
+        gap: 10px;
+    }
+    
+    .worship-tab {
+        font-size: 14px;
+        padding: 10px 16px;
+    }
+    
+    /* 서브메뉴 */
+    .sub-menu-items {
+        flex-wrap: wrap;
+        gap: 8px;
+    }
+    
+    .sub-menu-item {
+        font-size: 13px;
+        padding: 8px 16px;
+    }
+    
+    /* 컬럼 리스트 */
+    .column-item {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 12px;
+    }
+    
+    .column-number {
+        font-size: 18px;
+    }
+    
+    .column-title {
+        font-size: 15px;
+    }
+    
+    /* 비디오 상세 */
+    .video-detail-title {
+        font-size: 20px;
+        line-height: 28px;
+    }
+    
+    .video-navigation {
+        flex-direction: column;
+        gap: 16px;
+    }
+    
+    .video-nav-card {
+        width: 100%;
     }
 }
