@@ -187,11 +187,9 @@
 
 
 /* ==========================================
-   3. Footer (공통)
+   3. 반응형 섹션
    ========================================== */
 
-
-/* 기존 반응형 섹션 수정 및 추가 */
 @media (max-width: 768px) {
     .hero {
         height: 100vh;
@@ -239,7 +237,8 @@
     .media-section {
         padding: 0 20px 60px; /* 수정 */
         width: 100vw; /* 추가 */
-        background: linear-gradient(to bottom, #182B8C 40%, #fff 40%);
+        background: #182B8C;
+        /* background: linear-gradient(to bottom, #182B8C 40%, #fff 40%); */
     }
     
     .media-container {
@@ -256,18 +255,25 @@
         position: static;
         padding: 20px 0;
         color: #000;
+        text-align: center;
     }
     
     .media-title {
-        font-size: 20px;
-        line-height: 28px;
-        color: #000;
+        font-size: 28px;
+        font-style: normal;
+        font-weight: 700;
+        line-height: 40px;
+        color: #fff;
+        margin-bottom: 16px;
     }
     
     .media-meta,
     .media-date {
-        color: #666;
+        color: #fff;
         font-size: 14px;
+        font-style: normal;
+        font-weight: 700;
+        margin-bottom: 0;
     }
     
     .play-button {

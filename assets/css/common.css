@@ -572,7 +572,7 @@ footer {
 
     /* ========== Footer ========== */
     footer {
-        padding: 40px 20px 60px;
+        padding: 40px 20px 20px 20px;
     }
     
     .footer-content {
@@ -587,7 +587,7 @@ footer {
     .footer-main {
         display: flex;
         flex-direction: column;
-        gap: 20px;
+        gap: 40px;
         width: 100%;
         padding-right: 60px;
         position: relative;
@@ -610,8 +610,8 @@ footer {
     .footer-info p {
         font-size: 13px;
         line-height: 20px;
-        margin-bottom: 6px;
-        color: #666;
+        margin-bottom: 0px;
+        color: #000;
     }
     
     .footer-nav {
