@@ -563,9 +563,9 @@ header {
 /* ==========================================
    반응형 (church 전용)
    ========================================== */
-/* church.css와 korean-worship.css 각각에 추가 */
 
 @media (max-width: 768px) {
+    /* Hero Section */
     .hero,
     .hero-sermon {
         height: 200px;
@@ -574,100 +574,90 @@ header {
     .hero h1,
     .hero-sermon h1 {
         font-size: 28px;
+        line-height: 40px;
+    }
+    
+    /* Content Layout */
+    .content {
+        padding-top: 0;
     }
     
     .content-wrapper {
+        width: 100%;
+        padding: 0;
+        display: flex;
         flex-direction: column;
+        gap: 0;
     }
     
+    /* LNB - 헤더처럼 상단 고정 */
     .lnb {
         width: 100%;
-        margin-bottom: 20px;
-        border-right: none;
-        border-bottom: 1px solid #ddd;
+        border-top: none;
+        border-bottom: 2px solid #000;
+        padding: 0 20px;
+        margin-bottom: 0;
+        overflow-x: auto;
+        -webkit-overflow-scrolling: touch;
+        order: -1;
     }
     
     .lnb ul {
         display: flex;
-        overflow-x: auto;
+        gap: 0;
         white-space: nowrap;
-        padding-bottom: 10px;
+        padding: 0;
     }
     
-    .lnb ul li {
-        display: inline-block;
+    .lnb li {
+        flex-shrink: 0;
     }
     
-    .lnb ul li a {
-        padding: 10px 20px;
-        display: inline-block;
+    .lnb a {
+        padding: 0 20px;
+        height: 48px;
+        margin: 0;
+        border-radius: 0;
+        font-size: 16px;
+        display: flex;
+        align-items: center;
     }
     
+    .lnb a.active {
+        padding: 0 20px;
+        border-radius: 0;
+        border-bottom: 3px solid #182B8C;
+        background: transparent;
+        color: #182B8C;
+        font-weight: 700;
+        margin-bottom: -2px;
+    }
+    
+    /* Content Area - 기본 스타일만 */
     .content-area {
         width: 100%;
-        padding: 20px;
+        padding: 40px 0;
     }
     
-    /* 한국예배 비디오 그리드 */
-    .video-grid {
-        grid-template-columns: 1fr;
-        gap: 20px;
+    .content-area h1 {
+        font-size: 36px;
+        margin-bottom: 30px;
+        padding: 0 20px;
     }
     
-    .video-card.featured {
-        grid-column: auto;
-        grid-row: auto;
-        height: 250px;
+    .content-area h2 {
+        font-size: 24px;
+        margin-bottom: 30px;
+        padding: 0 20px;
     }
     
-    .worship-tabs {
-        flex-wrap: wrap;
-        gap: 10px;
-    }
-    
-    .worship-tab {
-        font-size: 14px;
-        padding: 10px 16px;
-    }
-    
-    /* 서브메뉴 */
-    .sub-menu-items {
-        flex-wrap: wrap;
-        gap: 8px;
-    }
-    
-    .sub-menu-item {
-        font-size: 13px;
-        padding: 8px 16px;
-    }
-    
-    /* 컬럼 리스트 */
-    .column-item {
-        flex-direction: column;
-        align-items: flex-start;
-        gap: 12px;
-    }
-    
-    .column-number {
-        font-size: 18px;
-    }
-    
-    .column-title {
-        font-size: 15px;
-    }
-    
-    /* 비디오 상세 */
-    .video-detail-title {
+    .content-area h3 {
         font-size: 20px;
-        line-height: 28px;
+        margin: 30px 0 15px 0;
     }
     
-    .video-navigation {
-        flex-direction: column;
-        gap: 16px;
-    }
-    
-    .video-nav-card {
-        width: 100%;
+    .content-area p {
+        font-size: 14px;
+        line-height: 1.6;
     }
 }

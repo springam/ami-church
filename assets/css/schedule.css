@@ -201,51 +201,136 @@
     color: #666;
 }
 
-/* 반응형 디자인 */
-@media (max-width: 900px) {
+
+
+/* 모바일 반응형 디자인 */
+@media (max-width: 768px) {
+    /* LNB 완전히 숨기기 */
+    .lnb {
+        display: none !important;
+    }
+    
+    /* Content Area 구조 */
+    .content-area {
+        padding: 40px 20px;
+    }
+    
+    .content-area > h2 {
+        font-size: 32px;
+        font-weight: 700;
+        margin-bottom: 40px;
+        text-align: center;
+        padding: 0;
+    }
+    
+    /* 예배 시간 섹션 - 배경 이미지 크게 */
+    .schedule-section {
+        background-size: cover;
+        background-position: center;
+        padding: 60px 20px 100px;
+        margin: 0 0 60px 0;
+        height: auto;
+        border-radius: 20px;
+        position: relative;
+    }
+    
+    .schedule-title {
+        margin-bottom: 120px;
+        text-align: center;
+    }
+    
+    .title-main,
+    .title-sub {
+        font-size: 18px;
+        font-weight: 600;
+        line-height: 28px;
+        color: #000;
+    }
+    
+    /* 카드 2개 나란히 - 배경과 겹치게 */
     .schedule-cards {
-        flex-direction: column;
-        align-items: center;
+        display: flex;
+        flex-direction: row;
+        gap: 12px;
+        justify-content: space-between;
+        position: relative;
+        margin-top: -60px;
     }
     
     .schedule-card {
-        width: 100%;
-        max-width: 380px;
-    }
-}
-
-@media (max-width: 768px) {
-    .content-area > h2 {
-        font-size: 36px;
+        flex: 1;
+        min-width: 0;
+        padding: 28px 20px;
+        border-radius: 20px;
     }
     
-    .schedule-section {
-        padding: 40px 20px 60px;
-    }
-    
-    .title-main {
-        font-size: 40px;
-    }
-    
-    .title-sub {
-        font-size: 28px;
+    .card-label {
+        font-size: 11px;
+        padding: 4px 14px;
+        margin-bottom: 12px;
+        border: 1px solid rgba(255,255,255,0.3);
     }
     
     .card-time {
-        font-size: 44px;
+        font-size: 28px;
+        font-weight: 700;
+        margin-bottom: 8px;
+    }
+    
+    .card-location {
+        font-size: 13px;
+    }
+    
+    /* 헌금 안내 */
+    .donation-title {
+        padding: 40px 0 24px;
+    }
+    
+    .donation-title > h2 {
+        font-size: 24px;
+        font-weight: 700;
+        padding: 0;
+        text-align: left;
     }
     
     .donation-section {
-        padding: 40px 30px;
-    }
-    
-    .bank-text {
-        font-size: 24px;
+        margin: 0;
+        padding: 24px 20px;
+        border-radius: 16px;
     }
     
     .donation-section::after {
-        font-size: 120px;
-        right: 20px;
-        bottom: 20px;
+        width: 100px;
+        height: 40px;
+        right: 10px;
+        bottom: 10px;
+    }
+    
+    .online-donation-btn {
+        font-size: 12px;
+        padding: 6px 16px;
+        margin-bottom: 16px;
+    }
+    
+    .bank-info {
+        gap: 10px;
+        margin-bottom: 12px;
+    }
+    
+    .bank-logo {
+        height: 24px;
+    }
+    
+    .bank-text {
+        font-size: 14px;
+    }
+    
+    .account-holder {
+        gap: 10px;
+    }
+    
+    .holder-label,
+    .holder-name {
+        font-size: 13px;
     }
 }
