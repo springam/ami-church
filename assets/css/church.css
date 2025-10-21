@@ -333,7 +333,9 @@ header {
 
 .timeline-year {
     font-size: 28px;
-    font-weight: 700;
+    font-style: normal;
+    font-weight: 500;
+    line-height: 40px;
     color: #000;
     text-align: right;
     padding-right: 10px;
@@ -343,6 +345,7 @@ header {
     position: relative;
     display: flex;
     justify-content: center;
+    /* align-items: center; */
 }
 
 .timeline-line::before {
@@ -373,19 +376,25 @@ header {
 
 .timeline-content {
     padding-top: 0;
+    display: flex;
+    flex-direction: row;
 }
 
 .timeline-date {
-    font-size: 14px;
+    font-size: 18px;
+    font-style: normal;
+    font-weight: 700;
+    line-height: 28px;
     color: #999;
-    margin-bottom: 8px;
-    font-weight: 400;
+    width: 60px;
 }
 
 .timeline-text {
-    font-size: 16px;
+    font-size: 18px;
+    font-style: normal;
+    font-weight: 400;
+    line-height: 28px;
     color: #000;
-    line-height: 1.8;
 }
 
 /* ==========================================
