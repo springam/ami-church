@@ -130,7 +130,7 @@ function toggleMobileMenu() {
     
     // 로고 이미지 변경
     if (header.classList.contains('menu-open')) {
-        headerLogo.src = 'assets/images/logo_footer.png';
+        headerLogo.src = 'assets/images/logo-footer.png';
     } else {
         headerLogo.src = 'assets/images/logo1.png';
     }

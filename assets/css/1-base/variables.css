@@ -1,0 +1,112 @@
+/* ==========================================
+   CSS Variables - 전역 변수 정의
+   ========================================== */
+
+:root {
+    /* ===== 색상 ===== */
+    /* Primary Colors */
+    --color-primary: #182B8C;
+    --color-primary-dark: #003870;
+    --color-primary-light: #0052A3;
+    
+    /* Secondary Colors */
+    --color-secondary-blue: #0094BE;
+    --color-secondary-teal: #00A895;
+    --color-secondary-green: #00A651;
+    --color-secondary-yellow: #C5A900;
+    --color-secondary-orange: #E87722;
+    
+    /* Neutral Colors */
+    --color-black: #000;
+    --color-white: #fff;
+    --color-gray-dark: #333;
+    --color-gray-medium: #666;
+    --color-gray-light: #999;
+    --color-gray-lighter: #DFDFDF;
+    --color-gray-lightest: #F5F5F5;
+    
+    /* Background Colors */
+    --color-bg-primary: #FFF;
+    --color-bg-secondary: #F8F9FA;
+    --color-bg-blue-light: #EBF1F6;
+    --color-bg-gray: #FAFAFA;
+    
+    /* Border Colors */
+    --color-border-light: #EAEAEA;
+    --color-border-medium: #E0E0E0;
+    --color-border-dark: #DFDFDF;
+    
+    /* ===== 폰트 ===== */
+    --font-family: "Pretendard Variable", Pretendard, -apple-system, BlinkMacSystemFont, 
+                   system-ui, Roboto, "Helvetica Neue", "Segoe UI", "Apple SD Gothic Neo", 
+                   "Noto Sans KR", "Malgun Gothic", "Apple Color Emoji", "Segoe UI Emoji", 
+                   "Segoe UI Symbol", sans-serif;
+    
+    /* Font Sizes */
+    --font-size-xs: 13px;
+    --font-size-sm: 14px;
+    --font-size-base: 16px;
+    --font-size-lg: 18px;
+    --font-size-xl: 20px;
+    --font-size-2xl: 24px;
+    --font-size-3xl: 28px;
+    --font-size-4xl: 32px;
+    --font-size-5xl: 36px;
+    --font-size-6xl: 48px;
+    --font-size-7xl: 60px;
+    --font-size-8xl: 72px;
+    
+    /* Font Weights */
+    --font-weight-normal: 400;
+    --font-weight-medium: 500;
+    --font-weight-semibold: 600;
+    --font-weight-bold: 700;
+    
+    /* Line Heights */
+    --line-height-tight: 1.2;
+    --line-height-normal: 1.5;
+    --line-height-relaxed: 1.6;
+    --line-height-loose: 1.8;
+    
+    /* ===== 간격 ===== */
+    --spacing-xs: 4px;
+    --spacing-sm: 8px;
+    --spacing-md: 12px;
+    --spacing-lg: 16px;
+    --spacing-xl: 20px;
+    --spacing-2xl: 24px;
+    --spacing-3xl: 30px;
+    --spacing-4xl: 40px;
+    --spacing-5xl: 60px;
+    --spacing-6xl: 80px;
+    
+    /* ===== 레이아웃 ===== */
+    --container-width: 1260px;
+    --content-max-width: 1000px;
+    --header-height: 80px;
+    --header-height-mobile: 60px;
+    
+    /* ===== Border Radius ===== */
+    --radius-sm: 4px;
+    --radius-md: 8px;
+    --radius-lg: 12px;
+    --radius-xl: 20px;
+    --radius-full: 50%;
+    
+    /* ===== Shadows ===== */
+    --shadow-sm: 0 2px 8px rgba(0, 0, 0, 0.08);
+    --shadow-md: 0 4px 12px rgba(0, 0, 0, 0.1);
+    --shadow-lg: 0 10px 30px rgba(0, 0, 0, 0.15);
+    
+    /* ===== Transitions ===== */
+    --transition-fast: 0.2s ease;
+    --transition-base: 0.3s ease;
+    --transition-slow: 0.5s ease;
+    
+    /* ===== Z-index ===== */
+    --z-index-base: 1;
+    --z-index-dropdown: 100;
+    --z-index-sticky: 500;
+    --z-index-overlay: 1000;
+    --z-index-modal: 1100;
+}

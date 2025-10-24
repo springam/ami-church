@@ -1,7 +1,7 @@
 /* ==========================================
    Hero Section - 슬라이더
    ========================================== */
-.hero {
+.home .hero {
     position: relative;
     width: 100%;
     max-width: 100%;
@@ -10,7 +10,7 @@
     margin: 0;
 }
 
-.hero-bg {
+.home .hero-bg {
     width: 100%;
     height: 100%;
     object-fit: cover;
@@ -22,28 +22,25 @@
     transition: opacity 1s ease-in-out;
 }
 
-.hero-bg.active {
+.home .hero-bg.active {
     opacity: 1;
 }
 
-.hero-content {
+.home .hero-content {
     position: absolute;
     top: 0;
     left: 0;
     width: 100%;
     height: 100%;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
     color: #fff;
 }
 
-.hero h1 {
+.home .hero h1 {
     font-size: 72px;
     font-weight: 700;
     line-height: 92px;
     position: absolute;
+    margin-top: 0;
     top: 50%;
     left: 50%;
     transform: translate(-50%, -50%);
@@ -53,11 +50,11 @@
     transition: opacity 1s ease-in-out;
 }
 
-.hero h1.active {
+.home .hero h1.active {
     opacity: 1;
 }
 
-.hero-indicators {
+.home .hero-indicators {
     position: absolute;
     bottom: 40px;
     left: 50%;
@@ -67,7 +64,7 @@
     gap: 20px;
 }
 
-.indicator {
+.home .indicator {
     width: 16px;
     height: 16px;
     border-radius: 50%;
@@ -76,7 +73,7 @@
     transition: background 0.3s;
 }
 
-.indicator.active {
+.home .indicator.active {
     background: #fff;
 }
 
@@ -187,13 +184,13 @@
 
 
 /* ==========================================
-   3. 반응형 섹션
+   반응형
    ========================================== */
 
 @media (max-width: 768px) {
-    .hero {
+    .home .hero {
         height: 100vh;
-        min-height: 600px;
+        min-height: 729px;
         width: 100vw;
         left: 0;
         margin: 0;
@@ -211,11 +208,11 @@
         padding: 0 20px;
     }
     
-    .hero h1 {
-        font-size: 32px;
-        line-height: 44px;
-        padding: 0 20px;
-        width: 100%;
+    .home .hero h1 {
+        font-size: 48px;
+        font-style: normal;
+        font-weight: 700;
+        line-height: 64px;
     }
     
     .hero-indicators {
@@ -228,21 +225,23 @@
     }
     
     .section-title {
-        font-size: 28px;
-        line-height: 40px;
+        font-size: 32px;
+        font-style: normal;
+        font-weight: 700;
+        line-height: 44px;
         width: 100%;
         padding: 0 20px;
     }
     
     .media-section {
-        padding: 0 20px 60px; 
-        width: 100vw; 
+        padding: 0 20px 60px;
+        width: 100vw;
         background: #182B8C;
     }
     
     .media-container {
         width: 100%;
-        max-width: 100%; 
+        max-width: 100%;
         padding: 0;
     }
 

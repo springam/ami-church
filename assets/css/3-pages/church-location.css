@@ -1,0 +1,254 @@
+/* ==========================================
+   Church - Location Page (오시는 길)
+   pages/location.html
+   ========================================== */
+
+.content-area {
+    max-width: 1000px; /* var(--content-max-width) replaced with 1000px */
+    margin: 0 auto;
+    padding: 0 0 80px 0;
+    width: 100%;
+}
+
+.content-area > h2 {
+    font-size: 48px; /* var(--font-size-6xl) replaced */
+    font-weight: 700; /* var(--font-weight-bold) replaced */
+    color: #000; /* var(--color-black) replaced */
+    margin-bottom: 80px;
+}
+
+/* 주소 섹션 */
+.address-section {
+    background-color: #182B8C;
+    border-radius: 12px;
+    padding: 28px 40px;
+    margin-bottom: 76px;
+    display: flex;
+    flex-direction: row;
+    gap: 60px;
+}
+
+.address-item {
+    display: flex;
+    align-items: center;
+}
+
+.address-icon {
+    width: 16px;
+    height: 20px;
+    flex-shrink: 0;
+    margin-right: 12px;
+}
+
+.address-label {
+    font-size: 18px; /* var(--font-size-lg) replaced */
+    font-weight: 700; /* var(--font-weight-bold) replaced */
+    color: #fff; /* var(--color-white) replaced */
+    margin-right: 28px; /* var(--spacing-3xl) replaced */
+}
+
+.address-text {
+    font-size: 18px;
+    font-style: normal;
+    font-weight: 400;
+    line-height: 28px;
+    color: #fff;
+}
+
+/* 지도 영역 */
+.map-section {
+    margin-bottom: 20px;
+}
+
+.map-container {
+    width: 100%;
+    height: 400px;
+    border-radius: 20px;
+    overflow: hidden;
+}
+
+.map-area {
+    width: 100%;
+    height: 400px;
+    background: #DFDFDF; /* var(--color-gray-lighter) replaced */
+    border-radius: 8px; /* var(--radius-md) replaced */
+    margin-bottom: 80px;
+}
+
+/* 교통 안내 */
+.transport-title {
+    text-align: center;
+    margin-bottom: 40px;
+}
+
+.transport-wrapper .transport-title h2 {
+    text-align: left;
+    font-size: 28px;
+    font-style: normal;
+    font-weight: 700;
+    line-height: 40px;
+    color: #000;
+    margin: 0;
+}
+
+.transport-section {
+    display: flex;
+    flex-direction: column;
+    gap: 30px;
+    margin-bottom: 40px;
+}
+
+.transport-item {
+    display: flex;
+    align-items: flex-start;
+    flex: 1;
+    padding-bottom: 40px;
+    border-bottom: 1px solid #E0E0E0;
+    gap: 30px;
+}
+
+.transport-item:last-child {
+    border-bottom: none;
+    padding-bottom: 0;
+}
+
+.transport-icon {
+    width: 80px;
+    height: 80px;
+    margin-bottom: 20px; /* var(--spacing-xl) replaced */
+}
+
+.transport-content {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+}
+
+.transport-name {
+    font-size: 18px;
+    font-style: normal;
+    font-weight: 700;
+    line-height: 28px;
+    color: #000;
+}
+
+.transport-info {
+    font-size: 16px;
+    font-style: normal;
+    font-weight: 400;
+    line-height: 24px;
+}
+
+.transport-name.bus {
+    color: #E87722; /* var(--color-secondary-orange) replaced */
+}
+
+.transport-name.subway {
+    color: #0094BE; /* var(--color-secondary-blue) replaced */
+}
+
+.transport-detail {
+    font-size: 18px; /* var(--font-size-lg) replaced */
+    color: #666; /* var(--color-gray-medium) replaced */
+    line-height: 1.6; /* var(--line-height-relaxed) replaced */
+}
+
+/* ==========================================
+   반응형 - 모바일
+   ========================================== */
+@media (max-width: 768px) {
+    .content-area {
+        padding: 0;
+    }
+    
+    .content-area > h2 {
+        font-size: 28px; /* var(--font-size-3xl) replaced */
+        margin-bottom: 40px; /* var(--spacing-4xl) replaced */
+        padding: 0 20px; /* var(--spacing-xl) replaced */
+    }
+    
+    /* 주소 섹션 */
+    .address-section {
+        padding: 20px 20px; /* var(--spacing-xl) replaced */
+        margin-bottom: 30px; /* var(--spacing-3xl) replaced */
+        flex-direction: column;
+        gap: 12px; /* var(--spacing-md) replaced */
+    }
+    
+    .address-item {
+        align-items: center;
+        flex-wrap: wrap;
+        gap: 12px; /* var(--spacing-md) replaced */
+    }
+    
+    .address-icon {
+        width: 20px;
+        height: 20px;
+    }
+    
+    .address-label {
+        font-size: 16px; /* var(--font-size-base) replaced */
+        font-weight: 700; /* var(--font-weight-bold) replaced */
+        color: #fff; /* var(--color-white) replaced */
+        margin-right: 0;
+        min-width: auto;
+    }
+    
+    .address-text {
+        font-size: 14px; /* var(--font-size-sm) replaced */
+        color: #fff; /* var(--color-white) replaced */
+        width: 100%;
+        margin-left: 32px;
+    }
+    
+    /* 지도 영역 */
+    .map-area {
+        height: 300px;
+        margin-bottom: 40px; /* var(--spacing-4xl) replaced */
+        padding: 0 20px; /* var(--spacing-xl) replaced */
+    }
+
+    /* 교통 안내 */
+    .transport-title {
+        padding: 0 20px 24px; /* var(--spacing-xl), var(--spacing-2xl) replaced */
+        margin-bottom: 0;
+    }
+    
+    .transport-title > h2 {
+        font-size: 24px; /* var(--font-size-2xl) replaced */
+        font-weight: 700; /* var(--font-weight-bold) replaced */
+    }
+    
+    .transport-section {
+        padding: 0 20px; /* var(--spacing-xl) replaced */
+        flex-direction: column;
+        gap: 24px; /* var(--spacing-2xl) replaced */
+    }
+    
+    .transport-item {
+        flex-direction: row;
+        gap: 16px; /* var(--spacing-lg) replaced */
+        padding-bottom: 24px; /* var(--spacing-2xl) replaced */
+    }
+    
+    .transport-icon {
+        width: 48px;
+        height: 48px;
+        margin-bottom: 0;
+        flex-shrink: 0;
+    }
+    
+    .transport-content {
+        text-align: left;
+    }
+
+    .transport-name {
+        font-size: 18px; /* var(--font-size-lg) replaced */
+        margin-bottom: 4px; /* var(--spacing-xs) replaced */
+    }
+
+    .transport-detail {
+        font-size: 14px; /* var(--font-size-sm) replaced */
+        line-height: 1.5; /* var(--line-height-normal) replaced */
+    }
+}

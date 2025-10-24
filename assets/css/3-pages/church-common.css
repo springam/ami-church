@@ -1,0 +1,155 @@
+/* ==========================================
+   Church Pages - 공통 레이아웃
+   ami-church.html, greeting, intro, schedule, location
+   ========================================== */
+
+/* ==========================================
+   Hero Section
+   ========================================== */
+.hero {
+    position: relative;
+    height: 340px;
+    overflow: hidden;
+    margin: 0;
+    background-image: url('../../images/bg-church.png');
+    background-size: cover;
+    background-repeat: no-repeat;
+    background-position: center;
+    background-color: #87CEEB;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    color: #fff;
+}
+
+.hero h1 {
+    font-size: 60px;
+    font-weight: 700;
+    line-height: 80px;
+    position: relative;
+    z-index: 2;
+    margin-top: 50px;
+}
+
+/* ==========================================
+   Content Layout
+   ========================================== */
+.content {
+    min-height: 600px;
+    padding-top: 120px;
+    background: #fff;
+    display: flex;
+    justify-content: center;
+}
+
+.content-wrapper {
+    width: 1260px;
+    max-width: 1260px;
+    padding: 0 40px;
+    display: grid;
+    grid-template-columns: 160px 1fr;
+    grid-template-areas: "title title" "lnb content";
+    gap: 80px;
+}
+
+/* Content Area - 메인 컨텐츠 영역 */
+.content-area {
+    width: 100%;
+}
+
+/* ==========================================
+   Breadcrumb (경로)
+   ========================================== */
+.breadcrumb {
+    display: flex;
+    align-items: center;
+    font-size: 14px; /* var(--font-size-sm) replaced */
+    color: #999; /* var(--color-gray-light) replaced */
+    margin-bottom: 20px;
+}
+
+.breadcrumb a {
+    color: #999; /* var(--color-gray-light) replaced */
+    text-decoration: none;
+    margin-right: 4px; /* var(--spacing-xs) replaced */
+}
+
+.breadcrumb span {
+    margin-right: 4px; /* var(--spacing-xs) replaced */
+}
+
+.breadcrumb .active {
+    color: #333; /* var(--color-gray-dark) replaced */
+}
+
+/* ==========================================
+   에러 메시지
+   ========================================== */
+.error-message {
+    color: #d32f2f;
+    background: #ffebee;
+    padding: 20px;
+    border-radius: 8px; /* var(--radius-md) replaced */
+    margin: 20px 0;
+}
+
+/* ==========================================
+   반응형 - 모바일
+   ========================================== */
+@media (max-width: 768px) {
+    /* Hero Section */
+    .hero {
+        height: 260px;
+        background-image: url(../../images/bg-church.png);
+        background-size: cover;
+    }
+    
+    .hero h1 {
+        font-size: 28px;
+        font-style: normal;
+        font-weight: 700;
+        line-height: 40px;
+        margin-top: 0px;
+    }
+    
+    /* Content Layout */
+    .content {
+        padding: 40px 20px;
+    }
+    
+    .content-wrapper {
+        width: 100%;
+        padding: 0;
+        display: flex;
+        flex-direction: column;
+        gap: 0;
+    }
+    
+    /* Content Area - 기본 스타일만 */
+    .content-area {
+        width: 100%;
+        padding: 60px 0;
+    }
+    
+    .content-area h1 {
+        font-size: 36px;
+        margin-bottom: 30px; 
+        padding: 0 20px;
+    }
+    
+    .content-area h2 {
+        font-size: 32px;
+        font-style: normal;
+        font-weight: 700;
+        line-height: 44px; 
+        margin-bottom: 20px;
+        padding: 0 20px;
+        text-align: center;
+    }
+    
+    /* Breadcrumb */
+    .breadcrumb {
+        padding: 0 20px;
+    }
+}

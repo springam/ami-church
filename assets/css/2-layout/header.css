@@ -1,0 +1,325 @@
+/* ==========================================
+   Header - 헤더 전용 스타일
+   ========================================== */
+header {
+    position: absolute;
+    top: 0;
+    left: 50%;  /* 0 → 50% */
+    transform: translateX(-50%);  /* 추가 */
+    width: 100%;
+    max-width: 1260px;
+    height: 80px; /* var(--header-height) replaced */
+    background: transparent;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0 60px; /* var(--spacing-5xl) replaced */
+    z-index: 500; /* var(--z-index-sticky) replaced */
+    box-sizing: border-box;
+}
+
+/* 모바일 메뉴 열렸을 때 */
+header.menu-open {
+    z-index: 1100; /* var(--z-index-modal) replaced */
+    background: #fff; /* var(--color-white) replaced */
+}
+
+/* ==========================================
+   로고
+   ========================================== */
+header .logo {
+    height: 40px;
+}
+
+header .logo img {
+    height: 100%;
+    width: auto;
+    object-fit: contain;
+    filter: brightness(0) invert(1);
+}
+
+/* ===== 데스크톱 네비게이션 ===== */
+header nav {
+    display: flex;
+    gap: 80px; /* var(--spacing-6xl) replaced */
+}
+
+header nav a {
+    color: #fff; /* var(--color-white) replaced */
+    text-decoration: none;
+    font-size: 18px; /* var(--font-size-lg) replaced */
+    font-weight: 500; /* var(--font-weight-medium) replaced */
+    transition: opacity 0.3s; /* var(--transition-base) replaced with 0.3s */
+}
+
+header nav a:hover {
+    opacity: 0.7;
+}
+
+/* ==========================================
+   헤더 아이콘 및 메뉴 버튼
+   ========================================== */
+.header-icons {
+    display: flex;
+    align-items: center;
+    gap: 20px; /* var(--spacing-xl) replaced */
+}
+
+.header-icons a {
+    color: #fff; /* var(--color-white) replaced */
+    transition: opacity 0.3s; /* var(--transition-base) replaced with 0.3s */
+}
+
+.header-icons a:hover {
+    opacity: 0.7;
+}
+
+.header-icons svg {
+    width: 24px;
+    height: 24px;
+}
+
+.mobile-menu-close {
+    display: none;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    width: 40px;
+    height: 40px;
+}
+
+.menu-button {
+    display: none;
+    position: relative;
+    z-index: 1100; /* var(--z-index-modal) replaced */
+    width: 28px;
+    height: 28px;
+    transform: translate(-50%, -50%);
+    background: none;
+    border: none;
+    cursor: pointer;
+}
+
+/* ==========================================
+   헤더 아이콘 그룹
+   ========================================== */
+.header-icons {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+}
+
+.search-icon {
+    cursor: pointer;
+    transition: opacity 0.3s;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.search-icon:hover {
+    opacity: 0.7;
+}
+
+/* ==========================================
+   햄버거 메뉴
+   ========================================== */
+.hamburger-menu {
+    display: none;
+    flex-direction: column;
+    gap: 6px;
+    cursor: pointer;
+}
+
+.hamburger-menu span {
+    width: 24px;
+    height: 2px;
+    background: #fff;
+    transition: all 0.3s;
+}
+
+/* X 버튼 (기본 숨김) */
+.mobile-menu-close {
+    display: none;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    width: 36px;
+    height: 36px;
+}
+
+.mobile-menu-close svg {
+    width: 32px;
+    height: 32px;
+}
+
+/* ==========================================
+   모바일 반응형
+   ========================================== */
+@media (max-width: 768px) {
+    html, body {
+        width: 100vw;
+        overflow-x: hidden;
+    }
+    
+    /* ========== Header ========== */
+    header {
+        position: absolute;
+        padding: 10px 20px;
+        height: 68px;
+        width: 100vw;
+    }
+    
+    /* 모바일 메뉴 열렸을 때 */
+    header.menu-open {
+        z-index: 1100;
+        background: #fff;
+    }
+
+    header .logo {
+        width: 100px;
+        height: 100%;
+    }
+    
+    header .logo img {
+        width: 100%;
+        height: 100%;
+        transition: filter 0.3s;
+    }
+    
+    /* 메뉴 열렸을 때 로고 필터 제거 */
+    header.menu-open .logo img {
+        filter: none;
+    }
+
+    /* 데스크톱 네비게이션 숨김 */
+    header nav {
+        display: none;
+    }
+    
+    /* 오른쪽 아이콘 그룹 */
+    .header-icons {
+        display: flex;
+        align-items: center;
+        gap: 16px;
+    }
+    
+    /* 메뉴 열렸을 때 아이콘 그룹 숨김 */
+    header.menu-open .header-icons {
+        display: none;
+    }
+    
+    /* 검색 아이콘 */
+    .search-icon {
+        width: 24px;
+        height: 24px;
+    }
+
+    .search-icon svg {
+        width: 24px;
+        height: 24px;
+    }
+
+    /* 햄버거 메뉴 */
+    .hamburger-menu {
+        display: flex;
+    }
+    
+    /* X 버튼 - 기본 숨김 */
+    .mobile-menu-close {
+        display: none;
+    }
+    
+    /* 메뉴 열렸을 때 X 버튼 표시 */
+    header.menu-open .mobile-menu-close {
+        display: flex;
+    }
+    
+    /* ========== 섹션 ========== */
+    /* section {
+        width: 100vw;
+        padding-left: 0;
+        padding-right: 0;
+    }
+    
+    .hero-bg {
+        width: 100vw;
+        height: 100%;
+        object-fit: cover;
+    } */
+
+    /* ========== Footer ========== */
+    footer {
+        padding: 40px 20px 20px 20px;
+    }
+    
+    .footer-content {
+        display: flex;
+        flex-direction: column;
+        gap: 0;
+        padding: 0;
+        width: 100%;
+        position: relative;
+    }
+    
+    .footer-main {
+        display: flex;
+        flex-direction: column;
+        gap: 40px;
+        width: 100%;
+        padding-right: 60px;
+        position: relative;
+    }
+    
+    .footer-logo {
+        width: 100px;
+        height: auto;
+    }
+    
+    .footer-logo img {
+        width: 100%;
+        height: auto;
+    }
+
+    .footer-info {
+        width: 100%;
+    }
+    
+    .footer-info p {
+        font-size: 13px;
+        line-height: 20px;
+        margin-bottom: 0px;
+        color: #000;
+    }
+    
+    .footer-nav {
+        display: none;
+    }
+    
+    .scroll-top {
+        position: absolute;
+        top: 0;
+        right: 0;
+        width: 48px;
+        height: 48px;
+        background: #000;
+        border-radius: 50%;
+    }
+    
+    .scroll-top svg {
+        width: 20px;
+        height: 20px;
+    }
+    
+    .scroll-top svg path {
+        stroke: #fff;
+    }
+    
+    .text-section,
+    .media-section,
+    .content,
+    footer {
+        width: 100vw;
+        box-sizing: border-box;
+    }
+}

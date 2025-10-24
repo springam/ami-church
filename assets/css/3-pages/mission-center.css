@@ -1,0 +1,400 @@
+/* ==========================================
+   Mission Center - 선교 센터 페이지
+   ========================================== */
+/* ==========================================
+   Hero Section
+   ========================================== */
+.mission .hero {
+    background-image: url('../../images/bg-mission.png');
+}
+
+/* ==========================================
+   Content Area
+   ========================================== */
+.content-area {
+    max-width: 1000px;
+    margin-bottom: 40px;
+    margin: 0 auto;
+    padding: 0 0 30px 0;
+    width: 100%;
+}
+
+/* .content-area h2 {
+    font-size: 48px;
+    font-weight: 700;
+    color: #000;
+    margin-bottom: 30px;
+} */
+
+/* ==========================================
+   센터 소개 (Center Intro)
+   ========================================== */
+.center-intro-content {
+    max-width: 1000px;
+    margin-bottom: 40px;
+}
+
+.intro-quote {
+    color: #182B8C;
+    margin: 30px 0 20px 0;
+    font-size: 32px;
+    font-weight: 700; 
+    line-height: 1.5;
+}
+
+.intro-text {
+    font-size: 20px; /* var(--font-size-xl) replaced with 20px */
+    font-weight: 400; /* var(--font-weight-normal) replaced */
+    line-height: 1.8; /* var(--line-height-loose) replaced */
+    color: #000; /* var(--color-black) replaced with #000 */
+    margin-bottom: 12px; /* var(--spacing-md) replaced */
+}
+
+.vision-image {
+    position: relative;
+    width: 100%;
+    height: 350px;
+    background: #DFDFDF; /* var(--color-gray-lighter) replaced */
+    margin: 30px 0;
+    border-radius: 8px; /* var(--radius-md) replaced */
+    overflow: hidden;
+}
+
+.vision-image img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.vision-text-overlay {
+    position: absolute;
+    left: 40px;
+    bottom: 40px;
+    padding: 6px 10px;
+    border-radius: 4px; 
+}
+
+.vision-text-overlay p {
+    font-size: 20px;
+    font-style: normal;
+    font-weight: 700;
+    line-height: 32px;
+    color: #fff;
+    margin: 0;
+}
+
+/* ==========================================
+   선교팀 (Mission Teams)
+   ========================================== */
+.team-section {
+    padding: 60px 0 80px 0; /* var(--spacing-5xl), var(--spacing-6xl) replaced */
+}
+
+.team-section + .team-section {
+    padding-top: 0;
+}
+
+.team-section h3 {
+    font-size: 32px;
+    font-weight: 700; 
+    color: #000; /* var(--color-black) replaced with #000 */
+    margin-bottom: 30px;
+    text-align: center;
+}
+
+.team-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 30px;
+}
+
+.team-card {
+    background: #F8F9FA; /* var(--color-bg-secondary) replaced */
+    border-radius: 8px; /* var(--radius-md) replaced */
+    overflow: hidden;
+    text-align: center;
+    padding: 30px 20px;
+    border: 1px solid #E0E0E0; /* var(--color-border-medium) replaced with #E0E0E0 */
+}
+
+.team-card-icon {
+    width: 60px;
+    height: 60px;
+    margin: 0 auto 20px auto; 
+    color: #182B8C;
+}
+
+.team-card-title {
+    font-size: 24px; /* var(--font-size-2xl) replaced */
+    font-weight: 700; 
+    color: #000; /* var(--color-black) replaced */
+    margin-bottom: 12px; /* var(--spacing-md) replaced */
+}
+
+.team-card-description {
+    font-size: 16px; /* var(--font-size-base) replaced */
+    color: #666; /* var(--color-gray-medium) replaced */
+    line-height: 1.6; /* var(--line-height-relaxed) replaced */
+}
+
+/* ==========================================
+   선교센터 소식 (News)
+   ========================================== */
+.news-section {
+    background: #EBF1F6; /* var(--color-bg-blue-light) replaced */
+    padding: 80px 0; /* var(--spacing-6xl) replaced */
+}
+
+.news-section h3 {
+    font-size: 32px;
+    font-weight: 700; 
+    color: #000; /* var(--color-black) replaced with #000 */
+    margin-bottom: 30px;
+    text-align: center;
+}
+
+.news-list {
+    display: flex;
+    flex-direction: column;
+    gap: 0;
+    max-width: 1000px;
+    margin-bottom: 40px;
+    margin: 0 auto;
+    border-top: 1px solid #E0E0E0; /* var(--color-border-medium) replaced with #E0E0E0 */
+    border-bottom: 1px solid #E0E0E0; /* var(--color-border-medium) replaced with #E0E0E0 */
+}
+
+.news-item {
+    display: flex;
+    align-items: center;
+    padding: 16px 0; /* var(--spacing-lg) replaced */
+    gap: 16px; /* var(--spacing-lg) replaced */
+    cursor: pointer;
+    transition: background 0.3s; /* var(--transition-base) replaced with 0.3s */
+}
+
+.news-item:not(:last-child) {
+    border-bottom: 1px solid #E0E0E0; /* var(--color-border-medium) replaced with #E0E0E0 */
+}
+
+.news-item:hover {
+    background: #FAFAFA; /* var(--color-bg-gray) replaced with #FAFAFA */
+}
+
+.news-category {
+    font-size: 16px; /* var(--font-size-base) replaced */
+    font-weight: 700; 
+    color: #182B8C;
+    flex-shrink: 0;
+    width: 80px;
+    text-align: center;
+}
+
+.news-title {
+    font-size: 18px; /* var(--font-size-lg) replaced */
+    font-weight: 500; /* var(--font-weight-medium) replaced */
+    color: #000; /* var(--color-black) replaced */
+    flex-grow: 1;
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+}
+
+.news-date {
+    font-size: 16px; /* var(--font-size-base) replaced */
+    color: #666; /* var(--color-gray-medium) replaced */
+    flex-shrink: 0;
+    width: 100px;
+    text-align: right;
+}
+
+/* ==========================================
+   섬기는 사람들
+   ========================================== */
+.people-section {
+    background: #182B8C;
+    padding: 80px 0; /* var(--spacing-6xl) replaced */
+    color: #fff; 
+}
+
+.people-section h4 {
+    font-size: 18px; /* var(--font-size-lg) replaced with 18px */
+    font-weight: 700; 
+    color: #fff; 
+    margin-bottom: 16px; /* var(--spacing-lg) replaced */
+}
+
+.people-list {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 20px; 
+    max-width: 1000px;
+    margin-bottom: 40px;
+    margin: 0 auto;
+}
+
+.people-group {
+    padding: 16px; /* var(--spacing-lg) replaced */
+    background: rgba(0, 0, 0, 0.2);
+    border-radius: 8px; /* var(--radius-md) replaced */
+}
+
+.people-item {
+    font-size: 16px; /* var(--font-size-base) replaced */
+    font-weight: 400; /* var(--font-weight-normal) replaced */
+    line-height: 1.6; /* var(--line-height-relaxed) replaced */
+    color: #fff; 
+    padding-left: 8px; /* var(--spacing-sm) replaced */
+    position: relative;
+}
+
+.people-item::before {
+    content: "•";
+    position: absolute;
+    left: 0;
+    color: #fff; 
+}
+
+.people-item .role {
+    font-weight: 500; /* var(--font-weight-medium) replaced */
+}
+
+.people-item .detail {
+    opacity: 0.9;
+}
+
+/* ==========================================
+   반응형
+   ========================================== */
+@media (max-width: 768px) {
+    .content-area {
+        padding: 0;
+    }
+    
+    /* .content-area h2 {
+        font-size: 36px;
+        margin-bottom: 20px; 
+        padding: 0 20px; 
+    } */
+    
+    .intro-quote {
+        font-size: 24px; /* var(--font-size-2xl) replaced with 24px */
+        line-height: 1.5;
+        margin: 20px 0 12px 0; /* var(--spacing-xl), var(--spacing-md) replaced */
+        padding: 0 20px; 
+    }
+    
+    .intro-text {
+        font-size: 16px; /* var(--font-size-base) replaced with 16px */
+        line-height: 1.6; /* var(--line-height-relaxed) replaced */
+        padding: 0 20px; 
+    }
+    
+    .vision-image {
+        height: 200px;
+        margin: 20px 20px; 
+    }
+    
+    .vision-text-overlay {
+        left: 8px; /* var(--spacing-sm) replaced */
+        bottom: 8px; /* var(--spacing-sm) replaced */
+        font-size: 14px; /* var(--font-size-sm) replaced with 14px */
+    }
+
+    /* 선교팀 */
+    .team-section {
+        padding: 40px 20px; /* var(--spacing-4xl), var(--spacing-xl) replaced */
+    }
+
+    .team-section h3 {
+        font-size: 24px; /* var(--font-size-2xl) replaced */
+        margin-bottom: 20px; 
+    }
+
+    .team-grid {
+        grid-template-columns: 1fr;
+        gap: 20px; 
+    }
+    
+    .team-card {
+        padding: 20px; 
+    }
+
+    .team-card-icon {
+        width: 48px;
+        height: 48px;
+        margin-bottom: 12px; /* var(--spacing-md) replaced */
+    }
+
+    .team-card-title {
+        font-size: 20px; /* var(--font-size-xl) replaced */
+    }
+
+    .team-card-description {
+        font-size: 14px; /* var(--font-size-sm) replaced */
+    }
+
+    /* 소식 */
+    .news-section {
+        padding: 40px 20px; /* var(--spacing-4xl), var(--spacing-xl) replaced */
+    }
+
+    .news-section h3 {
+        font-size: 24px; /* var(--font-size-2xl) replaced */
+        margin-bottom: 20px; 
+    }
+    
+    .news-list {
+        padding: 0 20px; 
+    }
+
+    .news-item {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 4px; /* var(--spacing-xs) replaced */
+        padding: 12px 0; /* var(--spacing-md) replaced */
+    }
+
+    .news-category {
+        font-size: 12px; /* var(--font-size-xs) replaced */
+        width: auto;
+    }
+
+    .news-title {
+        font-size: 16px; /* var(--font-size-base) replaced */
+        white-space: normal;
+        overflow: visible;
+        text-overflow: clip;
+        width: 100%;
+    }
+
+    .news-date {
+        font-size: 12px; /* var(--font-size-xs) replaced */
+        width: auto;
+        text-align: left;
+    }
+
+    /* 섬기는 사람들 */
+    .people-section {
+        padding: 40px 20px; /* var(--spacing-4xl), var(--spacing-xl) replaced */
+    }
+
+    .people-list {
+        grid-template-columns: 1fr;
+        gap: 12px; /* var(--spacing-md) replaced */
+        padding: 0;
+    }
+    
+    .people-group {
+        padding: 12px; /* var(--spacing-md) replaced */
+    }
+    
+    .people-section h4 {
+        font-size: 16px; /* var(--font-size-base) replaced */
+        margin-bottom: 8px; /* var(--spacing-sm) replaced */
+    }
+
+    .people-item {
+        font-size: 14px; /* var(--font-size-sm) replaced */
+    }
+}
