@@ -9,12 +9,16 @@
     width: 100%;
 }
 
-.content-area h2 {
-    font-size: 48px;
-    font-weight: 700;
-    color: #000;
-    margin-bottom: 60px;
+@media (min-width: 769px) {
+    .content-area h2 {
+        font-size: 48px;
+        font-weight: 700;
+        color: #000;
+        margin-bottom: 60px;
+    }
 }
+
+
 
 /* ==========================================
    섬기는 사람들
@@ -133,7 +137,7 @@
     }
     
     .ministry-section + .ministry-section {
-        padding-top: 12px; 
+        padding-top: 0px; 
     }
     
     .ministry-category {

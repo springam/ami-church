@@ -1,9 +1,10 @@
 /* ==========================================
    Sermon Video - 설교 영상 페이지 (한국 예배)
    ========================================== */
-   /* ==========================================
-   Hero Section
-   ========================================== */
+
+/* ==========================================
+Hero Section
+========================================== */
 .sermon .hero {
     background-image: url('../../images/bg-sermon.png');
 }
@@ -255,6 +256,7 @@
     text-overflow: ellipsis;
     display: -webkit-box;
     -webkit-line-clamp: 2;
+    line-clamp: 2;
     -webkit-box-orient: vertical;
     flex-grow: 1;
 }

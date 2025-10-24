@@ -9,14 +9,6 @@
     width: 100%;
 }
 
-.content-area > h2 {
-    font-size: 48px;
-    font-style: normal;
-    font-weight: 700;
-    color: #000;
-    margin-bottom: 60px;
-}
-
 /* 예배 시간 섹션 */
 .schedule-section {
     background-image: url('../../images/time-background.png');

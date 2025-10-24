@@ -101,8 +101,13 @@
     /* Hero Section */
     .hero {
         height: 260px;
-        background-image: url(../../images/bg-church.png);
+        background-image: url(../../images/bg-church-mobile.png);
         background-size: cover;
+        background-repeat: no-repeat;
+        background-position: center;
+        /* background-size: auto 100%;
+        background-position: right center; 
+        background-repeat: no-repeat; */
     }
     
     .hero h1 {
