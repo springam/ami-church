@@ -137,13 +137,17 @@ Hero Section
     overflow: hidden;
     cursor: pointer;
     transition: all 0.3s ease;
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
-    padding: 32px;
+    /* box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08); */
+    padding: 24px;
     display: flex;
     flex-direction: column;
     justify-content: space-between;
-    aspect-ratio: 1.16 / 1;
+    width: 100%;
+    aspect-ratio: 1.2 / 1;
     position: relative;
+    background-size: 100% 100%;
+    background-position: center;
+    background-repeat: no-repeat;
 }
 
 .video-card:hover {
@@ -216,7 +220,7 @@ Hero Section
     position: relative;
     width: 100%;
     /* 16:9 ratio */
-    padding-top: 50px; /* var(--spacing-4xl) replaced with 50px (approximation) */
+    padding-top: 50px; 
     overflow: hidden;
     flex-shrink: 0;
 }
@@ -236,20 +240,20 @@ Hero Section
 }
 
 .video-card-info {
-    padding: 16px; /* var(--spacing-lg) replaced */
+    padding: 16px; 
     flex-grow: 1;
     display: flex;
     flex-direction: column;
 }
 
 .video-card.featured .video-card-info {
-    padding: 24px; /* var(--spacing-2xl) replaced */
+    padding: 24px; 
 }
 
 .video-card-title {
-    font-size: 20px; /* var(--font-size-xl) replaced */
-    color: #000; /* var(--color-black) replaced */
-    line-height: 1.5; /* var(--line-height-normal) replaced */
+    font-size: 20px;
+    color: #000; 
+    line-height: 1.5;
     margin-bottom: 8px;
     /* 2줄 말줄임표 */
     overflow: hidden;
@@ -262,17 +266,17 @@ Hero Section
 }
 
 .video-card.featured .video-card-title {
-    font-size: 24px; /* var(--font-size-2xl) replaced */
+    font-size: 24px;
 }
 
 .video-card-meta {
-    font-size: 14px; /* var(--font-size-sm) replaced */
-    font-weight: 400; /* var(--font-weight-normal) replaced */
-    color: #666; /* var(--color-gray-medium) replaced */
+    font-size: 14px;
+    font-weight: 400;
+    color: #666;
     display: flex;
     justify-content: space-between;
     align-items: center;
-    line-height: 1.5; /* var(--line-height-normal) replaced */
+    line-height: 1.5;
     flex-shrink: 0;
 }
 
@@ -628,7 +632,7 @@ Hero Section
     border-radius: 4px; /* var(--radius-sm) replaced */
     padding: 8px 12px; /* var(--spacing-sm), var(--spacing-md) replaced */
     color: #000; /* var(--color-black) replaced */
-    font-size: 14px; /* var(--font-size-sm) replaced */
+    font-size: 14px;
     cursor: pointer;
     transition: all 0.3s; /* var(--transition-base) replaced with 0.3s */
 }
@@ -700,22 +704,112 @@ Hero Section
    ========================================== */
 @media (max-width: 768px) {
     .worship-header h2 {
-        font-size: 36px; /* var(--font-size-5xl) replaced with 36px */
+        font-size: 32px;
+        font-style: normal;
+        font-weight: 700;
+        line-height: 44px;
+        margin-bottom: 40px;
     }
     
     .worship-tabs {
         flex-wrap: wrap;
-        gap: 10px;
-        padding: 12px 20px; /* var(--spacing-md), var(--spacing-xl) replaced */
+        gap: 20px;
+        padding: 16px 20px;
     }
     
     .worship-tab {
-        font-size: 14px; /* var(--font-size-sm) replaced with 14px */
-        padding: 10px 8px;
+        font-size: 14px;
+        font-style: normal;
+        font-weight: 500;
+        line-height: 24px;
+        padding: 0;
+    }
+
+    .worship-tab.active {
+        font-size: 14px;
+        font-style: normal;
+        font-weight: 500;
+        line-height: 24px;
+        padding: 0;
+        color: #182B8C;
+    }
+
+    .video-card {
+        padding: 24px;
+        aspect-ratio: 1.8 / 1;
+    }
+
+    .video-card:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    }
+
+    .video-title {
+        font-size: 16px;
+        line-height: 24px;
+    }
+
+    .video-description {
+        font-size: 12px;
+        line-height: 16px;
+    }
+
+    .video-date {
+        font-size: 12px;
+        line-height: 16px;
+        color: #767676;
+    }
+
+    .content-area h2 {
+        font-size: 22px;
+        font-style: normal;
+        font-weight: 700;
+        line-height: 32px;
+        padding: 0;
+        margin-bottom: 16px;
+
+    }
+    
+    .video-detail-header {
+        margin-bottom: 28px;
+    }
+
+    .video-detail-meta {
+        font-size: 14px;
+        font-style: normal;
+        font-weight: 400;
+        line-height: 24px;
+    }
+
+    .video-detail-player {
+        position: relative;
+        width: 100%;
+        height: 0;
+        padding-bottom: 56.25%;
+        border-radius: 0;
+        overflow: hidden;
+    }
+
+    .video-detail-iframe {
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        border: none;
+        display: block;
+        position: absolute;
+    }
+
+    .video-navigation {
+        display: flex;
+        /* grid-template-columns: 1fr 1fr; */
+        gap: 20px;
+        margin-top: 20px;
+        flex-direction: column;
     }
     
     .sub-menu {
-        padding: 8px 20px; /* var(--spacing-sm), var(--spacing-xl) replaced */
+        padding: 8px 20px; 
     }
     
     .sub-menu-items {
@@ -725,13 +819,13 @@ Hero Section
     
     .sub-menu-item {
         font-size: 13px;
-        padding: 4px 8px; /* var(--spacing-xs), var(--spacing-sm) replaced */
+        padding: 4px 8px;
     }
     
     .video-grid {
         grid-template-columns: 1fr;
-        gap: 8px;
-        padding: 0 20px; 
+        gap: 12px;
+        padding: 0; 
     }
     
     .video-card.featured {
@@ -759,11 +853,11 @@ Hero Section
     }
 
     .video-card-title {
-        font-size: 16px; /* var(--font-size-base) replaced */
+        font-size: 16px; 
     }
     
     .video-card.featured .video-card-title {
-        font-size: 16px; /* var(--font-size-base) replaced */
+        font-size: 16px; 
     }
 
     .video-card-meta {
@@ -794,7 +888,7 @@ Hero Section
     }
     
     .column-title {
-        font-size: 14px; /* var(--font-size-sm) replaced */
+        font-size: 14px;
         overflow: hidden;
         text-overflow: ellipsis;
         white-space: nowrap;
@@ -809,7 +903,7 @@ Hero Section
     
     .pagination {
         gap: 4px;
-        margin: 20px 0 30px 0; /* var(--spacing-xl), var(--spacing-3xl) replaced */
+        margin: 20px 0 30px 0; 
     }
     
     .pagination-button {

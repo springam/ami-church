@@ -130,10 +130,18 @@
         font-size: 36px; 
         padding: 0 20px; 
     } */
+
+    .ministry-section.headquarters {
+        padding: 0;
+    }
+
+    .ministry-section.headquarters .ministry-content {
+        padding: 28px 0;
+    }
     
     .ministry-section {
         grid-template-columns: 1fr;
-        margin-bottom: 0;
+        padding: 0;
     }
     
     .ministry-section + .ministry-section {
@@ -142,18 +150,30 @@
     
     .ministry-category {
         padding: 8px 15px; 
-        border-radius: 8px 8px 0 0; 
+        border-radius: 8px 8px 0 0;
+        border-radius: 0;
     }
     
     .ministry-category h3 {
-        font-size: 20px; 
+        font-size: 20px;
+        font-style: normal;
+        font-weight: 400;
+        line-height: 32px;
     }
     
     .ministry-content {
-        padding: 8px 15px; 
+        padding: 28px 0; 
+    }
+
+    .ministry-column + .ministry-column {
+        margin: 10px 0;
+    }
+
+    .ministry-column:last-child {
+        margin-bottom: 0;
     }
     
-    .ministry-row {
+    /* .ministry-row {
         grid-template-columns: 1fr;
         gap: 15px;
         padding: 15px 0;
@@ -162,11 +182,11 @@
     
     .ministry-row:last-child {
         border-bottom: none;
-    }
+    } */
     
     .ministry-label {
         font-size: 14px;
-        padding: 6px 10px;
+        padding: 0;
         justify-content: flex-start;
         white-space: normal;
         text-align: left;
@@ -174,11 +194,11 @@
     
     .ministry-names {
         font-size: 14px;
-        line-height: 1.6;
+        font-style: normal;
+        font-weight: 400;
+        line-height: 24px;
     }
     
     /* 본부 사역자 모바일 */
-    .ministry-section.headquarters .ministry-content {
-        padding: 0 15px;
-    }
+    
 }

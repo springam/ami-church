@@ -153,6 +153,98 @@ header nav a:hover {
     height: 32px;
 }
 
+/* ========== 스크롤바 스타일 ========== */
+.mobile-main-menu::-webkit-scrollbar,
+.mobile-submenu-area::-webkit-scrollbar {
+    width: 4px;
+}
+
+.mobile-main-menu::-webkit-scrollbar-track,
+.mobile-submenu-area::-webkit-scrollbar-track {
+    background: #f1f1f1;
+}
+
+.mobile-main-menu::-webkit-scrollbar-thumb,
+.mobile-submenu-area::-webkit-scrollbar-thumb {
+    background: #888;
+    border-radius: 2px;
+}
+
+.mobile-main-menu::-webkit-scrollbar-thumb:hover,
+.mobile-submenu-area::-webkit-scrollbar-thumb:hover {
+    background: #555;
+}
+
+/* ==========================================
+   검색 오버레이
+   ========================================== */
+.search-overlay {
+    display: none !important;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100vh;
+    background: #fff;
+    z-index: 1000;
+    padding: 20px;
+}
+
+.search-overlay.active {
+    display: flex;
+    flex-direction: column;
+}
+
+.search-overlay-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 40px;
+}
+
+.search-overlay-logo {
+    height: 40px;
+}
+
+.search-overlay-logo img {
+    height: 100%;
+    width: auto;
+    filter: brightness(0);
+}
+
+.search-close-btn {
+    width: 32px;
+    height: 32px;
+    cursor: pointer;
+}
+
+.search-input-wrapper {
+    position: relative;
+}
+
+.search-input {
+    width: 100%;
+    padding: 16px 50px 16px 20px;
+    border: none;
+    border-bottom: 2px solid #182B8C;
+    font-size: 18px;
+    outline: none;
+}
+
+.search-input::placeholder {
+    color: #999;
+}
+
+.search-submit-btn {
+    position: absolute;
+    right: 10px;
+    top: 50%;
+    transform: translateY(-50%);
+    background: none;
+    border: none;
+    cursor: pointer;
+}
+
 /* ==========================================
    모바일 반응형
    ========================================== */

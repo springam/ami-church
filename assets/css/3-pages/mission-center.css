@@ -47,7 +47,7 @@
     font-weight: 400; /* var(--font-weight-normal) replaced */
     line-height: 1.8; /* var(--line-height-loose) replaced */
     color: #000; /* var(--color-black) replaced with #000 */
-    margin-bottom: 12px; /* var(--spacing-md) replaced */
+    margin-bottom: 12px;
 }
 
 .vision-image {
@@ -114,7 +114,7 @@
     overflow: hidden;
     text-align: center;
     padding: 30px 20px;
-    border: 1px solid #E0E0E0; /* var(--color-border-medium) replaced with #E0E0E0 */
+    border: 1px solid #E0E0E0; 
 }
 
 .team-card-icon {
@@ -128,11 +128,11 @@
     font-size: 24px; /* var(--font-size-2xl) replaced */
     font-weight: 700; 
     color: #000; /* var(--color-black) replaced */
-    margin-bottom: 12px; /* var(--spacing-md) replaced */
+    margin-bottom: 12px;
 }
 
 .team-card-description {
-    font-size: 16px; /* var(--font-size-base) replaced */
+    font-size: 16px;
     color: #666; /* var(--color-gray-medium) replaced */
     line-height: 1.6; /* var(--line-height-relaxed) replaced */
 }
@@ -160,29 +160,29 @@
     max-width: 1000px;
     margin-bottom: 40px;
     margin: 0 auto;
-    border-top: 1px solid #E0E0E0; /* var(--color-border-medium) replaced with #E0E0E0 */
-    border-bottom: 1px solid #E0E0E0; /* var(--color-border-medium) replaced with #E0E0E0 */
+    border-top: 1px solid #E0E0E0; 
+    border-bottom: 1px solid #E0E0E0; 
 }
 
 .news-item {
     display: flex;
     align-items: center;
-    padding: 16px 0; /* var(--spacing-lg) replaced */
-    gap: 16px; /* var(--spacing-lg) replaced */
+    padding: 16px 0;
+    gap: 16px;
     cursor: pointer;
-    transition: background 0.3s; /* var(--transition-base) replaced with 0.3s */
+    transition: background 0.3s; 
 }
 
 .news-item:not(:last-child) {
-    border-bottom: 1px solid #E0E0E0; /* var(--color-border-medium) replaced with #E0E0E0 */
+    border-bottom: 1px solid #E0E0E0; 
 }
 
 .news-item:hover {
-    background: #FAFAFA; /* var(--color-bg-gray) replaced with #FAFAFA */
+    background: #FAFAFA; 
 }
 
 .news-category {
-    font-size: 16px; /* var(--font-size-base) replaced */
+    font-size: 16px;
     font-weight: 700; 
     color: #182B8C;
     flex-shrink: 0;
@@ -191,7 +191,7 @@
 }
 
 .news-title {
-    font-size: 18px; /* var(--font-size-lg) replaced */
+    font-size: 18px;
     font-weight: 500; /* var(--font-weight-medium) replaced */
     color: #000; /* var(--color-black) replaced */
     flex-grow: 1;
@@ -201,7 +201,7 @@
 }
 
 .news-date {
-    font-size: 16px; /* var(--font-size-base) replaced */
+    font-size: 16px;
     color: #666; /* var(--color-gray-medium) replaced */
     flex-shrink: 0;
     width: 100px;
@@ -213,15 +213,15 @@
    ========================================== */
 .people-section {
     background: #182B8C;
-    padding: 80px 0; /* var(--spacing-6xl) replaced */
+    padding: 80px 0;
     color: #fff; 
 }
 
 .people-section h4 {
-    font-size: 18px; /* var(--font-size-lg) replaced with 18px */
+    font-size: 18px; 
     font-weight: 700; 
     color: #fff; 
-    margin-bottom: 16px; /* var(--spacing-lg) replaced */
+    margin-bottom: 16px;
 }
 
 .people-list {
@@ -234,17 +234,17 @@
 }
 
 .people-group {
-    padding: 16px; /* var(--spacing-lg) replaced */
+    padding: 16px;
     background: rgba(0, 0, 0, 0.2);
-    border-radius: 8px; /* var(--radius-md) replaced */
+    border-radius: 8px; 
 }
 
 .people-item {
-    font-size: 16px; /* var(--font-size-base) replaced */
-    font-weight: 400; /* var(--font-weight-normal) replaced */
-    line-height: 1.6; /* var(--line-height-relaxed) replaced */
+    font-size: 16px; 
+    font-weight: 400;
+    line-height: 1.6;
     color: #fff; 
-    padding-left: 8px; /* var(--spacing-sm) replaced */
+    padding-left: 8px; 
     position: relative;
 }
 
@@ -256,7 +256,7 @@
 }
 
 .people-item .role {
-    font-weight: 500; /* var(--font-weight-medium) replaced */
+    font-weight: 500;
 }
 
 .people-item .detail {
@@ -278,36 +278,49 @@
     } */
     
     .intro-quote {
-        font-size: 24px; /* var(--font-size-2xl) replaced with 24px */
-        line-height: 1.5;
-        margin: 20px 0 12px 0; /* var(--spacing-xl), var(--spacing-md) replaced */
-        padding: 0 20px; 
+        font-size: 24px;
+        font-style: normal;
+        font-weight: 700;
+        line-height: 36px; 
+        margin: 20px 0 24px 0;
+        padding: 0; 
     }
     
     .intro-text {
-        font-size: 16px; /* var(--font-size-base) replaced with 16px */
-        line-height: 1.6; /* var(--line-height-relaxed) replaced */
-        padding: 0 20px; 
+        font-size: 16px;
+        font-style: normal;
+        font-weight: 400;
+        line-height: 24px; 
+        padding: 0; 
     }
     
     .vision-image {
         height: 200px;
-        margin: 20px 20px; 
+        margin: 24px 0;
+        border-radius: 0;
     }
     
     .vision-text-overlay {
-        left: 8px; /* var(--spacing-sm) replaced */
-        bottom: 8px; /* var(--spacing-sm) replaced */
-        font-size: 14px; /* var(--font-size-sm) replaced with 14px */
+        left: 8px;
+        bottom: 8px; 
+    }
+
+    .vision-text-overlay p {
+        font-size: 14px;
+        font-style: normal;
+        font-weight: 700;
+        line-height: 24px;
+        color: #fff;
+        margin: 0;
     }
 
     /* 선교팀 */
     .team-section {
-        padding: 40px 20px; /* var(--spacing-4xl), var(--spacing-xl) replaced */
+        padding: 40px 20px;
     }
 
     .team-section h3 {
-        font-size: 24px; /* var(--font-size-2xl) replaced */
+        font-size: 24px;
         margin-bottom: 20px; 
     }
 
@@ -323,24 +336,24 @@
     .team-card-icon {
         width: 48px;
         height: 48px;
-        margin-bottom: 12px; /* var(--spacing-md) replaced */
+        margin-bottom: 12px;
     }
 
     .team-card-title {
-        font-size: 20px; /* var(--font-size-xl) replaced */
+        font-size: 20px;
     }
 
     .team-card-description {
-        font-size: 14px; /* var(--font-size-sm) replaced */
+        font-size: 14px; 
     }
 
     /* 소식 */
     .news-section {
-        padding: 40px 20px; /* var(--spacing-4xl), var(--spacing-xl) replaced */
+        padding: 40px 20px;
     }
 
     .news-section h3 {
-        font-size: 24px; /* var(--font-size-2xl) replaced */
+        font-size: 24px;
         margin-bottom: 20px; 
     }
     
@@ -351,17 +364,17 @@
     .news-item {
         flex-direction: column;
         align-items: flex-start;
-        gap: 4px; /* var(--spacing-xs) replaced */
-        padding: 12px 0; /* var(--spacing-md) replaced */
+        gap: 4px;
+        padding: 12px 0;
     }
 
     .news-category {
-        font-size: 12px; /* var(--font-size-xs) replaced */
+        font-size: 12px; 
         width: auto;
     }
 
     .news-title {
-        font-size: 16px; /* var(--font-size-base) replaced */
+        font-size: 16px;
         white-space: normal;
         overflow: visible;
         text-overflow: clip;
@@ -369,32 +382,32 @@
     }
 
     .news-date {
-        font-size: 12px; /* var(--font-size-xs) replaced */
+        font-size: 12px; 
         width: auto;
         text-align: left;
     }
 
     /* 섬기는 사람들 */
     .people-section {
-        padding: 40px 20px; /* var(--spacing-4xl), var(--spacing-xl) replaced */
+        padding: 40px 20px;
     }
 
     .people-list {
         grid-template-columns: 1fr;
-        gap: 12px; /* var(--spacing-md) replaced */
+        gap: 12px;
         padding: 0;
     }
     
     .people-group {
-        padding: 12px; /* var(--spacing-md) replaced */
+        padding: 12px;
     }
     
     .people-section h4 {
-        font-size: 16px; /* var(--font-size-base) replaced */
-        margin-bottom: 8px; /* var(--spacing-sm) replaced */
+        font-size: 16px;
+        margin-bottom: 8px; 
     }
 
     .people-item {
-        font-size: 14px; /* var(--font-size-sm) replaced */
+        font-size: 14px;
     }
 }
