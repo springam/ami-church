@@ -198,9 +198,9 @@
    ========================================== */
 @media (max-width: 768px) {
     /* LNB 완전히 숨기기 */
-    .lnb {
+    /* .lnb {
         display: none !important;
-    }
+    } */
     
     /* Content Area 구조 */
     .content-area {

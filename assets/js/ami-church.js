@@ -172,6 +172,72 @@
     }
 
     /* ========================================
+       4.5. 모바일 LNB 드롭다운 초기화
+       ======================================== */
+    function initMobileLNBDropdown() {
+        const lnb = document.querySelector('.lnb');
+        if (!lnb) return;
+        
+        // 토글 버튼 생성 (모바일에서만)
+        if (window.innerWidth <= 768) {
+            createLNBToggle();
+        }
+        
+        // 화면 크기 변경 시 재생성
+        window.addEventListener('resize', () => {
+            if (window.innerWidth <= 768) {
+                createLNBToggle();
+            } else {
+                removeLNBToggle();
+            }
+        });
+    }
+
+    // LNB 토글 버튼 생성
+    function createLNBToggle() {
+        const lnb = document.querySelector('.lnb');
+        if (!lnb || lnb.querySelector('.lnb-toggle')) return;
+        
+        const activeLink = lnb.querySelector('a.active');
+        const activeText = activeLink ? activeLink.textContent : '메뉴';
+        
+        const toggleBtn = document.createElement('button');
+        toggleBtn.className = 'lnb-toggle';
+        toggleBtn.innerHTML = `
+            <span>${activeText}</span>
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M6 9l6 6 6-6"/>
+            </svg>
+        `;
+        
+        toggleBtn.addEventListener('click', () => {
+            lnb.classList.toggle('open');
+        });
+        
+        lnb.insertBefore(toggleBtn, lnb.firstChild);
+    }
+
+    // LNB 토글 버튼 제거
+    function removeLNBToggle() {
+        const toggle = document.querySelector('.lnb-toggle');
+        if (toggle) {
+            toggle.remove();
+        }
+        const lnb = document.querySelector('.lnb');
+        if (lnb) {
+            lnb.classList.remove('open');
+        }
+    }
+
+    // 모바일 LNB 닫기
+    function closeMobileLNB() {
+        const lnb = document.querySelector('.lnb');
+        if (lnb) {
+            lnb.classList.remove('open');
+        }
+    }
+
+    /* ========================================
        5. 메뉴 활성화 상태 관리 함수
        ======================================== */
     function setActiveMenu(page) {
@@ -197,6 +263,9 @@
         
         loadContent(initialPage, false);
         setActiveMenu(initialPage);
+
+        // 모바일 LNB 드롭다운 초기화
+        initMobileLNBDropdown();
         
         // LNB 메뉴 클릭 이벤트
         document.querySelectorAll('.lnb a[data-page]').forEach(link => {
@@ -206,6 +275,9 @@
                 loadContent(page);
                 setActiveMenu(page);
                 window.location.hash = page;
+
+                // 모바일에서 드롭다운 닫기
+                closeMobileLNB();
             });
         });
         
