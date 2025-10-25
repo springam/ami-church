@@ -88,18 +88,6 @@ header nav a:hover {
     height: 40px;
 }
 
-.menu-button {
-    display: none;
-    position: relative;
-    z-index: 1100; /* var(--z-index-modal) replaced */
-    width: 28px;
-    height: 28px;
-    transform: translate(-50%, -50%);
-    background: none;
-    border: none;
-    cursor: pointer;
-}
-
 /* ==========================================
    헤더 아이콘 그룹
    ========================================== */

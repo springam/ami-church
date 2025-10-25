@@ -98,11 +98,6 @@
     height: 20px;
 }
 
-.mobile-submenu-header.collapsible {
-    cursor: pointer;
-    border-bottom: 1px solid #E0E0E0;
-}
-
 .mobile-submenu-header.collapsible:hover {
     background: #F5F5F5;
 }
@@ -153,13 +148,6 @@
         padding: 0;
     }
 
-    .lnb h3 {
-        font-size: 24px;
-        font-weight: 700; /* var(--font-weight-bold) replaced */
-        color: #000; 
-        margin-bottom: 12px; /* var(--spacing-md) replaced */
-    }
-
     .lnb ul {
         list-style: none;
         padding: 0;
@@ -172,16 +160,16 @@
 
     .lnb a {
         display: block;
-        padding: 10px 16px; /* var(--spacing-sm), var(--spacing-lg) replaced */
-        color: #666; /* var(--color-gray-medium) replaced */
-        font-size: 16px; /* var(--font-size-base) replaced */
-        font-weight: 500; /* var(--font-weight-medium) replaced */
+        padding: 10px 16px;
+        color: #666;
+        font-size: 16px; 
+        font-weight: 500; 
         text-decoration: none;
-        transition: all 0.3s; /* var(--transition-base) replaced with 0.3s */
+        transition: all 0.3s; 
         cursor: pointer;
         border-radius: 8px;
         height: 40px;
-        margin: 20px 0 10px 0; /* var(--spacing-xl) replaced */
+        margin: 20px 0 10px 0; 
     }
 
     .lnb a:hover {
@@ -192,8 +180,8 @@
         background: #182B8C;
         border-radius: 8px;
         color: #fff;
-        font-weight: 700; /* var(--font-weight-bold) replaced */
-        padding-left: 20px; /* var(--spacing-xl) replaced */
+        font-weight: 700;
+        padding-left: 20px; 
     }
 }
 

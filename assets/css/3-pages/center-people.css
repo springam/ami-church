@@ -2,13 +2,6 @@
    Center People - 섬기는 사람들
    ========================================== */
 
-/* .content-area {
-    max-width: 1000px;
-    margin: 0 auto;
-    padding: 0;
-    width: 100%;
-} */
-
 @media (min-width: 769px) {
     .content-area h2 {
         font-size: 48px;
@@ -17,8 +10,6 @@
         margin-bottom: 60px;
     }
 }
-
-
 
 /* ==========================================
    섬기는 사람들
@@ -91,34 +82,14 @@
     line-height: 28px;
     color: #666;
     padding-left: 20px;
-    position: relative; /* 이부분이 들어가야 아래서 before 가 제대로 작동함 */
+    position: relative; 
 }
 
 .ministry-names::before {
     content: '•';
-    position: absolute; /* 뒤에 나오는 내용의 position relative 와 함께 사용 */
+    position: absolute;
     left: 0;
     color: #666;
-}
-
-/* 본부 사역자 스타일 */
-.ministry-section.headquarters .ministry-category {
-    background: #00A651;
-}
-
-/* 목회자 스타일 */
-.ministry-section.pastoral .ministry-category {
-    background: #182B8C;
-}
-
-/* 팀장 스타일 */
-.ministry-section.team-leader .ministry-category {
-    background: #E87722;
-}
-
-/* 교역자 스타일 */
-.ministry-section.ministry-worker .ministry-category {
-    background: #0094BE; 
 }
 
 /* ==========================================
@@ -164,25 +135,10 @@
         padding: 28px 0; 
     }
 
-    .ministry-column + .ministry-column {
-        margin: 10px 0;
+    .ministry-content:last-child {
+        padding: 28px 0 0 0; 
     }
 
-    .ministry-column:last-child {
-        margin-bottom: 0;
-    }
-    
-    /* .ministry-row {
-        grid-template-columns: 1fr;
-        gap: 15px;
-        padding: 15px 0;
-        border-bottom: 1px solid #EAEAEA; 
-    }
-    
-    .ministry-row:last-child {
-        border-bottom: none;
-    } */
-    
     .ministry-label {
         font-size: 14px;
         padding: 0;
@@ -197,7 +153,5 @@
         font-weight: 400;
         line-height: 24px;
     }
-    
-    /* 본부 사역자 모바일 */
     
 }

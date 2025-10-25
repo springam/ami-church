@@ -1,14 +1,6 @@
 /* ==========================================
    Church Schedule - 예배 시간
    ========================================== */
-
-/* .content-area {
-    max-width: 1000px;
-    margin: 0 auto;
-    padding: 0 0 60px 0;
-    width: 100%;
-} */
-
 /* 예배 시간 섹션 */
 .schedule-section {
     background-image: url('../../images/time-background.png');
@@ -359,17 +351,12 @@
         line-height: 24px;
     }
 
+    /*  ami 이미지 */
     .donation-section-content::after {
-        content: '';
-        position: absolute;
         right: 19px;
         bottom: 0px;
         width: 111px;
         height: 52px;
-        background-image: url('../../images/logo-color.png');
-        background-size: contain;
-        background-repeat: no-repeat;
-        background-position: center;
-        pointer-events: none;
     }
+
 }

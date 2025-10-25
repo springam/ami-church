@@ -3,8 +3,8 @@
    ========================================== */
 
 /* ==========================================
-Hero Section
-========================================== */
+    Hero Section
+    ========================================== */
 .sermon .hero {
     background-image: url('../../images/bg-sermon.png');
 }
@@ -536,10 +536,6 @@ Hero Section
     border-top: 1px solid #EAEAEA;
 }
 
-/* .column-item:hover {
-    background: #f8f8f8;
-} */
-
 .column-item.featured {
     background: #0066cc;
 }
@@ -759,16 +755,6 @@ Hero Section
         line-height: 16px;
         color: #767676;
     }
-
-    /* .content-area h2 {
-        font-size: 22px;
-        font-style: normal;
-        font-weight: 700;
-        line-height: 32px;
-        padding: 0;
-        margin-bottom: 16px;
-
-    } */
     
     .video-detail-header {
         margin-bottom: 28px;
@@ -957,22 +943,6 @@ Hero Section
 
     .video-card-meta {
         font-size: 12px;
-    }
-    
-    
-    
-    
-    
-    .column-info {
-        width: 100%;
-        gap: 8px;
-        align-items: center;
-    }
-    
-    .column-category {
-        font-size: 12px;
-        min-width: 40px;
-        text-align: left;
     }
     
     .column-title {
