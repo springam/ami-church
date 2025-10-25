@@ -2,12 +2,12 @@
    Center People - 섬기는 사람들
    ========================================== */
 
-.content-area {
+/* .content-area {
     max-width: 1000px;
     margin: 0 auto;
     padding: 0;
     width: 100%;
-}
+} */
 
 @media (min-width: 769px) {
     .content-area h2 {
@@ -28,6 +28,10 @@
     grid-template-columns: 248px 1fr;
     padding: 28px 0;
     overflow: hidden;
+}
+
+.ministry-section:last-child {
+    padding: 28px 0 0 0;
 }
 
 .ministry-section + .ministry-section {
@@ -121,11 +125,6 @@
    반응형 - 모바일
    ========================================== */
 @media (max-width: 768px) {
-    .content-area {
-        max-width: 100%;
-        padding: 0;
-    }
-    
     /* .content-area h2 {
         font-size: 36px; 
         padding: 0 20px; 

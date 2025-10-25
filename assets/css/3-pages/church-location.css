@@ -3,12 +3,12 @@
    pages/location.html
    ========================================== */
 
-.content-area {
-    max-width: 1000px; /* var(--content-max-width) replaced with 1000px */
+/* .content-area {
+    max-width: 1000px;
     margin: 0 auto;
     padding: 0 0 80px 0;
     width: 100%;
-}
+} */
 
 /* 주소 섹션 */
 .address-section {
@@ -34,7 +34,7 @@
 }
 
 .address-label {
-    font-size: 18px; /* var(--font-size-lg) replaced */
+    font-size: 18px;
     font-weight: 700; /* var(--font-weight-bold) replaced */
     color: #fff;
     margin-right: 28px; /* var(--spacing-3xl) replaced */
@@ -88,7 +88,6 @@
     display: flex;
     flex-direction: column;
     gap: 30px;
-    margin-bottom: 40px;
 }
 
 .transport-item {
@@ -108,7 +107,7 @@
 .transport-icon {
     width: 80px;
     height: 80px;
-    margin-bottom: 20px; /* var(--spacing-xl) replaced */
+    margin-bottom: 20px;
 }
 
 .transport-content {
@@ -133,27 +132,23 @@
 }
 
 .transport-name.bus {
-    color: #E87722; /* var(--color-secondary-orange) replaced */
+    color: #E87722;
 }
 
 .transport-name.subway {
-    color: #0094BE; /* var(--color-secondary-blue) replaced */
+    color: #0094BE;
 }
 
 .transport-detail {
-    font-size: 18px; /* var(--font-size-lg) replaced */
-    color: #666; /* var(--color-gray-medium) replaced */
-    line-height: 1.6; /* var(--line-height-relaxed) replaced */
+    font-size: 18px;
+    color: #666;
+    line-height: 1.6; 
 }
 
 /* ==========================================
    반응형 - 모바일
    ========================================== */
 @media (max-width: 768px) {
-    .content-area {
-        padding: 0;
-    }
-    
     /* .content-area > h2 {
         font-size: 28px;
         margin-bottom: 40px;
@@ -233,6 +228,7 @@
         padding: 0; 
         flex-direction: column;
         gap: 24px; 
+        margin-bottom: 0;
     }
     
     .transport-item {

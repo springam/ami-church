@@ -174,7 +174,7 @@
 
 .intro-people-section .ministry-section:last-child {
     padding: 28px 0 0;
-    margin: 0 0 60px 0;
+    margin: 0;
     border-bottom: none;
 }
 
@@ -376,6 +376,10 @@
         padding: 0;
         margin: 0;
         border: none;
+    }
+
+    .intro-people-section .ministry-section:last-child .ministry-content {
+        padding-bottom: 0;
     }
 
     .history-title {

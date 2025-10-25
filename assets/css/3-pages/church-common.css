@@ -46,15 +46,17 @@
 .content-wrapper {
     width: 1260px;
     max-width: 1260px;
-    padding: 0 40px;
+    padding: 0 40px 120px 40px;
     display: grid;
     grid-template-columns: 160px 1fr;
-    grid-template-areas: "title title" "lnb content";
+    /* grid-template-areas: "title title" "lnb content"; */
     gap: 80px;
 }
 
-/* Content Area - 메인 컨텐츠 영역 */
 .content-area {
+    max-width: 1000px;
+    margin: 0 auto;
+    padding: 0;
     width: 100%;
 }
 
@@ -120,7 +122,15 @@
     
     /* Content Layout */
     .content {
-        padding: 40px 20px;
+        padding-bottom: 60px;
+        margin-top: -176px;
+    }
+    #contentArea {
+        padding: 40px 20px 0 20px;
+    }
+
+    .content-area {
+        padding: 0;
     }
     
     .content-wrapper {
@@ -131,12 +141,6 @@
         gap: 0;
     }
     
-    /* Content Area - 기본 스타일만 */
-    .content-area {
-        width: 100%;
-        padding: 60px 0;
-    }
-    
     .content-area h1 {
         font-size: 36px;
         margin-bottom: 30px; 
@@ -144,12 +148,12 @@
     }
     
     .content-area h2 {
-        font-size: 32px;
+        font-size: 22px;
         font-style: normal;
         font-weight: 700;
-        line-height: 44px; 
-        margin-bottom: 40px;
-        padding: 0 20px;
+        line-height: 32px;
+        padding: 0;
+        margin-bottom: 16px;
         text-align: center;
     }
 

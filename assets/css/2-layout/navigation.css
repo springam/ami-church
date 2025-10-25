@@ -146,54 +146,54 @@
 /* ===== LNB (Local Navigation Bar) - 데스크톱 서브 메뉴 ===== */
 @media (min-width: 769px) {
     .lnb {
-    background: #fff;
-    border-top: 3px solid #000;
-    width: 160px;
-    height: fit-content;
-    padding: 0;
+        background: #fff;
+        border-top: 3px solid #000;
+        width: 160px;
+        height: fit-content;
+        padding: 0;
     }
 
     .lnb h3 {
-    font-size: 24px;
-    font-weight: 700; /* var(--font-weight-bold) replaced */
-    color: #000; 
-    margin-bottom: 12px; /* var(--spacing-md) replaced */
+        font-size: 24px;
+        font-weight: 700; /* var(--font-weight-bold) replaced */
+        color: #000; 
+        margin-bottom: 12px; /* var(--spacing-md) replaced */
     }
 
     .lnb ul {
-    list-style: none;
-    padding: 0;
-    width: 100%;
+        list-style: none;
+        padding: 0;
+        width: 100%;
     }
 
     .lnb li {
-    margin-bottom: 0px;
+        margin-bottom: 0px;
     }
 
     .lnb a {
-    display: block;
-    padding: 10px 16px; /* var(--spacing-sm), var(--spacing-lg) replaced */
-    color: #666; /* var(--color-gray-medium) replaced */
-    font-size: 16px; /* var(--font-size-base) replaced */
-    font-weight: 500; /* var(--font-weight-medium) replaced */
-    text-decoration: none;
-    transition: all 0.3s; /* var(--transition-base) replaced with 0.3s */
-    cursor: pointer;
-    border-radius: 8px;
-    height: 40px;
-    margin: 20px 0 10px 0; /* var(--spacing-xl) replaced */
+        display: block;
+        padding: 10px 16px; /* var(--spacing-sm), var(--spacing-lg) replaced */
+        color: #666; /* var(--color-gray-medium) replaced */
+        font-size: 16px; /* var(--font-size-base) replaced */
+        font-weight: 500; /* var(--font-weight-medium) replaced */
+        text-decoration: none;
+        transition: all 0.3s; /* var(--transition-base) replaced with 0.3s */
+        cursor: pointer;
+        border-radius: 8px;
+        height: 40px;
+        margin: 20px 0 10px 0; /* var(--spacing-xl) replaced */
     }
 
     .lnb a:hover {
-    background: #fff;
+        background: #fff;
     }
 
     .lnb a.active {
-    background: #182B8C;
-    border-radius: 8px;
-    color: #fff;
-    font-weight: 700; /* var(--font-weight-bold) replaced */
-    padding-left: 20px; /* var(--spacing-xl) replaced */
+        background: #182B8C;
+        border-radius: 8px;
+        color: #fff;
+        font-weight: 700; /* var(--font-weight-bold) replaced */
+        padding-left: 20px; /* var(--spacing-xl) replaced */
     }
 }
 
@@ -209,7 +209,7 @@
         padding: 0;
         margin-bottom: 0;
         order: -1;
-        background: rgba(0, 0, 0, 0.3);
+        backdrop-filter: blur(5px);
         position: relative;
     }
     
@@ -221,16 +221,18 @@
         padding: 16px 20px;
         background: rgba(0, 0, 0, 0.3);
         color: #fff;
-        font-size: 16px;
-        font-weight: 500;
+        font-size: 14px;
+        font-style: normal;
+        font-weight: 700;
+        line-height: 20px;
         cursor: pointer;
         width: 100%;
         border: none;
     }
     
     .lnb-toggle svg {
-        width: 20px;
-        height: 20px;
+        width: 24px;
+        height: 24px;
         transition: transform 0.3s;
     }
     

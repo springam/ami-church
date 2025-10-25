@@ -760,7 +760,7 @@ Hero Section
         color: #767676;
     }
 
-    .content-area h2 {
+    /* .content-area h2 {
         font-size: 22px;
         font-style: normal;
         font-weight: 700;
@@ -768,7 +768,7 @@ Hero Section
         padding: 0;
         margin-bottom: 16px;
 
-    }
+    } */
     
     .video-detail-header {
         margin-bottom: 28px;
