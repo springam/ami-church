@@ -46,6 +46,8 @@
 .ministry-content {
     background: #fff;
     padding-left: 60px;
+    display: grid;
+    align-items: center;
 }
 
 .ministry-row {
@@ -132,10 +134,14 @@
     }
     
     .ministry-content {
-        padding: 28px 0; 
+        padding: 28px 0;
     }
 
-    .ministry-content:last-child {
+    .ministry-section:last-child {
+        padding: 28px 0 0 0; 
+    }
+
+    .ministry-section:last-child .ministry-content {
         padding: 28px 0 0 0; 
     }
 

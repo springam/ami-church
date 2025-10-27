@@ -246,9 +246,9 @@
         border-bottom: 1px solid #EAEAEA;
     }
     
-    .lnb li:last-child {
+    /* .lnb li:last-child {
         border-bottom: none;
-    }
+    } */
     
     .lnb a {
         display: block;

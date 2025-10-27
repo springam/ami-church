@@ -177,6 +177,9 @@
                 loadContent(page);
                 setActiveMenu(page);
                 window.location.hash = page;
+
+                // 모바일에서 드롭다운 닫기
+                closeMobileLNB();
             });
         });
         

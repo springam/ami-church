@@ -273,14 +273,15 @@
         line-height: 28px;
         color: #999;
         width: 60px;
-        margin-right: 12px;
+        margin-right: 0;
+        margin-bottom: 4px;
     }
 
     .timeline-text {
         color: #000;
         display: flex;
         flex-direction: column;
-        gap: 8px;
+        gap: 0;
     }
 
      .timeline-detail {
@@ -300,13 +301,17 @@
         font-weight: 700;
     }
 
-    .timeline-label {
+    /* .timeline-label {
         font-size: 14px;
         font-style: normal;
         font-weight: 400;
         line-height: 28px;
         color: #000;
         flex-shrink: 0;
+    } */
+
+    .timeline-label {
+        display: none;
     }
 
     .timeline-info {
@@ -314,6 +319,14 @@
         line-height: 28px;
         color: #000;
         flex: 1;
+        text-indent: 50px;
+    }
+
+    .timeline-info::before {
+        content: "(임직자)";
+        position: absolute;
+        text-indent:-50px;
+        color: #000;
     }
 
     /* 섬기는 사람들 */
