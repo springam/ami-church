@@ -35,7 +35,7 @@ header .logo img {
     height: 100%;
     width: auto;
     object-fit: contain;
-    filter: brightness(0) invert(1);
+    /* filter: brightness(0) invert(1); */
 }
 
 /* ===== 데스크톱 네비게이션 ===== */
