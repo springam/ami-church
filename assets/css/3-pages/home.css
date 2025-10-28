@@ -222,6 +222,7 @@
     .text-section {
         padding: 60px 20px;
         width: 100vw;
+        box-sizing: border-box;
     }
     
     .section-title {
@@ -237,6 +238,7 @@
         padding: 0 20px 60px;
         width: 100vw;
         background: #182B8C;
+        box-sizing: border-box;
     }
     
     .media-container {
@@ -277,20 +279,5 @@
     .play-button {
         width: 80px;
         height: 80px;
-    }
-    
-    footer .footer-content {
-        flex-direction: column;
-        gap: 40px;
-    }
-    
-    .footer-nav {
-        flex-direction: column;
-        gap: 30px;
-        width: 100%;
-    }
-    
-    .footer-nav-column {
-        width: 100%;
     }
 }

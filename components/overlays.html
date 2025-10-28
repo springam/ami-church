@@ -1,0 +1,90 @@
+<!-- 검색 오버레이 이거 왜 로드 안되냐 -->
+<div class="search-overlay">
+    <div class="search-overlay-header">
+        <div class="search-overlay-logo">
+            <img src="assets/images/logo/logo.png" alt="AMI 교회">
+        </div>
+        <svg class="search-close-btn" onclick="toggleSearch()" viewBox="0 0 24 24" fill="none" stroke="#000" stroke-width="2">
+            <path d="M18 6L6 18M6 6l12 12"/>
+        </svg>
+    </div>
+    <div class="search-input-wrapper">
+        <input type="text" class="search-input" placeholder="검색어를 입력해 주세요">
+        <button class="search-submit-btn">
+            <svg width="32" height="32" viewBox="0 0 32 32" fill="none">
+                <circle cx="14" cy="14" r="9" stroke="#000" stroke-width="2"/>
+                <path d="M21 21L27 27" stroke="#000" stroke-width="2" stroke-linecap="round"/>
+            </svg>
+        </button>
+    </div>
+</div>
+
+<!-- 모바일 메뉴 오버레이 -->
+<div class="mobile-menu-overlay">
+    <div class="mobile-menu-container">
+        <!-- 왼쪽 메인 메뉴 -->
+        <nav class="mobile-main-menu">
+            <button class="mobile-main-item active" data-submenu="ami-church">
+                AMI 교회
+            </button>
+            <button class="mobile-main-item" data-submenu="mission">
+                선교 센터
+            </button>
+            <button class="mobile-main-item" data-submenu="sermon">
+                설교 영상
+            </button>
+            <button class="mobile-main-item" data-submenu="international">
+                International
+            </button>
+        </nav>
+        
+        <!-- 오른쪽 서브 메뉴 -->
+        <div class="mobile-submenu-area">
+            <!-- AMI 교회 서브메뉴 -->
+            <div class="mobile-submenu-content active" id="submenu-ami-church">
+                <div class="mobile-submenu-header">
+                    <h3>AMI 교회</h3>
+                </div>
+                <ul class="mobile-submenu-list">
+                    <li><a href="ami-church.html#greeting">인사말</a></li>
+                    <li><a href="ami-church.html#intro">교회 소개</a></li>
+                    <li><a href="ami-church.html#schedule">예배 시간</a></li>
+                    <li><a href="ami-church.html#location">오시는 길</a></li>
+                </ul>
+            </div>
+            
+            <!-- 선교 센터 서브메뉴 -->
+            <div class="mobile-submenu-content" id="submenu-mission">
+                <div class="mobile-submenu-header">
+                    <h3>선교 센터</h3>
+                </div>
+                <ul class="mobile-submenu-list">
+                    <li><a href="mission-center.html#center-intro">센터 소개</a></li>
+                    <li><a href="mission-center.html#center-people">섬기는 사람들</a></li>
+                </ul>
+            </div>
+
+            <!-- 설교 영상 서브메뉴 -->
+            <div class="mobile-submenu-content" id="submenu-sermon">
+                <div class="mobile-submenu-header">
+                    <h3>설교 영상</h3>
+                </div>
+                <ul class="mobile-submenu-list">
+                    <li><a href="sermon-video.html#koreanworship">한국 예배</a></li>
+                    <li><a href="sermon-video.html#aba">ABA</a></li>
+                    <li><a href="sermon-video.html#avs">AVS/AVCK</a></li>
+                </ul>
+            </div>
+            
+            <!-- International 서브메뉴 -->
+            <div class="mobile-submenu-content" id="submenu-international">
+                <div class="mobile-submenu-header">
+                    <h3>International</h3>
+                </div>
+                <ul class="mobile-submenu-list">
+                    <li><a href="#international">Coming Soon</a></li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</div>

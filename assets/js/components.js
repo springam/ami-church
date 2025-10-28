@@ -32,6 +32,7 @@
         
         const components = [
             { id: 'header-placeholder', path: 'components/header.html' },
+            { id: 'overlays-placeholder', path: 'components/overlays.html' },
             { id: 'footer-placeholder', path: 'components/footer.html' }
         ];
 

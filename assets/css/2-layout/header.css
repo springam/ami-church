@@ -218,7 +218,7 @@ header nav {
    검색 오버레이
    ========================================== */
 .search-overlay {
-    display: none !important;
+    display: none;
     position: fixed;
     top: 0;
     left: 0;
@@ -226,11 +226,10 @@ header nav {
     height: 100vh;
     background: #fff;
     z-index: 1000;
-    padding: 20px;
 }
 
 .search-overlay.active {
-    display: flex;
+    display: flex !important;
     flex-direction: column;
 }
 
@@ -238,7 +237,9 @@ header nav {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    margin-bottom: 40px;
+    margin-bottom: 20px;
+    padding: 20px;
+    border-bottom: #DFDFDF 1px solid;
 }
 
 .search-overlay-logo {
@@ -248,7 +249,7 @@ header nav {
 .search-overlay-logo img {
     height: 100%;
     width: auto;
-    filter: brightness(0);
+    /* filter: brightness(0); */
 }
 
 .search-close-btn {
@@ -259,14 +260,18 @@ header nav {
 
 .search-input-wrapper {
     position: relative;
+    padding: 20px;
 }
 
 .search-input {
     width: 100%;
-    padding: 16px 50px 16px 20px;
+    padding: 0 50px 16px 0;
     border: none;
-    border-bottom: 2px solid #182B8C;
+    border-bottom: 2px solid #000;
     font-size: 18px;
+    font-style: normal;
+    font-weight: 700;
+    line-height: 28px;
     outline: none;
 }
 
@@ -369,80 +374,5 @@ header nav {
     /* 메뉴 열렸을 때 X 버튼 표시 */
     header.menu-open .mobile-menu-close {
         display: flex;
-    }
-
-    /* ========== Footer ========== */
-    footer {
-        padding: 40px 20px 20px 20px;
-    }
-    
-    .footer-content {
-        display: flex;
-        flex-direction: column;
-        gap: 0;
-        padding: 0;
-        width: 100%;
-        position: relative;
-    }
-    
-    .footer-main {
-        display: flex;
-        flex-direction: column;
-        gap: 40px;
-        width: 100%;
-        padding-right: 60px;
-        position: relative;
-    }
-    
-    .footer-logo {
-        width: 100px;
-        height: auto;
-    }
-    
-    .footer-logo img {
-        width: 100%;
-        height: auto;
-    }
-
-    .footer-info {
-        width: 100%;
-    }
-    
-    .footer-info p {
-        font-size: 13px;
-        line-height: 20px;
-        margin-bottom: 0px;
-        color: #000;
-    }
-    
-    .footer-nav {
-        display: none;
-    }
-    
-    .scroll-top {
-        position: absolute;
-        top: 0;
-        right: 0;
-        width: 48px;
-        height: 48px;
-        background: #000;
-        border-radius: 50%;
-    }
-    
-    .scroll-top svg {
-        width: 20px;
-        height: 20px;
-    }
-    
-    .scroll-top svg path {
-        stroke: #fff;
-    }
-    
-    .text-section,
-    .media-section,
-    .content,
-    footer {
-        width: 100vw;
-        box-sizing: border-box;
     }
 }

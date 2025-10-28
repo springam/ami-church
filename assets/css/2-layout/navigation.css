@@ -29,7 +29,8 @@
 .mobile-main-menu {
     width: 50%;
     background: #fff;
-    /* border-right: 1px solid #EAEAEA; */
+    border-right: 1px solid #EAEAEA;
+    border-top: 1px solid #EAEAEA;
     display: flex;
     flex-direction: column;
     padding: 40px 20px;
@@ -64,6 +65,7 @@
     background: #FAFAFA;
     overflow-y: auto;
     padding: 0;
+    border-top: 1px solid #EAEAEA;
 }
 
 .mobile-submenu-content {
