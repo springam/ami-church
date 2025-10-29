@@ -5,8 +5,12 @@
     // 컴포넌트 로드 완료 후 실행
     function initializeCommonFeatures() {
         console.log('🚀 공통 기능 초기화 시작');
-        initMobileMenu();
-        initSearch();
+        
+        // 약간의 딜레이를 주어 DOM이 완전히 렌더링되도록
+        setTimeout(() => {
+            initMobileMenu();
+            initSearch();
+        }, 100);
     }
 
     // 모바일 메뉴 초기화
@@ -130,9 +134,9 @@ function toggleMobileMenu() {
     
     // 로고 이미지 변경
     if (header.classList.contains('menu-open')) {
-        headerLogo.src = 'assets/images/logo/logo.png';
+        headerLogo.src = 'assets/images/logo/logo-blue.png';
     } else {
-        headerLogo.src = 'assets/images/logo/logo.png';
+        headerLogo.src = 'assets/images/logo/logo-white.png';
     }
 }
 
