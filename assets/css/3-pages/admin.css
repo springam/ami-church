@@ -583,10 +583,16 @@
    Admin Add/Edit Page - 동영상 추가/수정
    ========================================== */
 .video-form {
+    /* background: #EBF1F6;
+    border-radius: 12px;
+    padding: 48px 60px; */
+    max-width: 1280px;
+}
+
+.video-form-container {
     background: #EBF1F6;
     border-radius: 12px;
     padding: 48px 60px;
-    max-width: 1280px;
 }
 
 .form-row {
@@ -753,8 +759,9 @@
 /* ==========================================
    삭제 확인 모달
    ========================================== */
-.delete-modal {
-    display: none;
+.delete-modal,
+.cancel-modal {
+    display: none;  /* ⭐ 중요: 기본적으로 숨김 */
     position: fixed;
     top: 0;
     left: 0;
@@ -765,8 +772,9 @@
     justify-content: center;
 }
 
-.delete-modal.show {
-    display: flex;
+.delete-modal.show,
+.cancel-modal.show {
+    display: flex;  /* show 클래스가 있을 때만 표시 */
 }
 
 .modal-overlay {
@@ -857,7 +865,16 @@
     color: #fff;
 }
 
+.modal-btn-confirm {
+    background: #182B8C;
+    color: #fff;
+}
+
 .modal-btn-delete:hover {
+    background: #0F1F5C;
+}
+
+.modal-btn-confirm:hover {
     background: #0F1F5C;
 }
 

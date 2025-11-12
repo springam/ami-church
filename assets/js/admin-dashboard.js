@@ -25,6 +25,7 @@ let allVideos = [];
 let filteredVideos = [];
 let currentPage = 1;
 const itemsPerPage = 10;
+let videoToDelete = null; // 삭제할 비디오 ID
 
 /**
  * Timestamp를 날짜 문자열로 변환
@@ -83,13 +84,12 @@ async function fetchVideos() {
             allVideos.push({
                 id: docSnapshot.id,
                 ...data,
-                display: data.display !== undefined ? data.display : false // 기본값: false (비활성)
+                display: data.display !== undefined ? data.display : false
             });
         });
         
         console.log('✅ 동영상 로드 완료:', allVideos.length, '개');
         
-        // 초기 필터링 (검색어와 카테고리 모두 적용)
         applyFilters();
         
     } catch (error) {
@@ -129,7 +129,6 @@ function renderTable() {
         return;
     }
     
-    // 현재 페이지의 동영상만 표시
     const startIndex = (currentPage - 1) * itemsPerPage;
     const endIndex = startIndex + itemsPerPage;
     const pageVideos = filteredVideos.slice(startIndex, endIndex);
@@ -165,7 +164,6 @@ function renderTable() {
         </tr>
     `).join('');
     
-    // 상태 변경 이벤트 리스너 추가
     document.querySelectorAll('.status-select').forEach(select => {
         select.addEventListener('change', handleStatusChange);
     });
@@ -185,7 +183,6 @@ function showEmptyState(message) {
         </tr>
     `;
     
-    // 페이지네이션 숨김
     document.getElementById('pagination').innerHTML = '';
 }
 
@@ -203,7 +200,6 @@ function renderPagination() {
     
     let html = '';
     
-    // 이전 버튼
     html += `
         <button class="pagination-btn pagination-arrow" onclick="changePage(1)" ${currentPage === 1 ? 'disabled' : ''}>
             <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
@@ -217,7 +213,6 @@ function renderPagination() {
         </button>
     `;
     
-    // 페이지 번호 (최대 5개)
     let startPage = Math.max(1, currentPage - 2);
     let endPage = Math.min(totalPages, startPage + 4);
     
@@ -233,7 +228,6 @@ function renderPagination() {
         `;
     }
     
-    // 다음 버튼
     html += `
         <button class="pagination-btn pagination-arrow" onclick="changePage(${currentPage + 1})" ${currentPage === totalPages ? 'disabled' : ''}>
             <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
@@ -261,7 +255,6 @@ window.changePage = function(page) {
     renderTable();
     renderPagination();
     
-    // 페이지 최상단으로 스크롤
     window.scrollTo({ top: 0, behavior: 'smooth' });
 };
 
@@ -270,7 +263,7 @@ window.changePage = function(page) {
  */
 async function handleStatusChange(e) {
     const videoId = e.target.dataset.videoId;
-    const newDisplayValue = e.target.value === 'true'; // 문자열을 boolean으로 변환
+    const newDisplayValue = e.target.value === 'true';
     
     try {
         const videoRef = doc(db, 'video', videoId);
@@ -278,7 +271,6 @@ async function handleStatusChange(e) {
         
         console.log('✅ 상태 변경 완료:', videoId, newDisplayValue ? '활성' : '비활성');
         
-        // 로컬 데이터 업데이트
         const video = allVideos.find(v => v.id === videoId);
         if (video) {
             video.display = newDisplayValue;
@@ -287,7 +279,6 @@ async function handleStatusChange(e) {
     } catch (error) {
         console.error('❌ 상태 변경 오류:', error);
         alert('상태 변경에 실패했습니다.');
-        // 실패 시 이전 값으로 복원
         e.target.value = e.target.value === 'true' ? 'false' : 'true';
     }
 }
@@ -296,40 +287,72 @@ async function handleStatusChange(e) {
  * 동영상 수정
  */
 window.editVideo = function(videoId) {
-    // 추가하기 페이지로 이동 (수정 모드)
     window.location.href = `admin-add.html?edit=${videoId}`;
 };
 
 /**
- * 동영상 삭제
+ * 삭제 모달 표시
  */
-window.deleteVideo = async function(videoId) {
-    const video = allVideos.find(v => v.id === videoId);
+function showDeleteModal(videoId) {
+    videoToDelete = videoId;
+    const modal = document.getElementById('deleteModal');
+    if (modal) {
+        modal.classList.add('show');
+        console.log('✅ 삭제 모달 표시:', videoId);
+    }
+}
+
+/**
+ * 삭제 모달 숨김
+ */
+function hideDeleteModal() {
+    videoToDelete = null;
+    const modal = document.getElementById('deleteModal');
+    if (modal) {
+        modal.classList.remove('show');
+        console.log('✅ 삭제 모달 숨김');
+    }
+}
+
+/**
+ * 동영상 삭제 버튼 클릭
+ */
+window.deleteVideo = function(videoId) {
+    console.log('🗑️ 삭제 버튼 클릭:', videoId);
+    showDeleteModal(videoId);
+};
+
+/**
+ * 실제 삭제 처리
+ */
+async function confirmDelete() {
+    if (!videoToDelete) return;
+    
+    const video = allVideos.find(v => v.id === videoToDelete);
     
     if (!video) {
         alert('동영상을 찾을 수 없습니다.');
-        return;
-    }
-    
-    if (!confirm(`"${video.title}"을(를) 삭제하시겠습니까?\n\n삭제된 데이터는 복구할 수 없습니다.`)) {
+        hideDeleteModal();
         return;
     }
     
     try {
-        const videoRef = doc(db, 'video', videoId);
+        console.log('🗑️ 삭제 처리 시작:', videoToDelete);
+        const videoRef = doc(db, 'video', videoToDelete);
         await deleteDoc(videoRef);
         
         console.log('✅ 동영상 삭제 완료');
         alert('동영상이 삭제되었습니다.');
         
-        // 목록 새로고침
+        hideDeleteModal();
         await fetchVideos();
         
     } catch (error) {
         console.error('❌ 삭제 오류:', error);
         alert('삭제 중 오류가 발생했습니다.');
+        hideDeleteModal();
     }
-};
+}
 
 /**
  * 페이지 초기화
@@ -346,10 +369,54 @@ document.addEventListener('DOMContentLoaded', async () => {
     
     console.log('👤 로그인 사용자:', adminUser.name);
     
+    // ✅ 삭제 모달 이벤트 리스너
+    const deleteModal = document.getElementById('deleteModal');
+    
+    if (deleteModal) {
+        console.log('✅ 삭제 모달 찾음');
+        
+        // X 버튼
+        const modalClose = deleteModal.querySelector('#modalClose');
+        if (modalClose) {
+            modalClose.addEventListener('click', () => {
+                console.log('✅ X 버튼 클릭');
+                hideDeleteModal();
+            });
+        }
+        
+        // 오버레이
+        const overlay = deleteModal.querySelector('.modal-overlay');
+        if (overlay) {
+            overlay.addEventListener('click', () => {
+                console.log('✅ 오버레이 클릭');
+                hideDeleteModal();
+            });
+        }
+        
+        // 취소 버튼
+        const cancelBtn = deleteModal.querySelector('#cancelBtn');
+        if (cancelBtn) {
+            cancelBtn.addEventListener('click', () => {
+                console.log('✅ 취소 버튼 클릭');
+                hideDeleteModal();
+            });
+        }
+        
+        // 삭제 버튼
+        const confirmDeleteBtn = deleteModal.querySelector('#confirmDeleteBtn');
+        if (confirmDeleteBtn) {
+            confirmDeleteBtn.addEventListener('click', () => {
+                console.log('✅ 삭제 확인 버튼 클릭');
+                confirmDelete();
+            });
+        }
+    } else {
+        console.error('❌ 삭제 모달을 찾을 수 없음');
+    }
+    
     // 검색 입력
     const searchInput = document.getElementById('searchInput');
     if (searchInput) {
-        // 엔터키로 검색
         searchInput.addEventListener('keypress', (e) => {
             if (e.key === 'Enter') {
                 applyFilters();

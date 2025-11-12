@@ -1,4 +1,4 @@
-// admin-add.js - 동영상 추가/수정
+// admin-add.js
 import { initializeApp } from "https://www.gstatic.com/firebasejs/12.4.0/firebase-app.js";
 import { getFirestore, collection, addDoc, doc, getDoc, updateDoc, Timestamp } from "https://www.gstatic.com/firebasejs/12.4.0/firebase-firestore.js";
 import { checkAdminSession } from './admin-auth.js';
@@ -16,11 +16,9 @@ const firebaseConfig = {
     measurementId: "G-ZKNQHKK26V"
 };
 
-// Firebase 초기화
 const app = initializeApp(firebaseConfig);
 const db = getFirestore(app);
 
-// 전역 변수
 let isEditMode = false;
 let editVideoId = null;
 
@@ -51,13 +49,11 @@ async function loadVideoData(videoId) {
         const videoData = videoSnap.data();
         console.log('✅ 데이터 로드 완료:', videoData);
         
-        // 폼에 데이터 채우기
         document.getElementById('videoTitle').value = videoData.title || '';
         document.getElementById('videoUrl').value = videoData.videoUrl || '';
         document.getElementById('category1').value = videoData.category || '';
         document.getElementById('videoDescription').value = videoData.description || '';
         
-        // 페이지 제목 및 버튼 텍스트 변경
         document.getElementById('pageTitle').textContent = '동영상 수정하기';
         document.getElementById('submitBtn').textContent = '수정하기';
         
@@ -74,13 +70,11 @@ async function loadVideoData(videoId) {
 async function handleSubmit(e) {
     e.preventDefault();
     
-    // 폼 데이터 수집
     const title = document.getElementById('videoTitle').value.trim();
     const videoUrl = document.getElementById('videoUrl').value.trim();
     const category = document.getElementById('category1').value;
     const description = document.getElementById('videoDescription').value.trim();
     
-    // 유효성 검사
     if (!title) {
         alert('동영상 제목을 입력하세요.');
         document.getElementById('videoTitle').focus();
@@ -99,40 +93,35 @@ async function handleSubmit(e) {
         return;
     }
     
-    // YouTube URL 유효성 검사
     if (!isValidYouTubeUrl(videoUrl)) {
         alert('올바른 YouTube URL을 입력하세요.\n예: https://www.youtube.com/watch?v=VIDEO_ID');
         document.getElementById('videoUrl').focus();
         return;
     }
     
-    // 동영상 데이터 객체
     const videoData = {
         title: title,
         videoUrl: videoUrl,
         category: category,
         description: description,
-        status: 'inactive' // 기본값: 비활성
+        status: 'inactive'
     };
     
     try {
         if (isEditMode) {
-            // 수정 모드
             console.log('🔄 동영상 수정:', editVideoId);
             const videoRef = doc(db, 'video', editVideoId);
             await updateDoc(videoRef, videoData);
             console.log('✅ 수정 완료');
             alert('동영상이 수정되었습니다.');
         } else {
-            // 추가 모드
             console.log('➕ 동영상 추가');
-            videoData.date = Timestamp.now(); // 추가 시에만 날짜 추가
+            videoData.date = Timestamp.now();
             await addDoc(collection(db, 'video'), videoData);
             console.log('✅ 추가 완료');
             alert('동영상이 추가되었습니다.');
         }
         
-        // 목록 페이지로 이동
         window.location.href = 'admin-dashboard.html';
         
     } catch (error) {
@@ -155,12 +144,30 @@ function isValidYouTubeUrl(url) {
 }
 
 /**
- * 취소 버튼
+ * 취소 모달 표시
+ */
+function showCancelModal() {
+    const modal = document.getElementById('cancelModal');
+    if (modal) {
+        modal.classList.add('show');
+    }
+}
+
+/**
+ * 취소 모달 숨김
+ */
+function hideCancelModal() {
+    const modal = document.getElementById('cancelModal');
+    if (modal) {
+        modal.classList.remove('show');
+    }
+}
+
+/**
+ * 취소 버튼 - 모달 표시
  */
 function handleCancel() {
-    if (confirm('작성중인 내용이 저장되지 않습니다.\n목록으로 돌아가시겠습니까?')) {
-        window.location.href = 'admin-dashboard.html';
-    }
+    showCancelModal();
 }
 
 /**
@@ -169,7 +176,6 @@ function handleCancel() {
 document.addEventListener('DOMContentLoaded', async () => {
     console.log('✅ DOM 로드 완료 (추가/수정 페이지)');
     
-    // 세션 확인
     const adminUser = checkAdminSession();
     if (!adminUser) {
         console.log('⏸️ 세션 없음 - 초기화 중단');
@@ -178,7 +184,6 @@ document.addEventListener('DOMContentLoaded', async () => {
     
     console.log('👤 로그인 사용자:', adminUser.name);
     
-    // URL 파라미터 확인 (수정 모드인지 확인)
     editVideoId = getUrlParameter('edit');
     if (editVideoId) {
         isEditMode = true;
@@ -198,5 +203,34 @@ document.addEventListener('DOMContentLoaded', async () => {
     const cancelBtn = document.getElementById('cancelBtn');
     if (cancelBtn) {
         cancelBtn.addEventListener('click', handleCancel);
+    }
+    
+    // ✅ 모달 이벤트 리스너 추가
+    const modal = document.getElementById('cancelModal');
+    const modalClose = modal?.querySelector('#modalClose');
+    const cancelModalBtn = modal?.querySelector('#cancelModalBtn');
+    const confirmCancelBtn = modal?.querySelector('#confirmCancelBtn');
+    
+    // X 버튼 클릭
+    if (modalClose) {
+        modalClose.addEventListener('click', hideCancelModal);
+    }
+    
+    // 오버레이 클릭
+    const overlay = modal?.querySelector('.modal-overlay');
+    if (overlay) {
+        overlay.addEventListener('click', hideCancelModal);
+    }
+    
+    // 취소하기 버튼
+    if (cancelModalBtn) {
+        cancelModalBtn.addEventListener('click', hideCancelModal);
+    }
+    
+    // 확인 버튼 - 목록으로 이동
+    if (confirmCancelBtn) {
+        confirmCancelBtn.addEventListener('click', () => {
+            window.location.href = 'admin-dashboard.html';
+        });
     }
 });

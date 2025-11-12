@@ -31,71 +31,95 @@
 
             <!-- Form -->
             <form class="video-form" id="videoForm">
-                <div class="form-row">
-                    <label class="form-label">동영상 제목</label>
-                    <input 
-                        type="text" 
-                        class="form-field" 
-                        id="videoTitle"
-                        placeholder="동영상 제목을 입력하세요"
-                        required
-                    >
-                </div>
+                <div class="video-form-container">
+                    <div class="form-row">
+                        <label class="form-label">동영상 제목</label>
+                        <input 
+                            type="text" 
+                            class="form-field" 
+                            id="videoTitle"
+                            placeholder="동영상 제목을 입력하세요"
+                            required
+                        >
+                    </div>
 
-                <div class="form-row">
-                    <label class="form-label">Youtube URL 주소</label>
-                    <input 
-                        type="url" 
-                        class="form-field" 
-                        id="videoUrl"
-                        placeholder="Youtube 동영상의 URL을 입력하세요"
-                        required
-                    >
-                </div>
+                    <div class="form-row">
+                        <label class="form-label">Youtube URL 주소</label>
+                        <input 
+                            type="url" 
+                            class="form-field" 
+                            id="videoUrl"
+                            placeholder="Youtube 동영상의 URL을 입력하세요"
+                            required
+                        >
+                    </div>
 
-                <div class="form-row">
-                    <label class="form-label">카테고리 입력</label>
-                    <div class="category-selects">
-                        <select class="form-select" id="category1" required>
-                            <option value="">주일 예배</option>
-                            <option value="weekly">이번주 설교</option>
-                            <option value="scripture">성서강해 설교</option>
-                            <option value="topic">주제별 설교</option>
-                        </select>
-                        <span class="category-arrow">›</span>
-                        <select class="form-select" id="category2" disabled>
-                            <option value="">성서강해 설교</option>
-                        </select>
-                        <span class="category-arrow">›</span>
-                        <select class="form-select" id="category3" disabled>
-                            <option value="">교미사</option>
-                        </select>
+                    <div class="form-row">
+                        <label class="form-label">카테고리 입력</label>
+                        <div class="category-selects">
+                            <select class="form-select" id="category1" required>
+                                <option value="">주일 예배</option>
+                                <option value="weekly">ABA</option>
+                                <option value="scripture">AVS/AVCK</option>
+                            </select>
+                            <span class="category-arrow">›</span>
+                            <select class="form-select" id="category2" disabled>
+                                <option value="weekly">이번주 설교</option>
+                                <option value="scripture">성서강해 설교</option>
+                                <option value="topic">주제별 설교</option>
+                            </select>
+                            <span class="category-arrow">›</span>
+                            <select class="form-select" id="category3" disabled>
+                                <option value="">로마서</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="form-row">
+                        <label class="form-label">본문</label>
+                        <input 
+                            type="text"
+                            class="form-field" 
+                            id="videoDescription"
+                            placeholder="설교 본문을 입력하세요"
+                        >
+                    </div>
+                </div>
+                
+
+                <div class="add-buttons">
+                    <div class="form-actions">
+                        <button type="button" class="form-btn form-btn-cancel" id="cancelBtn">취소하기</button>
+                        <button type="submit" class="form-btn form-btn-submit" id="submitBtn">추가하기</button>
                     </div>
                 </div>
 
-                <div class="form-row">
-                    <label class="form-label">본문</label>
-                    <input 
-                        type="text"
-                        class="form-field" 
-                        id="videoDescription"
-                        placeholder="설교 본문을 입력하세요"
-                    >
-                </div>
             </form>
-
-            <div class="add-buttons">
-                <div class="form-actions">
-                    <button type="button" class="form-btn form-btn-cancel" id="cancelBtn">취소하기</button>
-                    <button type="submit" class="form-btn form-btn-submit" id="submitBtn">추가하기</button>
-                </div>
-            </div>
         </main>
 
         <!-- Footer -->
         <footer class="admin-footer">
             © Copyrights 2025 AMI Missions International. All rights reserved.
         </footer>
+    </div>
+
+    <!-- 취소 확인 모달 -->
+    <div class="cancel-modal" id="cancelModal">
+        <div class="modal-overlay"></div>
+        <div class="modal-content">
+            <button class="modal-close" id="modalClose">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
+                    <path d="M18 6L6 18M6 6L18 18" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+                </svg>
+            </button>
+            <div class="modal-body">
+                <p class="modal-text">작성중인 내용이 저장되지 않습니다.<br>목록으로 돌아가시겠습니까?</p>
+                <div class="modal-buttons">
+                    <!-- <button class="modal-btn modal-btn-cancel" id="cancelModalBtn">취소하기</button> -->
+                    <button class="modal-btn modal-btn-confirm" id="confirmCancelBtn">취소하기</button>
+                </div>
+            </div>
+        </div>
     </div>
 
     <!-- Scripts -->
