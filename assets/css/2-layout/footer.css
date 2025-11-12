@@ -103,11 +103,28 @@ footer {
     color: #333;
 }
 
+.admin-login-btn {
+    display: inline-flex;
+    padding: 4px 8px;
+    justify-content: center;
+    align-items: center;
+    gap: 10px;
+    color: #18288A;
+    font-size: 12px;
+    font-style: normal;
+    font-weight: 500;
+    line-height: 16px;
+    border-radius: 4px;
+    border: 1px solid #D9DBE6;
+    background: #E9EAF0;
+    margin-top: 10px;
+}
+
 /* ===== 스크롤 탑 버튼 ===== */
 .scroll-top {
     position: absolute;
     right: 60px;
-    bottom: 0;
+    /* bottom: 0; */
     width: 60px;
     height: 60px;
     background: #000;

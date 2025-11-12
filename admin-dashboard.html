@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>동영상 목록보기 - AMI 교회 관리자</title>
+    <!-- CSS -->
+    <link rel="stylesheet" href="assets/css/main.css">
+    <link rel="stylesheet" href="assets/css/3-pages/admin.css">
+    <!-- Pretendard 폰트 -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.min.css" />
+</head>
+<body>
+    <div class="admin-dashboard">
+        <!-- Header -->
+        <header class="admin-header">
+            <div class="admin-header-container">
+                <div class="admin-logo">
+                    <a href="index.html"><img src="assets/images/logo/logo-blue.png" alt="AMI 교회"></a>
+                </div>
+                <nav class="admin-tabs">
+                    <a href="admin-dashboard.html" class="admin-tab active">동영상 목록보기</a>
+                    <a href="admin-add.html" class="admin-tab">동영상 추가하기</a>
+                </nav>
+            </div>
+        </header>
+
+        <!-- Content -->
+        <main class="admin-content">
+            <h1 class="page-title">동영상 목록보기</h1>
+
+            <!-- Search & Filter -->
+            <div class="search-filter-area">
+                <div class="search-box">
+                    <input 
+                        type="text" 
+                        class="search-input" 
+                        id="searchInput"
+                        placeholder="동영상 제목으로 검색"
+                    >
+                    <button class="search-btn" id="searchBtn">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <circle cx="11" cy="11" r="8"/>
+                            <path d="M21 21l-4.35-4.35"/>
+                        </svg>
+                    </button>
+                </div>
+            </div>
+
+            <div class="filter-select-box">
+                <div class="filter-select-container">
+                    <select class="filter-select" id="categoryFilter">
+                        <option value="">전체</option>
+                        <option value="weekly">이번주 설교</option>
+                        <option value="scripture">성서강해 설교</option>
+                        <option value="topic">주제별 설교</option>
+                        <option value="column">목회자 컬럼</option>
+                    </select>
+                </div>
+            </div>
+
+            <!-- Video Table -->
+            <div class="video-table-container">
+                <table class="video-table">
+                    <thead>
+                        <tr>
+                            <th style="width: 30%;">제목</th>
+                            <th style="width: 15%;">카테고리</th>
+                            <th style="width: 25%;">URL 주소</th>
+                            <th style="width: 12%;">등록일자</th>
+                            <th style="width: 10%;">상태</th>
+                            <th style="width: 80px;">수정</th>
+                        </tr>
+                    </thead>
+                    <tbody id="videoTableBody">
+                        <tr>
+                            <td colspan="6" class="empty-state">
+                                <div class="empty-state-text">로딩 중...</div>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <!-- Pagination -->
+            <div class="pagination" id="pagination"></div>
+        </main>
+
+        <!-- Footer -->
+        <footer class="admin-footer">
+            © Copyrights 2025 AMI Missions International. All rights reserved.
+        </footer>
+    </div>
+
+    <!-- Scripts -->
+    <script type="module" src="assets/js/admin-dashboard.js"></script>
+</body>
+</html>

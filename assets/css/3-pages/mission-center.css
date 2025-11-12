@@ -18,7 +18,7 @@
 
 .intro-quote {
     color: #182B8C;
-    margin: 30px 0 20px 0;
+    margin: 30px 0 40px 0;
     font-size: 32px;
     font-weight: 700; 
     line-height: 1.5;
@@ -29,7 +29,17 @@
     font-weight: 400;
     line-height: 1.8; 
     color: #000; 
-    margin-bottom: 12px;
+    margin-bottom: 40px;
+}
+
+.intro-signature {
+    font-size: 20px;
+    font-style: normal;
+    font-weight: 700;
+    line-height: 32px;
+    color: #000;
+    margin-top: 40px;
+    margin-bottom: 0;
 }
 
 .vision-image {
@@ -37,7 +47,7 @@
     width: 100%;
     height: 350px;
     background: #DFDFDF;
-    margin: 30px 0;
+    margin: 40px 0;
     border-radius: 8px; 
     overflow: hidden;
 }

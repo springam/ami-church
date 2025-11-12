@@ -1,0 +1,580 @@
+/* ==========================================
+   Admin Pages - 관리자 페이지 전용 스타일
+   ========================================== */
+
+/* ==========================================
+   Admin Login Page
+   ========================================== */
+.admin-login {
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-image: url('../../images/bg-login.png');
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    padding: 20px;
+}
+
+.login-container {
+    background: #fff;
+    border-radius: 20px;
+    padding: 40px;
+    width: 100%;
+    max-width: 480px;
+    height: 542px;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+    text-align: center;
+}
+
+.login-logo {
+    width: 136px;
+    height: 64px;
+    margin: 0 auto 40px;
+}
+
+.login-logo img {
+    width: 100%;
+    height: 64px;
+}
+
+.login-form {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+}
+
+.form-group {
+    text-align: left;
+}
+
+.form-input {
+    width: 100%;
+    padding: 16px 20px;
+    border: 1px solid #DFDFDF;
+    border-radius: 8px;
+    color: var(--999999, #999);
+    font-size: 16px;
+    font-style: normal;
+    font-weight: 400;
+    line-height: 24px; 
+    transition: all 0.3s;
+    box-sizing: border-box;
+}
+
+.form-input::placeholder {
+    color: #999;
+}
+
+.form-input:focus {
+    outline: none;
+    border-color: #182B8C;
+    box-shadow: 0 0 0 3px rgba(24, 43, 140, 0.1);
+}
+
+.form-checkbox {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-top: 10px;
+}
+
+.form-checkbox input[type="checkbox"] {
+    width: 18px;
+    height: 18px;
+    cursor: pointer;
+}
+
+.form-checkbox label {
+    font-size: 14px;
+    color: #666;
+    cursor: pointer;
+}
+
+.login-btn {
+    width: 100%;
+    padding: 16px;
+    background: #182B8C;
+    color: #fff;
+    border: none;
+    border-radius: 8px;
+    font-size: 18px;
+    font-weight: 700;
+    line-height: 28px;
+    cursor: pointer;
+    transition: all 0.3s;
+    margin-top: 8px;
+}
+
+.login-btn:hover {
+    background: #0F1F5C;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(24, 43, 140, 0.3);
+}
+
+.login-btn:active {
+    transform: translateY(0);
+}
+
+.login-footer {
+    margin-top: 32px;
+    padding-top: 32px;
+    border-top: 1px solid #EAEAEA;
+    text-align: center;
+}
+
+.forgot-password {
+    color: #000;
+    font-size: 16px;
+    font-style: normal;
+    font-weight: 400;
+    line-height: 24px; 
+    text-decoration: none;
+    transition: color 0.3s;
+}
+
+.forgot-password:hover {
+    color: #182B8C;
+}
+
+.error-message {
+    color: #d32f2f;
+    font-size: 14px;
+    margin-top: 10px;
+    display: none;
+}
+
+.error-message.show {
+    display: block;
+}
+
+/* ==========================================
+   Admin Dashboard - 새로운 디자인
+   ========================================== */
+.admin-dashboard {
+    min-height: 100vh;
+    background: #fff;
+}
+
+/* Header */
+.admin-header {
+    background: #fff;
+    border-bottom: 1px solid #E0E0E0;
+    padding: 20px 60px;
+    height: 104px;
+}
+
+.admin-header-container {
+    width: 100%;
+    /* max-width: 1400px; */
+    margin: 0 auto;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.admin-logo {
+    height: 48px;
+}
+
+.admin-logo img {
+    height: 100%;
+}
+
+.admin-tabs {
+    display: flex;
+    gap: 100px;
+}
+
+.admin-tab {
+    font-size: 18px;
+    font-weight: 500;
+    color: #666;
+    text-decoration: none;
+    padding-bottom: 20px 0;
+    border-bottom: 2px solid transparent;
+    transition: all 0.3s;
+    cursor: pointer;
+}
+
+.admin-tab.active {
+    color: #182B8C;
+    font-weight: 700;
+    border-bottom-color: #182B8C;
+}
+
+.admin-tab:hover {
+    color: #182B8C;
+}
+
+/* Content */
+.admin-content {
+    max-width: 1400px;
+    margin: 84px auto;
+    padding: 60px 60px 80px;
+}
+
+.page-title {
+    font-size: 32px;
+    font-weight: 700;
+    color: #000;
+    margin-bottom: 40px;
+}
+
+/* Search & Filter */
+.search-filter-area {
+    background: #EBF1F6;
+    border-radius: 12px;
+    padding: 20px;
+    margin-bottom: 20px;
+    /* display: flex; */
+    gap: 20px;
+    align-items: center;
+}
+
+.search-box {
+    /* flex: 1; */
+    position: relative;
+    margin: auto;
+    width: 480px;
+}
+
+.search-input {
+    width: 100%;
+    padding: 8px 50px 8px 20px;
+    border: 1px solid #DDD;
+    border-radius: 8px;
+    font-size: 14px;
+    font-style: normal;
+    font-weight: 400;
+    line-height: 24px;
+    background: #fff;
+}
+
+.search-input::placeholder {
+    color: #999;
+}
+
+.search-btn {
+    position: absolute;
+    right: 15px;
+    top: 50%;
+    transform: translateY(-50%);
+    background: none;
+    border: none;
+    cursor: pointer;
+    padding: 5px;
+}
+
+.search-btn svg {
+    width: 20px;
+    height: 20px;
+}
+
+.filter-select-box {
+    display: flex;
+    width: 100%;
+    justify-content: flex-end;
+    margin-bottom: 20px;
+}
+
+.filter-select {
+    min-width: 160px;
+    font-size: 14px;
+    font-style: normal;
+    font-weight: 400;
+    line-height: 24px;
+    background: #fff;
+    cursor: pointer;
+}
+
+.filter-select-container {
+    border: 1px solid #DFDFDF;
+    border-radius: 8px;
+    padding: 8px 16px 8px 8px;
+}
+
+/* Video Table */
+.video-table-container {
+    background: #fff;
+    overflow: hidden;
+}
+
+.video-table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+.video-table thead {
+    background: #F5F5F5;
+    border-bottom: 1px solid #000;
+    border-top: 1px solid #000;
+}
+
+.video-table th:first-child {
+    padding: 12px 0 12px 24px;
+}
+
+.video-table th {
+    padding: 12px 0;
+    text-align: left;
+    font-size: 14px;
+    font-weight: 700;
+    color: #333;
+}
+
+.video-table th:nth-child(4) {
+    padding-left: 10px;
+}
+
+.video-table th:nth-child(5) {
+    padding-left: 35px;
+}
+
+.video-table th:nth-child(6) {
+    padding-left: 25px;
+}
+
+.video-table td {
+    /* padding: 12px 24px; */
+    font-size: 16px;
+    font-style: normal;
+    font-weight: 400;
+    line-height: 24px;
+    color: #666;
+    border-bottom: 1px solid #EAEAEA;
+    vertical-align: middle;
+}
+
+.video-table tbody tr:hover {
+    background: #F8F9FA;
+}
+
+/* .video-table tbody tr:last-child td {
+    border-bottom: none;
+} */
+
+.video-table tbody td:first-child {
+    padding: 12px 0 12px 24px;
+    font-size: 16px;
+    font-style: normal;
+    font-weight: 400;
+    line-height: 24px;
+    color: #000;
+}
+
+.video-table tbody td:last-child {
+    padding: 12px 24px 12px 0;
+    font-size: 16px;
+    font-style: normal;
+    font-weight: 400;
+    line-height: 24px;
+    color: #000;
+}
+
+/* 제목 컬럼 */
+.video-title-cell {
+    font-size: 16px;
+    font-style: normal;
+    font-weight: 400;
+    line-height: 24px;
+    color: #000;
+}
+
+/* URL 컬럼 */
+.video-url-cell {
+    max-width: 200px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+/* 상태 드롭다운 */
+.status-select {
+    padding: 6px 30px 6px 12px;
+    margin: 10px;
+    border: 1px solid #E0E0E0;
+    border-radius: 6px;
+    font-size: 13px;
+    color: #999;
+    background: #fff;
+    cursor: pointer;
+    appearance: none;
+    background-image: url("data:image/svg+xml,%3Csvg width='12' height='8' viewBox='0 0 12 8' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M1 1L6 6L11 1' stroke='%23999' stroke-width='2' stroke-linecap='round'/%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: right 10px center;
+}
+
+.status-select option {
+    padding: 10px;
+}
+
+/* 액션 버튼 */
+.action-buttons {
+    display: flex;
+    gap: 8px;
+}
+
+.icon-btn {
+    width: 32px;
+    height: 32px;
+    border: none;
+    background: none;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 4px;
+    transition: all 0.3s;
+}
+
+.icon-btn:hover {
+    background: #F0F0F0;
+}
+
+.icon-btn svg {
+    width: 18px;
+    height: 18px;
+}
+
+.edit-icon {
+    color: #666;
+}
+
+.delete-icon {
+    color: #d32f2f;
+}
+
+/* Pagination */
+.pagination {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 8px;
+    margin-top: 40px;
+}
+
+.pagination-btn {
+    min-width: 36px;
+    height: 36px;
+    padding: 0 12px;
+    border: 1px solid #E0E0E0;
+    background: #fff;
+    color: #666;
+    border-radius: 6px;
+    font-size: 14px;
+    cursor: pointer;
+    transition: all 0.3s;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.pagination-btn:hover:not(.active):not(:disabled) {
+    background: #F8F9FA;
+    border-color: #182B8C;
+    color: #182B8C;
+}
+
+.pagination-btn.active {
+    background: #182B8C;
+    color: #fff;
+    border-color: #182B8C;
+    font-weight: 700;
+}
+
+.pagination-btn:disabled {
+    opacity: 0.3;
+    cursor: not-allowed;
+}
+
+.pagination-arrow {
+    padding: 0;
+}
+
+/* Footer */
+.admin-footer {
+    position: absolute;
+    bottom: 0;
+    height: 84px;
+    text-align: center;
+    padding: 24px 20px;
+    color: #999;
+    font-size: 14px;
+    font-style: normal;
+    font-weight: 400;
+    line-height: 24px;
+}
+
+/* Empty State */
+.empty-state {
+    text-align: center;
+    padding: 80px 20px;
+    color: #999;
+}
+
+.empty-state-icon {
+    font-size: 48px;
+    margin-bottom: 16px;
+}
+
+.empty-state-text {
+    font-size: 16px;
+}
+
+/* ==========================================
+   반응형 - 모바일
+   ========================================== */
+@media (max-width: 768px) {
+    .admin-header {
+        padding: 16px 20px;
+    }
+
+    .admin-header-container {
+        flex-direction: column;
+        gap: 16px;
+    }
+
+    .admin-tabs {
+        gap: 20px;
+        width: 100%;
+        justify-content: center;
+    }
+
+    .admin-tab {
+        font-size: 16px;
+    }
+
+    .admin-content {
+        padding: 30px 20px 60px;
+    }
+
+    .page-title {
+        font-size: 24px;
+        margin-bottom: 30px;
+    }
+
+    .search-filter-area {
+        flex-direction: column;
+        padding: 20px;
+    }
+
+    .filter-select {
+        width: 100%;
+    }
+
+    .video-table-container {
+        overflow-x: auto;
+    }
+
+    .video-table {
+        min-width: 800px;
+    }
+
+    .video-table th,
+    .video-table td {
+        padding: 12px 10px;
+        font-size: 13px;
+    }
+}
