@@ -211,7 +211,7 @@
 /* Content */
 .admin-content {
     max-width: 1400px;
-    margin: 84px auto;
+    margin: 104px auto;
     padding: 60px 60px 80px;
 }
 
@@ -576,5 +576,302 @@
     .video-table td {
         padding: 12px 10px;
         font-size: 13px;
+    }
+}
+
+/* ==========================================
+   Admin Add/Edit Page - 동영상 추가/수정
+   ========================================== */
+.video-form {
+    background: #EBF1F6;
+    border-radius: 12px;
+    padding: 48px 60px;
+    max-width: 1280px;
+}
+
+.form-row {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    flex-direction: row;
+    margin-bottom: 16px;
+}
+
+.form-row:last-child {
+    margin-bottom: 0;
+}
+
+.form-label {
+    flex: 130px;
+    display: block;
+    font-size: 14px;
+    font-style: normal;
+    font-weight: 500;
+    line-height: 24px; 
+    color: #000;
+}
+
+.form-field {
+    width: 100%;
+    padding: 8px 16px;
+    border: 1px solid #DFDFDF;
+    border-radius: 4px;
+    font-size: 14px;
+    font-style: normal;
+    font-weight: 400;
+    line-height: 24px;
+    color: #999;
+    background: #fff;
+    transition: all 0.3s;
+    box-sizing: border-box;
+}
+
+.form-field::placeholder {
+    color: #999;
+}
+
+.form-field:focus {
+    outline: none;
+    border-color: #182B8C;
+    box-shadow: 0 0 0 3px rgba(24, 43, 140, 0.1);
+}
+
+.category-selects {
+    display: flex;
+    align-items: center;
+    width: 100%;
+    gap: 12px;
+}
+
+.form-select {
+    flex: 1;
+    padding: 8px 40px 8px 16px;
+    border: 1px solid #DFDFDF;
+    border-radius: 8px;
+    font-size: 14px;
+    font-style: normal;
+    font-weight: 400;
+    line-height: 24px; 
+    color: #000;
+    background: #fff;
+    cursor: pointer;
+    appearance: none;
+    background-image: url("data:image/svg+xml,%3Csvg width='12' height='8' viewBox='0 0 12 8' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M1 1L6 6L11 1' stroke='%23666' stroke-width='2' stroke-linecap='round'/%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: right 16px center;
+    transition: all 0.3s;
+}
+
+.form-select:disabled {
+    background-color: #F5F5F5;
+    color: #999;
+    cursor: not-allowed;
+}
+
+.form-select:not(:disabled):focus {
+    outline: none;
+    border-color: #182B8C;
+    box-shadow: 0 0 0 3px rgba(24, 43, 140, 0.1);
+}
+
+.category-arrow {
+    font-size: 20px;
+    color: #999;
+    flex-shrink: 0;
+}
+
+/* .form-textarea {
+    width: 100%;
+    padding: 16px 20px;
+    border: 1px solid #DFDFDF;
+    border-radius: 8px;
+    font-size: 16px;
+    color: #333;
+    background: #fff;
+    font-family: 'Pretendard', sans-serif;
+    resize: vertical;
+    min-height: 120px;
+    transition: all 0.3s;
+    box-sizing: border-box;
+} */
+
+.form-textarea::placeholder {
+    color: #999;
+}
+
+.form-textarea:focus {
+    outline: none;
+    border-color: #182B8C;
+    box-shadow: 0 0 0 3px rgba(24, 43, 140, 0.1);
+}
+
+.form-actions {
+    display: flex;
+    justify-content: center;
+    gap: 16px;
+    margin-top: 48px;
+}
+
+.form-btn {
+    padding: 8px 16px;
+    border-radius: 4px;
+    font-size: 14px;
+    font-style: normal;
+    font-weight: 400;
+    line-height: 24px; 
+    cursor: pointer;
+    transition: all 0.3s;
+    border: none;
+    white-space: nowrap;
+}
+
+.form-btn-cancel {
+    background: #F5F5F5;
+    color: #000;
+    
+}
+
+.form-btn-cancel:hover {
+    background: #E0E0E0;
+}
+
+.form-btn-submit {
+    background: #182B8C;
+    color: #fff;
+}
+
+.form-btn-submit:hover {
+    background: #0F1F5C;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(24, 43, 140, 0.3);
+}
+
+.form-btn-submit:active {
+    transform: translateY(0);
+}
+
+/* ==========================================
+   삭제 확인 모달
+   ========================================== */
+.delete-modal {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 1000;
+    align-items: center;
+    justify-content: center;
+}
+
+.delete-modal.show {
+    display: flex;
+}
+
+.modal-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.5);
+}
+
+.modal-content {
+    position: relative;
+    background: #fff;
+    border-radius: 16px;
+    width: 360px;
+    height: 220px;
+    flex-shrink: 0;
+    padding: 40px 32px 32px;
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
+    z-index: 1001;
+}
+
+.modal-close {
+    position: absolute;
+    top: 16px;
+    right: 16px;
+    height: 32px;
+    width: 32px;
+    background: none;
+    border: none;
+    cursor: pointer;
+    padding: 4px;
+    color: #666;
+    transition: color 0.3s;
+}
+
+.modal-close:hover {
+    color: #000;
+}
+
+.modal-body {
+    text-align: center;
+    margin-top: 32px;
+}
+
+.modal-text {
+    font-size: 14px;
+    font-style: normal;
+    font-weight: 400;
+    line-height: 24px;
+    color: #000;
+    margin: 0 0 28px 0;
+}
+
+.modal-buttons {
+    display: flex;
+    gap: 12px;
+    justify-content: center;
+    align-items: center;
+}
+
+.modal-btn {
+    /* flex: 1; */
+    padding: 8px 16px;
+    border-radius: 4px;
+    font-size: 14px;
+    font-style: normal;
+    font-weight: 400;
+    line-height: 24px;
+    cursor: pointer;
+    transition: all 0.3s;
+    border: none;
+}
+
+.modal-btn-cancel {
+    background: #fff;
+    color: #000;
+    border: 1px solid #DFDFDF;
+}
+
+.modal-btn-cancel:hover {
+    background: #E0E0E0;
+}
+
+.modal-btn-delete {
+    background: #182B8C;
+    color: #fff;
+}
+
+.modal-btn-delete:hover {
+    background: #0F1F5C;
+}
+
+@media (max-width: 480px) {
+    .modal-content {
+        padding: 32px 24px 24px;
+    }
+    
+    .modal-text {
+        font-size: 15px;
+        margin-bottom: 24px;
+    }
+    
+    .modal-buttons {
+        flex-direction: column;
     }
 }

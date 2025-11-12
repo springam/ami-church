@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>동영상 추가하기 - AMI 교회 관리자</title>
+    <!-- CSS -->
+    <link rel="stylesheet" href="assets/css/main.css">
+    <link rel="stylesheet" href="assets/css/3-pages/admin.css">
+    <!-- Pretendard 폰트 -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.min.css" />
+</head>
+<body>
+    <div class="admin-dashboard">
+        <!-- Header -->
+        <header class="admin-header">
+            <div class="admin-header-container">
+                <div class="admin-logo">
+                    <a href="index.html"><img src="assets/images/logo/logo-blue.png" alt="AMI 교회"></a>
+                </div>
+                <nav class="admin-tabs">
+                    <a href="admin-dashboard.html" class="admin-tab">동영상 목록보기</a>
+                    <a href="admin-add.html" class="admin-tab active">동영상 추가하기</a>
+                </nav>
+            </div>
+        </header>
+
+        <!-- Content -->
+        <main class="admin-content">
+            <h1 class="page-title" id="pageTitle">동영상 추가하기</h1>
+
+            <!-- Form -->
+            <form class="video-form" id="videoForm">
+                <div class="form-row">
+                    <label class="form-label">동영상 제목</label>
+                    <input 
+                        type="text" 
+                        class="form-field" 
+                        id="videoTitle"
+                        placeholder="동영상 제목을 입력하세요"
+                        required
+                    >
+                </div>
+
+                <div class="form-row">
+                    <label class="form-label">Youtube URL 주소</label>
+                    <input 
+                        type="url" 
+                        class="form-field" 
+                        id="videoUrl"
+                        placeholder="Youtube 동영상의 URL을 입력하세요"
+                        required
+                    >
+                </div>
+
+                <div class="form-row">
+                    <label class="form-label">카테고리 입력</label>
+                    <div class="category-selects">
+                        <select class="form-select" id="category1" required>
+                            <option value="">주일 예배</option>
+                            <option value="weekly">이번주 설교</option>
+                            <option value="scripture">성서강해 설교</option>
+                            <option value="topic">주제별 설교</option>
+                        </select>
+                        <span class="category-arrow">›</span>
+                        <select class="form-select" id="category2" disabled>
+                            <option value="">성서강해 설교</option>
+                        </select>
+                        <span class="category-arrow">›</span>
+                        <select class="form-select" id="category3" disabled>
+                            <option value="">교미사</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="form-row">
+                    <label class="form-label">본문</label>
+                    <input 
+                        type="text"
+                        class="form-field" 
+                        id="videoDescription"
+                        placeholder="설교 본문을 입력하세요"
+                    >
+                </div>
+            </form>
+
+            <div class="add-buttons">
+                <div class="form-actions">
+                    <button type="button" class="form-btn form-btn-cancel" id="cancelBtn">취소하기</button>
+                    <button type="submit" class="form-btn form-btn-submit" id="submitBtn">추가하기</button>
+                </div>
+            </div>
+        </main>
+
+        <!-- Footer -->
+        <footer class="admin-footer">
+            © Copyrights 2025 AMI Missions International. All rights reserved.
+        </footer>
+    </div>
+
+    <!-- Scripts -->
+    <script type="module" src="assets/js/admin-add.js"></script>
+</body>
+</html>

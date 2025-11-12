@@ -92,6 +92,24 @@
         </footer>
     </div>
 
+    <div class="delete-modal" id="deleteModal">
+        <div class="modal-overlay"></div>
+        <div class="modal-content">
+            <button class="modal-close" id="modalClose">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
+                    <path d="M18 6L6 18M6 6L18 18" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+                </svg>
+            </button>
+            <div class="modal-body">
+                <p class="modal-text">선택된 동영상 항목을 삭제 하시겠습니까?</p>
+                <div class="modal-buttons">
+                    <button class="modal-btn modal-btn-cancel" id="cancelBtn">취소하기</button>
+                    <button class="modal-btn modal-btn-delete" id="confirmDeleteBtn">삭제하기</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
     <!-- Scripts -->
     <script type="module" src="assets/js/admin-dashboard.js"></script>
 </body>

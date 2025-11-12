@@ -302,7 +302,9 @@ window.editVideo = function(videoId) {
 /**
  * 동영상 삭제
  */
-window.deleteVideo = async function(videoId) {
+let videoToDelete = null;
+
+window.deleteVideo = function(videoId) {
     const video = allVideos.find(v => v.id === videoId);
     
     if (!video) {
@@ -310,16 +312,27 @@ window.deleteVideo = async function(videoId) {
         return;
     }
     
-    if (!confirm(`"${video.title}"을(를) 삭제하시겠습니까?\n\n삭제된 데이터는 복구할 수 없습니다.`)) {
-        return;
-    }
+    // 삭제할 비디오 ID 저장
+    videoToDelete = videoId;
+    
+    // 모달 표시
+    document.getElementById('deleteModal').classList.add('show');
+};
+
+/**
+ * 실제 삭제 처리
+ */
+async function confirmDelete() {
+    if (!videoToDelete) return;
     
     try {
-        const videoRef = doc(db, 'video', videoId);
+        const videoRef = doc(db, 'video', videoToDelete);
         await deleteDoc(videoRef);
         
         console.log('✅ 동영상 삭제 완료');
-        alert('동영상이 삭제되었습니다.');
+        
+        // 모달 닫기
+        closeModal();
         
         // 목록 새로고침
         await fetchVideos();
@@ -328,7 +341,15 @@ window.deleteVideo = async function(videoId) {
         console.error('❌ 삭제 오류:', error);
         alert('삭제 중 오류가 발생했습니다.');
     }
-};
+}
+
+/**
+ * 모달 닫기
+ */
+function closeModal() {
+    document.getElementById('deleteModal').classList.remove('show');
+    videoToDelete = null;
+}
 
 /**
  * 페이지 초기화
@@ -366,6 +387,28 @@ document.addEventListener('DOMContentLoaded', async () => {
     const categoryFilter = document.getElementById('categoryFilter');
     if (categoryFilter) {
         categoryFilter.addEventListener('change', applyFilters);
+    }
+
+    // 모달 이벤트 리스너 추가
+    const modalClose = document.getElementById('modalClose');
+    const cancelBtn = document.getElementById('cancelBtn');
+    const confirmDeleteBtn = document.getElementById('confirmDeleteBtn');
+    const modalOverlay = document.querySelector('.modal-overlay');
+    
+    if (modalClose) {
+        modalClose.addEventListener('click', closeModal);
+    }
+    
+    if (cancelBtn) {
+        cancelBtn.addEventListener('click', closeModal);
+    }
+    
+    if (confirmDeleteBtn) {
+        confirmDeleteBtn.addEventListener('click', confirmDelete);
+    }
+    
+    if (modalOverlay) {
+        modalOverlay.addEventListener('click', closeModal);
     }
     
     // 동영상 목록 로드
