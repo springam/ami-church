@@ -113,8 +113,9 @@ async function fetchColumns() {
         
         querySnapshot.forEach((doc) => {
             const data = doc.data();
-            
-            columns.push({
+
+            if (data.display === true) {
+                columns.push({
                 id: doc.id,
                 title: data.title || '제목 없음',
                 date: formatDate(data.date),
@@ -123,6 +124,8 @@ async function fetchColumns() {
                 category: data.category || '',
                 downloadUrl: data.downloadUrl || ''
             });
+            }
+            
         });
 
         // 날짜 역순 정렬
@@ -174,19 +177,23 @@ async function fetchVideos(category) {
                 category: data.category,
                 date: data.date
             });
+
+            if (data.display === true) {
+                videos.push({
+                    id: doc.id,
+                    title: data.title || '제목 없음',
+                    date: formatDate(data.date),
+                    dateObj: data.date,
+                    category: data.category,
+                    preacher: data.preacher || '',
+                    description: data.description || '',
+                    subCategory: data.subCategory || '', // ⭐ subCategory 추가
+                    thumbnail: data.thumbnail || 'assets/images/thumbnails/default-thumbnail.jpg',
+                    videoUrl: data.videoUrl || ''
+                });
+            }
             
-            videos.push({
-                id: doc.id,
-                title: data.title || '제목 없음',
-                date: formatDate(data.date),
-                dateObj: data.date,
-                category: data.category,
-                preacher: data.preacher || '',
-                description: data.description || '',
-                subCategory: data.subCategory || '', // ⭐ subCategory 추가
-                thumbnail: data.thumbnail || 'assets/images/thumbnails/default-thumbnail.jpg',
-                videoUrl: data.videoUrl || ''
-            });
+            
         });
 
         videos.sort((a, b) => {
