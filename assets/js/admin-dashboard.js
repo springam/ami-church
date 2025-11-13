@@ -45,16 +45,35 @@ function formatDate(timestamp) {
 }
 
 /**
- * 카테고리 이름 변환
+ * 카테고리 이름 변환 - category + subCategory + detailCategory 조합
  */
-function getCategoryName(category) {
-    const names = {
-        'weekly': '주일예배>이번주설교',
-        'scripture': '주일예배>성서강해설교',
-        'topic': '주일예배>주제별설교',
-        'column': '목회자 컬럼'
+function getCategoryName(video) {
+    const categoryNames = {
+        'sunday': '주일예배',
+        'aba': 'ABA',
+        'avs': 'AVS/AVCK'
     };
-    return names[category] || category;
+    
+    const subCategoryNames = {
+        'weekly': '이번주설교',
+        'scripture': '성서강해설교',
+        'topic': '주제별설교',
+        'column': '목회자칼럼',
+        'avs': 'AVS',
+        'avck': 'AVCK'
+    };
+    
+    let result = categoryNames[video.category] || video.category;
+    
+    if (video.subCategory) {
+        result += ' > ' + (subCategoryNames[video.subCategory] || video.subCategory);
+    }
+    
+    if (video.detailCategory) {
+        result += ' > ' + video.detailCategory;
+    }
+    
+    return result;
 }
 
 /**
@@ -84,7 +103,7 @@ async function fetchVideos() {
             allVideos.push({
                 id: docSnapshot.id,
                 ...data,
-                display: data.display !== undefined ? data.display : false
+                status: data.status || 'inactive' // status 필드 사용
             });
         });
         
@@ -103,11 +122,11 @@ async function fetchVideos() {
  */
 function applyFilters() {
     const searchTerm = document.getElementById('searchInput').value.toLowerCase();
-    const category = document.getElementById('categoryFilter').value;
+    const subCategory = document.getElementById('categoryFilter').value;
     
     filteredVideos = allVideos.filter(video => {
         const matchesSearch = !searchTerm || video.title.toLowerCase().includes(searchTerm);
-        const matchesCategory = !category || video.category === category;
+        const matchesCategory = !subCategory || video.subCategory === subCategory;
         return matchesSearch && matchesCategory;
     });
     
@@ -136,13 +155,13 @@ function renderTable() {
     tbody.innerHTML = pageVideos.map(video => `
         <tr data-video-id="${video.id}">
             <td class="video-title-cell">${video.title || '제목 없음'}</td>
-            <td>${getCategoryName(video.category)}</td>
+            <td>${getCategoryName(video)}</td>
             <td class="video-url-cell" title="${video.videoUrl || ''}">${shortenUrl(video.videoUrl)}</td>
             <td>${formatDate(video.date)}</td>
             <td>
                 <select class="status-select" data-video-id="${video.id}">
-                    <option value="false" ${video.display === false ? 'selected' : ''}>비활성</option>
-                    <option value="true" ${video.display === true ? 'selected' : ''}>활성</option>
+                    <option value="inactive" ${video.status === 'inactive' ? 'selected' : ''}>비활성</option>
+                    <option value="active" ${video.status === 'active' ? 'selected' : ''}>활성</option>
                 </select>
             </td>
             <td>
@@ -263,23 +282,24 @@ window.changePage = function(page) {
  */
 async function handleStatusChange(e) {
     const videoId = e.target.dataset.videoId;
-    const newDisplayValue = e.target.value === 'true';
+    const newStatus = e.target.value; // 'active' 또는 'inactive'
     
     try {
         const videoRef = doc(db, 'video', videoId);
-        await updateDoc(videoRef, { display: newDisplayValue });
+        await updateDoc(videoRef, { status: newStatus });
         
-        console.log('✅ 상태 변경 완료:', videoId, newDisplayValue ? '활성' : '비활성');
+        console.log('✅ 상태 변경 완료:', videoId, newStatus);
         
         const video = allVideos.find(v => v.id === videoId);
         if (video) {
-            video.display = newDisplayValue;
+            video.status = newStatus;
         }
         
     } catch (error) {
         console.error('❌ 상태 변경 오류:', error);
         alert('상태 변경에 실패했습니다.');
-        e.target.value = e.target.value === 'true' ? 'false' : 'true';
+        // 원래 값으로 복원
+        e.target.value = e.target.value === 'active' ? 'inactive' : 'active';
     }
 }
 

@@ -153,7 +153,8 @@
    Admin Dashboard - 새로운 디자인
    ========================================== */
 .admin-dashboard {
-    min-height: 100vh;
+    /* min-height: 100vh; */
+    height: 100%;
     background: #fff;
 }
 
@@ -211,7 +212,7 @@
 /* Content */
 .admin-content {
     max-width: 1400px;
-    margin: 104px auto;
+    margin: 104px auto 0;
     padding: 60px 60px 80px;
 }
 
@@ -452,7 +453,7 @@
     justify-content: center;
     align-items: center;
     gap: 8px;
-    margin-top: 40px;
+    margin: 24px 0 0 0;
 }
 
 .pagination-btn {
@@ -462,7 +463,7 @@
     border: 1px solid #E0E0E0;
     background: #fff;
     color: #666;
-    border-radius: 6px;
+    border-radius: 50%;
     font-size: 14px;
     cursor: pointer;
     transition: all 0.3s;
@@ -495,6 +496,19 @@
 
 /* Footer */
 .admin-footer {
+    position: relative;
+    bottom: 0;
+    height: 84px;
+    text-align: center;
+    padding: 24px 20px;
+    color: #999;
+    font-size: 14px;
+    font-style: normal;
+    font-weight: 400;
+    line-height: 24px;
+}
+
+.admin-add-footer {
     position: absolute;
     bottom: 0;
     height: 84px;
@@ -546,9 +560,9 @@
         font-size: 16px;
     }
 
-    .admin-content {
+    /* .admin-content {
         padding: 30px 20px 60px;
-    }
+    } */
 
     .page-title {
         font-size: 24px;

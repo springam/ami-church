@@ -1,7 +1,7 @@
 // korean-worship.js
 import { initializeApp } from "https://www.gstatic.com/firebasejs/12.4.0/firebase-app.js";
 import { getAnalytics } from "https://www.gstatic.com/firebasejs/12.4.0/firebase-analytics.js";
-import { getFirestore, collection, query, where, orderBy, getDocs } from "https://www.gstatic.com/firebasejs/12.4.0/firebase-firestore.js";
+import { getFirestore, collection, query, where, getDocs } from "https://www.gstatic.com/firebasejs/12.4.0/firebase-firestore.js";
 
 console.log('🎯 korean-worship.js 로드됨!');
 
@@ -28,20 +28,28 @@ const db = getFirestore(app);
 console.log('✅ Firestore 초기화 완료');
 
 // 전역 변수
-let currentCategory = 'weekly';
+let currentSubCategory = 'weekly'; // 현재 선택된 subCategory (worship-tabs)
+let currentDetailCategory = null; // 현재 선택된 detailCategory (sub-menu)
 let currentPage = 1;
 const itemsPerPage = 9;
 let totalPages = 1;
 let allVideos = [];
 let currentVideoIndex = -1;
-let currentSubCategory = null; // ⭐ 현재 선택된 서브카테고리
 
-// ⭐ 카테고리별 서브카테고리 설정 (나중에 쉽게 변경 가능)
-const SUB_CATEGORIES = {
-    scripture: ['옵기서', '요나서', '마태복음 5장', '마태복음 13장', '마태복음 16장', '누가복음', '요한복음', '사도행전', '로마서', '로마서 9장~11장', '고린도전서', '빌립보서', '빌레몬서', '야고보서'],
-    topic: ['옵기서', '요나서', '마태복음 5장', '마태복음 13장', '마태복음 16장', '누가복음', '요한복음', '사도행전', '로마서', '로마서 9장~11장', '고린도전서', '빌립보서', '빌레몬서', '야고보서'],
-    column: ['23년', '24년', '25년'],
-    weekly: [] // 이번주 설교는 서브메뉴 없음
+// ⭐ subCategory별 detailCategory 설정
+const DETAIL_CATEGORIES = {
+    weekly: [], // 이번주 설교는 detailCategory 없음
+    scripture: [
+        '욥기서', '요나서', '마태복음 5장', '마태복음 13장', '마태복음 16장', 
+        '누가복음', '요한복음', '사도행전', '로마서', '로마서 9장~11장', 
+        '고린도 전서', '빌립보서', '빌레몬서', '야고보서'
+    ],
+    topic: [
+        '여자의 후손', '기독론', '성전', '천사', '기도', '격려', '전도론', 
+        '주기도문', '파라독스', '감람산', '아리랑족속', '저주와 복', '엘로힘', 
+        '바울', '하나님을 아는 자식', '천사학', '이스라엘', '기타'
+    ],
+    column: [] // 목회자 칼럼은 detailCategory 없음
 };
 
 /**
@@ -50,16 +58,25 @@ const SUB_CATEGORIES = {
 function getYouTubeEmbedUrl(url) {
     if (!url) return '';
     
+    // youtu.be 짧은 URL
     let match = url.match(/youtu\.be\/([^?]+)/);
     if (match) {
         return `https://www.youtube.com/embed/${match[1]}`;
     }
     
+    // 일반 watch URL
     match = url.match(/youtube\.com\/watch\?v=([^&]+)/);
     if (match) {
         return `https://www.youtube.com/embed/${match[1]}`;
     }
     
+    // 라이브 URL
+    match = url.match(/youtube\.com\/live\/([^?]+)/);
+    if (match) {
+        return `https://www.youtube.com/embed/${match[1]}`;
+    }
+    
+    // 이미 embed URL인 경우
     if (url.includes('youtube.com/embed/')) {
         return url;
     }
@@ -98,112 +115,85 @@ function formatDate(timestamp) {
 }
 
 /**
- * Firestore에서 목회자 컬럼 데이터 가져오기
- */
-async function fetchColumns() {
-    try {
-        console.log('=== 목회자 컬럼 데이터 가져오기 시작 ===');
-        
-        const columnsRef = collection(db, 'column');
-        const querySnapshot = await getDocs(columnsRef);
-        
-        console.log('컬럼 문서 개수:', querySnapshot.size);
-        
-        const columns = [];
-        
-        querySnapshot.forEach((doc) => {
-            const data = doc.data();
-
-            if (data.display === true) {
-                columns.push({
-                id: doc.id,
-                title: data.title || '제목 없음',
-                date: formatDate(data.date),
-                dateObj: data.date,
-                year: data.year ? data.year.toString() : '',
-                category: data.category || '',
-                downloadUrl: data.downloadUrl || ''
-            });
-            }
-            
-        });
-
-        // 날짜 역순 정렬
-        columns.sort((a, b) => {
-            const dateA = a.dateObj?.toDate ? a.dateObj.toDate() : new Date(a.dateObj);
-            const dateB = b.dateObj?.toDate ? b.dateObj.toDate() : new Date(b.dateObj);
-            return dateB - dateA;
-        });
-        
-        console.log('로드된 컬럼:', columns);
-        console.log('=== 목회자 컬럼 데이터 가져오기 완료 ===\n');
-        
-        return columns;
-        
-    } catch (error) {
-        console.error('❌ 컬럼 데이터 오류:', error);
-        return [];
-    }
-}
-
-/**
  * Firestore에서 영상 데이터 가져오기
+ * 주일 예배 카테고리에서 subCategory와 detailCategory로 필터링
  */
-async function fetchVideos(category) {
+async function fetchVideos(subCategory, detailCategory = null) {
     try {
         console.log('=== 데이터 가져오기 시작 ===');
-        console.log('1. 카테고리:', category);
-        console.log('2. Firestore DB 연결 상태:', db ? 'OK' : 'FAIL');
+        console.log('1. subCategory:', subCategory);
+        console.log('2. detailCategory:', detailCategory);
+        console.log('3. Firestore DB 연결 상태:', db ? 'OK' : 'FAIL');
         
         const videosRef = collection(db, 'video');
-        console.log('3. 컬렉션 참조 생성:', videosRef ? 'OK' : 'FAIL');
+        console.log('4. 컬렉션 참조 생성:', videosRef ? 'OK' : 'FAIL');
         
-        const q = query(
+        // ⭐ 단순 쿼리로 변경 - category만 필터링하고 나머지는 클라이언트에서 처리
+        let q = query(
             videosRef,
-            where('category', '==', category)
+            where('category', '==', 'sunday')
         );
-        console.log('4. 쿼리 생성 완료');
+        console.log('5. 쿼리 생성 완료');
 
         const querySnapshot = await getDocs(q);
-        console.log('5. 쿼리 실행 완료 - 문서 개수:', querySnapshot.size);
+        console.log('6. 쿼리 실행 완료 - 문서 개수:', querySnapshot.size);
         
         const videos = [];
         
         querySnapshot.forEach((doc) => {
             const data = doc.data();
-            console.log('6. 문서 데이터:', {
+            console.log('7. 문서 데이터:', {
                 id: doc.id,
                 title: data.title,
                 category: data.category,
+                subCategory: data.subCategory,
+                detailCategory: data.detailCategory,
+                status: data.status,
                 date: data.date
             });
 
-            if (data.display === true) {
-                videos.push({
-                    id: doc.id,
-                    title: data.title || '제목 없음',
-                    date: formatDate(data.date),
-                    dateObj: data.date,
-                    category: data.category,
-                    preacher: data.preacher || '',
-                    description: data.description || '',
-                    subCategory: data.subCategory || '', // ⭐ subCategory 추가
-                    thumbnail: data.thumbnail || 'assets/images/thumbnails/default-thumbnail.jpg',
-                    videoUrl: data.videoUrl || ''
-                });
+            // ⭐ 클라이언트 측 필터링
+            // 1. subCategory 체크
+            if (data.subCategory !== subCategory) {
+                return;
             }
             
+            // 2. status 체크 (active만 표시)
+            if (data.status !== 'active') {
+                console.log('   ⏭️ 비활성 상태로 스킵:', data.title);
+                return;
+            }
             
+            // 3. detailCategory 체크 (필터가 있는 경우)
+            if (detailCategory && data.detailCategory !== detailCategory) {
+                return;
+            }
+            
+            // 모든 조건을 만족하면 추가
+            videos.push({
+                id: doc.id,
+                title: data.title || '제목 없음',
+                date: formatDate(data.date),
+                dateObj: data.date,
+                category: data.category,
+                subCategory: data.subCategory || '',
+                detailCategory: data.detailCategory || '',
+                preacher: data.preacher || '',
+                description: data.description || '',
+                thumbnail: data.thumbnail || 'assets/images/thumbnails/default-thumbnail.jpg',
+                videoUrl: data.videoUrl || ''
+            });
         });
 
+        // 날짜 역순 정렬
         videos.sort((a, b) => {
             const dateA = a.dateObj?.toDate ? a.dateObj.toDate() : new Date(a.dateObj);
             const dateB = b.dateObj?.toDate ? b.dateObj.toDate() : new Date(b.dateObj);
             return dateB - dateA;
         });
         
-        console.log('7. 최종 변환된 비디오 개수:', videos.length);
-        console.log('8. 변환된 비디오 목록:', videos);
+        console.log('8. 최종 변환된 비디오 개수:', videos.length);
+        console.log('9. 변환된 비디오 목록:', videos);
         console.log('=== 데이터 가져오기 완료 ===\n');
         
         return videos;
@@ -217,209 +207,113 @@ async function fetchVideos(category) {
 }
 
 /**
- * 목회자 컬럼 리스트 렌더링
- */
-function renderColumnList(columns, page = 1) {
-    const videoGrid = document.getElementById('videoGrid');
-    if (!videoGrid) return;
-
-    // ⭐ 연도 필터링
-    let filteredColumns = columns;
-    if (currentSubCategory) {
-        const yearOnly = currentSubCategory.replace('년', '');
-        filteredColumns = columns.filter(column => column.year === yearOnly);
-    }
-
-    const startIndex = (page - 1) * itemsPerPage;
-    const endIndex = startIndex + itemsPerPage;
-    const pageColumns = filteredColumns.slice(startIndex, endIndex);
-
-    if (pageColumns.length === 0) {
-        videoGrid.innerHTML = `
-            <div class="empty-state">
-                <div class="empty-state-icon">📄</div>
-                <div class="empty-state-text">아직 등록된 컬럼이 없습니다.</div>
-            </div>
-        `;
-        return;
-    }
-
-    // ⭐ 리스트 형식으로 렌더링
-    videoGrid.innerHTML = `
-        <div class="column-list">
-            ${pageColumns.map((column, index) => `
-                <div class="column-item ${index === 2 ? 'featured' : ''}">
-                    <div class="column-number">${String(startIndex + index + 1).padStart(2, '0')}.</div>
-                    <div class="column-title">${column.title}</div>
-                    <button class="column-download-btn" onclick="downloadColumn('${column.downloadUrl}', '${column.title}')">
-                        다운받기
-                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="none">
-                            <path d="M6.66699 10.0003L10.0003 13.3337M10.0003 13.3337L13.3337 10.0003M10.0003 13.3337V6.66699M18.3337 10.0003C18.3337 14.6027 14.6027 18.3337 10.0003 18.3337C5.39795 18.3337 1.66699 14.6027 1.66699 10.0003C1.66699 5.39795 5.39795 1.66699 10.0003 1.66699C14.6027 1.66699 18.3337 5.39795 18.3337 10.0003Z" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
-                        </svg>
-                    </button>
-                </div>
-            `).join('')}
-        </div>
-    `;
-
-    // ⭐ 페이지네이션 업데이트
-    renderPagination(filteredColumns.length, page);
-}
-
-/**
- * 컬럼 다운로드
- */
-window.downloadColumn = function(url, title) {
-    if (!url) {
-        alert('다운로드 URL이 없습니다.');
-        return;
-    }
-    
-    // 새 창에서 열기 (다운로드)
-    window.open(url, '_blank');
-}
-
-/**
- * 비디오 그리드 렌더링
+ * 비디오 리스트 렌더링
  */
 function renderVideos(videos, page = 1) {
+    console.log('🎨 renderVideos 호출:', videos.length, '개');
+    
     const videoGrid = document.getElementById('videoGrid');
     if (!videoGrid) {
-        console.error('videoGrid 요소를 찾을 수 없습니다');
+        console.error('❌ videoGrid 요소를 찾을 수 없음!');
         return;
     }
-
-    // ⭐ 서브카테고리 필터링
-    let filteredVideos = videos;
-    if (currentSubCategory) {
-        filteredVideos = videos.filter(video => video.subCategory === currentSubCategory);
-    }
+    
+    console.log('✅ videoGrid 요소 찾음:', videoGrid);
 
     const startIndex = (page - 1) * itemsPerPage;
     const endIndex = startIndex + itemsPerPage;
-    const pageVideos = filteredVideos.slice(startIndex, endIndex);
+    const pageVideos = videos.slice(startIndex, endIndex);
+    
+    console.log('📄 페이지 비디오:', pageVideos.length, '개 (페이지:', page, ')');
 
     if (pageVideos.length === 0) {
+        console.log('⚠️ 비디오가 없어서 empty-state 표시');
         videoGrid.innerHTML = `
             <div class="empty-state">
-                <div class="empty-state-icon">📹</div>
-                <div class="empty-state-text">아직 등록된 영상이 없습니다.</div>
+                <div class="empty-state-icon">🎥</div>
+                <div class="empty-state-text">아직 등록된 설교 영상이 없습니다.</div>
             </div>
         `;
+        totalPages = 1;
+        renderPagination();
         return;
     }
 
-    videoGrid.innerHTML = pageVideos.map((video, index) => {
-        const isFeatured = index === 4 && pageVideos.length > 4;
-        const backgroundStyle = video.thumbnail ? `style="background-image: url('${video.thumbnail}');"` : '';
-        
-        // ⭐ weekly가 아닐 때만 subCategory 표시
-        const showSubCategory = currentCategory !== 'weekly' && video.subCategory;
-        
+    console.log('🔨 비디오 카드 HTML 생성 중...');
+    const cardsHTML = pageVideos.map(video => {
+        console.log('  카드 생성:', video.title);
+        console.log('  - thumbnail:', video.thumbnail);
+        console.log('  - description:', video.description);
+        console.log('  - date:', video.date);
+        console.log('  - videoUrl:', video.videoUrl);
+        console.log('  - 전체 video 객체:', video);
         return `
-            <div class="video-card ${isFeatured ? 'featured' : ''}" ${backgroundStyle} onclick='playVideo(${JSON.stringify(video).replace(/'/g, "&apos;")})'>
-                <div class="video-content">
-                    ${showSubCategory ? `<div class="video-subcategory">${video.subCategory}</div>` : ''}
-                    <div class="video-title">${video.title}</div>
-                    ${video.description ? `
-                        <div class="video-description-wrapper">
-                            <span class="video-description">${video.description}</span>
-                        </div>
-                    ` : ''}
-                    <div class="video-info">
-                        <div class="video-date">${video.date}</div>
-                    </div>
+        <div class="video-card" style="background-image: url('${video.thumbnail}');" onclick='playVideo(${JSON.stringify(video).replace(/'/g, "&apos;")})'>
+            <div class="video-content">
+                <h3 class="video-title">${video.title}</h3>
+                ${video.description ? `
+                <div class="video-description-wrapper">
+                    <span class="video-description">${video.description}</span>
+                </div>
+                ` : ''}
+                <div class="video-info">
+                    <span class="video-date">${video.date}</span>
                 </div>
             </div>
-        `;
+        </div>
+    `;
     }).join('');
-    
-    // ⭐ 필터링된 결과로 페이지네이션 업데이트
-    renderPagination(filteredVideos.length, page);
+
+    console.log('✅ HTML 생성 완료, videoGrid에 삽입');
+    console.log('📝 생성된 HTML (처음 200자):', cardsHTML.substring(0, 200));
+    videoGrid.innerHTML = cardsHTML;
+    console.log('✅ videoGrid.innerHTML 설정 완료');
+    console.log('📝 설정 후 videoGrid.innerHTML (처음 200자):', videoGrid.innerHTML.substring(0, 200));
+
+    totalPages = Math.ceil(videos.length / itemsPerPage);
+    console.log('📊 총 페이지:', totalPages);
+    renderPagination();
 }
 
 /**
- * 서브메뉴 생성 (weekly 제외한 모든 카테고리)
+ * 서브메뉴 렌더링
  */
 function renderSubMenu() {
     const subMenu = document.getElementById('subMenu');
     const subMenuItems = document.getElementById('subMenuItems');
-    const worshipTabs = document.querySelector('.worship-tabs');
     
-    if (!subMenu || !subMenuItems || !worshipTabs) return;
-    
-    // ⭐ weekly는 서브메뉴 없음
-    if (currentCategory === 'weekly') {
-        subMenu.style.display = 'none';
-        worshipTabs.classList.remove('has-submenu');
-        console.log('✅ 서브메뉴 숨김 - has-submenu 제거됨');
-        return;
-    }
-    
-    // ⭐ 현재 카테고리의 고정 서브카테고리 목록 가져오기
-    const subCategories = SUB_CATEGORIES[currentCategory] || [];
-    
-    if (subCategories.length === 0) {
-        subMenu.style.display = 'none';
-        worshipTabs.classList.remove('has-submenu');
-        console.log('✅ 서브카테고리 없음 - has-submenu 제거됨');
-        return;
-    }
-    
-    // 서브메뉴 표시
-    subMenu.style.display = 'block';
-    worshipTabs.classList.add('has-submenu');
-    console.log('✅ 서브메뉴 표시 - has-submenu 추가됨');
-    
-    // ⭐ 서브메뉴 아이템 생성 ('전체' 버튼 제거)
-    let subMenuHTML = '';
-    
-    subCategories.forEach(subCategory => {
-        subMenuHTML += `
-            <div class="sub-menu-item ${currentSubCategory === subCategory ? 'active' : ''}" 
-                 onclick="filterBySubCategory('${subCategory}')">
-                ${subCategory}
-            </div>
-        `;
-    });
-    
-    subMenuItems.innerHTML = subMenuHTML;
-}
+    if (!subMenu || !subMenuItems) return;
 
-/**
- * 서브카테고리로 필터링
- */
-window.filterBySubCategory = function(subCategory) {
-    currentSubCategory = subCategory;
-    currentPage = 1; // 페이지 초기화
+    const detailCategories = DETAIL_CATEGORIES[currentSubCategory];
     
-    // ⭐ column일 때는 리스트 렌더링
-    if (currentCategory === 'column') {
-        renderColumnList(allVideos, currentPage);
-    } else {
-        renderVideos(allVideos, currentPage);
+    // detailCategory가 없는 경우 (이번주 설교, 목회자 칼럼)
+    if (!detailCategories || detailCategories.length === 0) {
+        subMenu.style.display = 'none';
+        return;
     }
+
+    // 서브메뉴 표시 및 항목 생성
+    subMenu.style.display = 'block';
     
-    renderSubMenu(); // ⭐ 파라미터 제거
-    
-    // 스크롤 위치 조정
-    const worshipContainer = document.querySelector('.worship-container');
-    if (worshipContainer) {
-        worshipContainer.scrollIntoView({ 
-            behavior: 'smooth', 
-            block: 'start' 
-        });
-    }
+    subMenuItems.innerHTML = `
+        <div class="sub-menu-item ${!currentDetailCategory ? 'active' : ''}" onclick="changeDetailCategory(null)">
+            전체
+        </div>
+        ${detailCategories.map(category => `
+            <div class="sub-menu-item ${currentDetailCategory === category ? 'active' : ''}" 
+                 onclick="changeDetailCategory('${category}')">
+                ${category}
+            </div>
+        `).join('')}
+    `;
 }
 
 /**
  * 페이지네이션 렌더링
  */
-function renderPagination(totalItems, currentPage) {
+function renderPagination() {
     const pagination = document.getElementById('pagination');
     if (!pagination) return;
-
-    totalPages = Math.ceil(totalItems / itemsPerPage);
 
     if (totalPages <= 1) {
         pagination.innerHTML = '';
@@ -459,12 +353,7 @@ window.changePage = function(page) {
     if (page < 1 || page > totalPages) return;
     currentPage = page;
     
-    // ⭐ column일 때는 리스트 렌더링
-    if (currentCategory === 'column') {
-        renderColumnList(allVideos, currentPage);
-    } else {
-        renderVideos(allVideos, currentPage);
-    }
+    renderVideos(allVideos, currentPage);
     
     const worshipContainer = document.querySelector('.worship-container');
     if (worshipContainer) {
@@ -482,7 +371,7 @@ window.playVideo = function(video) {
     // 현재 비디오의 인덱스 찾기
     currentVideoIndex = allVideos.findIndex(v => v.id === video.id);
     
-    // ⭐ 그리드 뷰와 헤더 모두 숨기기
+    // 그리드 뷰와 헤더 모두 숨기기
     const videoGrid = document.getElementById('videoGrid');
     const pagination = document.getElementById('pagination');
     const worshipHeader = document.querySelector('.worship-header');
@@ -585,7 +474,7 @@ window.backToList = function() {
         detailView.classList.remove('active');
     }
     
-    // ⭐ 헤더와 그리드 뷰 다시 표시
+    // 헤더와 그리드 뷰 다시 표시
     if (videoGrid) videoGrid.style.display = 'grid';
     if (pagination) pagination.style.display = 'flex';
     if (worshipHeader) worshipHeader.style.display = 'block';
@@ -601,18 +490,19 @@ window.backToList = function() {
 }
 
 /**
- * 카테고리 변경
+ * subCategory 변경 (worship-tabs 클릭)
  */
-async function changeCategory(category) {
-    if (currentCategory === category) return;
+async function changeSubCategory(subCategory) {
+    if (currentSubCategory === subCategory) return;
 
-    currentCategory = category;
+    currentSubCategory = subCategory;
     currentPage = 1;
-    currentSubCategory = null; // ⭐ 서브카테고리 필터 초기화
+    currentDetailCategory = null; // detailCategory 초기화
 
+    // 탭 활성화 상태 변경
     document.querySelectorAll('.worship-tab').forEach(tab => {
         tab.classList.remove('active');
-        if (tab.dataset.category === category) {
+        if (tab.dataset.category === subCategory) {
             tab.classList.add('active');
         }
     });
@@ -620,6 +510,7 @@ async function changeCategory(category) {
     // 상세 뷰가 열려있으면 닫기
     backToList();
 
+    // 로딩 표시
     const videoGrid = document.getElementById('videoGrid');
     if (videoGrid) {
         videoGrid.innerHTML = '<div class="loading">콘텐츠를 불러오는 중...</div>';
@@ -630,16 +521,39 @@ async function changeCategory(category) {
         pagination.innerHTML = '';
     }
 
-    // ⭐ 목회자 컬럼은 다른 데이터 소스 사용
-    if (category === 'column') {
-        allVideos = await fetchColumns();
-        renderColumnList(allVideos, currentPage);
-    } else {
-        allVideos = await fetchVideos(category);
-        renderVideos(allVideos, currentPage);
-    }
+    // 데이터 로드
+    allVideos = await fetchVideos(subCategory);
+    renderVideos(allVideos, currentPage);
+    renderSubMenu();
+}
+
+/**
+ * detailCategory 변경 (sub-menu 클릭)
+ */
+window.changeDetailCategory = async function(detailCategory) {
+    if (currentDetailCategory === detailCategory) return;
+
+    currentDetailCategory = detailCategory;
+    currentPage = 1;
+
+    // 서브메뉴 활성화 상태 변경
+    document.querySelectorAll('.sub-menu-item').forEach(item => {
+        item.classList.remove('active');
+    });
     
-    renderSubMenu(); // ⭐ 파라미터 제거
+    if (detailCategory === null) {
+        document.querySelector('.sub-menu-item:first-child')?.classList.add('active');
+    }
+
+    // 로딩 표시
+    const videoGrid = document.getElementById('videoGrid');
+    if (videoGrid) {
+        videoGrid.innerHTML = '<div class="loading">콘텐츠를 불러오는 중...</div>';
+    }
+
+    // 데이터 로드
+    allVideos = await fetchVideos(currentSubCategory, detailCategory);
+    renderVideos(allVideos, currentPage);
 }
 
 /**
@@ -648,30 +562,26 @@ async function changeCategory(category) {
 export async function initKoreanWorship() {
     console.log('🚀 initKoreanWorship() 실행');
     
+    // worship-tabs 이벤트 리스너
     const tabs = document.querySelectorAll('.worship-tab');
     console.log('탭 개수:', tabs.length);
     
     tabs.forEach(tab => {
         tab.addEventListener('click', () => {
             console.log('탭 클릭:', tab.dataset.category);
-            changeCategory(tab.dataset.category);
+            changeSubCategory(tab.dataset.category);
         });
     });
 
     console.log('🔥 초기 데이터 로드 시작...');
     
-    // ⭐ 초기 카테고리에 따라 다른 데이터 로드
-    if (currentCategory === 'column') {
-        allVideos = await fetchColumns();
-        renderColumnList(allVideos, currentPage);
-    } else {
-        allVideos = await fetchVideos(currentCategory);
-        renderVideos(allVideos, currentPage);
-    }
+    // 초기 데이터 로드
+    allVideos = await fetchVideos(currentSubCategory);
+    renderVideos(allVideos, currentPage);
     
     console.log('📦 로드된 데이터:', allVideos);
     
-    renderSubMenu(); // ⭐ 파라미터 제거
+    renderSubMenu();
     
     console.log('✅ 초기화 완료!');
 }

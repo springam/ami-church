@@ -22,6 +22,61 @@ const db = getFirestore(app);
 let isEditMode = false;
 let editVideoId = null;
 
+// 카테고리 계층 구조 정의
+const categoryData = {
+    sunday: {
+        name: '주일 예배',
+        subCategories: {
+            weekly: '이번주 설교',
+            scripture: '성서강해 설교',
+            topic: '주제별 설교',
+            column: '목회자 칼럼'
+        },
+        detailCategories: {
+            weekly: [],
+            scripture: [
+                '욥기서', '요나서', '마태복음 5장', '마태복음 13장', '마태복음 16장', 
+                '누가복음', '요한복음', '사도행전', '로마서', '로마서 9장~11장', 
+                '고린도 전서', '빌립보서', '빌레몬서', '야고보서'
+            ],
+            topic: [
+                '여자의 후손', '기독론', '성전', '천사', '기도', '격려', '전도론', 
+                '주기도문', '파라독스', '감람산', '아리랑족속', '저주와 복', '엘로힘', 
+                '바울', '하나님을 아는 자식', '천사학', '이스라엘', '기타'
+            ],
+            column: []
+        }
+    },
+    aba: {
+        name: 'ABA',
+        subCategories: {},
+        detailCategories: {
+            '': [
+                '1학기 하늘의 조직', '2학기 인간론', '3학기 창조론', '4학기 종말론', 
+                '5학기 구원론', '6학기 에베소서', '7학기 이슬람', '8학기 이스라엘 절기', 
+                '9학기 기독론'
+            ]
+        }
+    },
+    avs: {
+        name: 'AVS/AVCK',
+        subCategories: {
+            avs: 'AVS',
+            avck: 'AVCK'
+        },
+        detailCategories: {
+            avs: [
+                '제15기 여자의 후손', '제19기 산상수훈', '제21기 이세상과 저세상', 
+                '제23기 선지서 17권 개관'
+            ],
+            avck: [
+                '제 1기', '제 2기', '제 3기', '제 4기', '제 7기', '제 8기', 
+                '제 9기', '제 11기', '제 12기', '제 13기'
+            ]
+        }
+    }
+};
+
 /**
  * URL에서 파라미터 가져오기
  */
@@ -31,11 +86,81 @@ function getUrlParameter(name) {
 }
 
 /**
+ * 두 번째 카테고리(subCategory) 업데이트
+ */
+function updateSubCategory(mainCategory) {
+    const category2 = document.getElementById('category2');
+    const category3 = document.getElementById('category3');
+    
+    // 초기화
+    category2.innerHTML = '<option value="">선택하세요</option>';
+    category3.innerHTML = '<option value="">선택하세요</option>';
+    category3.disabled = true;
+    
+    if (!mainCategory || !categoryData[mainCategory]) {
+        category2.disabled = true;
+        return;
+    }
+    
+    const subCategories = categoryData[mainCategory].subCategories;
+    
+    // ABA의 경우 subCategory가 없고 바로 detailCategory로 이동
+    if (Object.keys(subCategories).length === 0) {
+        category2.disabled = true;
+        updateDetailCategory(mainCategory, '');
+        return;
+    }
+    
+    // subCategory 옵션 추가
+    Object.entries(subCategories).forEach(([value, label]) => {
+        const option = document.createElement('option');
+        option.value = value;
+        option.textContent = label;
+        category2.appendChild(option);
+    });
+    
+    category2.disabled = false;
+}
+
+/**
+ * 세 번째 카테고리(detailCategory) 업데이트
+ */
+function updateDetailCategory(mainCategory, subCategory) {
+    const category3 = document.getElementById('category3');
+    
+    // 초기화
+    category3.innerHTML = '<option value="">선택하세요</option>';
+    
+    if (!mainCategory || !categoryData[mainCategory]) {
+        category3.disabled = true;
+        return;
+    }
+    
+    const detailCategories = categoryData[mainCategory].detailCategories;
+    
+    // detailCategory가 없는 경우 (이번주 설교, 목회자 칼럼)
+    if (!detailCategories || !detailCategories[subCategory] || detailCategories[subCategory].length === 0) {
+        category3.disabled = true;
+        return;
+    }
+    
+    // detailCategory 옵션 추가
+    detailCategories[subCategory].forEach(label => {
+        const option = document.createElement('option');
+        option.value = label;
+        option.textContent = label;
+        category3.appendChild(option);
+    });
+    
+    category3.disabled = false;
+}
+
+/**
  * 수정 모드: 기존 동영상 데이터 로드
  */
 async function loadVideoData(videoId) {
     try {
-        console.log('📥 동영상 데이터 로드:', videoId);
+        console.log('🔥 동영상 데이터 로드:', videoId);
         
         const videoRef = doc(db, 'video', videoId);
         const videoSnap = await getDoc(videoRef);
@@ -49,10 +174,43 @@ async function loadVideoData(videoId) {
         const videoData = videoSnap.data();
         console.log('✅ 데이터 로드 완료:', videoData);
         
+        // 기본 정보 입력
         document.getElementById('videoTitle').value = videoData.title || '';
         document.getElementById('videoUrl').value = videoData.videoUrl || '';
-        document.getElementById('category1').value = videoData.category || '';
         document.getElementById('videoDescription').value = videoData.description || '';
+        
+        // 카테고리 복원
+        const category1 = document.getElementById('category1');
+        const category2 = document.getElementById('category2');
+        const category3 = document.getElementById('category3');
+        
+        if (videoData.category) {
+            category1.value = videoData.category;
+            updateSubCategory(videoData.category);
+            
+            // subCategory가 있는 경우
+            if (videoData.subCategory) {
+                // subCategory 옵션이 로드될 때까지 대기
+                setTimeout(() => {
+                    category2.value = videoData.subCategory;
+                    updateDetailCategory(videoData.category, videoData.subCategory);
+                    
+                    // detailCategory가 있는 경우
+                    if (videoData.detailCategory) {
+                        setTimeout(() => {
+                            category3.value = videoData.detailCategory;
+                        }, 100);
+                    }
+                }, 100);
+            } else {
+                // ABA의 경우 (subCategory 없이 바로 detailCategory)
+                setTimeout(() => {
+                    if (videoData.detailCategory) {
+                        category3.value = videoData.detailCategory;
+                    }
+                }, 100);
+            }
+        }
         
         document.getElementById('pageTitle').textContent = '동영상 수정하기';
         document.getElementById('submitBtn').textContent = '수정하기';
@@ -65,6 +223,21 @@ async function loadVideoData(videoId) {
 }
 
 /**
+ * 랜덤 썸네일 선택
+ */
+function getRandomThumbnail() {
+    const thumbnails = [
+        'assets/images/thumbnails/videoCard-gray.png',
+        'assets/images/thumbnails/videoCard-green.png',
+        'assets/images/thumbnails/videoCard-orange.png',
+        'assets/images/thumbnails/videoCard-purple.png'
+    ];
+    
+    const randomIndex = Math.floor(Math.random() * thumbnails.length);
+    return thumbnails[randomIndex];
+}
+
+/**
  * 폼 제출 처리
  */
 async function handleSubmit(e) {
@@ -73,6 +246,8 @@ async function handleSubmit(e) {
     const title = document.getElementById('videoTitle').value.trim();
     const videoUrl = document.getElementById('videoUrl').value.trim();
     const category = document.getElementById('category1').value;
+    const subCategory = document.getElementById('category2').value;
+    const detailCategory = document.getElementById('category3').value;
     const description = document.getElementById('videoDescription').value.trim();
     
     if (!title) {
@@ -99,23 +274,38 @@ async function handleSubmit(e) {
         return;
     }
     
+    // 동영상 데이터 구성
     const videoData = {
         title: title,
         videoUrl: videoUrl,
         category: category,
         description: description,
-        status: 'inactive'
+        status: 'active', // 기본값은 활성
+        thumbnail: getRandomThumbnail() // ⭐ 랜덤 썸네일 추가
     };
+    
+    // subCategory가 있는 경우에만 추가
+    if (subCategory) {
+        videoData.subCategory = subCategory;
+    }
+    
+    // detailCategory가 있는 경우에만 추가
+    if (detailCategory) {
+        videoData.detailCategory = detailCategory;
+    }
     
     try {
         if (isEditMode) {
             console.log('🔄 동영상 수정:', editVideoId);
             const videoRef = doc(db, 'video', editVideoId);
+            // ⭐ 수정 시에는 썸네일 변경하지 않음 (기존 값 유지)
+            delete videoData.thumbnail;
             await updateDoc(videoRef, videoData);
             console.log('✅ 수정 완료');
             alert('동영상이 수정되었습니다.');
         } else {
             console.log('➕ 동영상 추가');
+            console.log('📸 선택된 썸네일:', videoData.thumbnail);
             videoData.date = Timestamp.now();
             await addDoc(collection(db, 'video'), videoData);
             console.log('✅ 추가 완료');
@@ -137,7 +327,8 @@ function isValidYouTubeUrl(url) {
     const patterns = [
         /^https?:\/\/(www\.)?youtube\.com\/watch\?v=[\w-]+/,
         /^https?:\/\/youtu\.be\/[\w-]+/,
-        /^https?:\/\/(www\.)?youtube\.com\/embed\/[\w-]+/
+        /^https?:\/\/(www\.)?youtube\.com\/embed\/[\w-]+/,
+        /^https?:\/\/(www\.)?youtube\.com\/live\/[\w-]+/  // YouTube 라이브 URL
     ];
     
     return patterns.some(pattern => pattern.test(url));
@@ -184,6 +375,24 @@ document.addEventListener('DOMContentLoaded', async () => {
     
     console.log('👤 로그인 사용자:', adminUser.name);
     
+    // 카테고리 이벤트 리스너 등록
+    const category1 = document.getElementById('category1');
+    const category2 = document.getElementById('category2');
+    
+    if (category1) {
+        category1.addEventListener('change', (e) => {
+            updateSubCategory(e.target.value);
+        });
+    }
+    
+    if (category2) {
+        category2.addEventListener('change', (e) => {
+            const mainCategory = document.getElementById('category1').value;
+            updateDetailCategory(mainCategory, e.target.value);
+        });
+    }
+    
+    // 수정 모드 체크
     editVideoId = getUrlParameter('edit');
     if (editVideoId) {
         isEditMode = true;
@@ -205,10 +414,9 @@ document.addEventListener('DOMContentLoaded', async () => {
         cancelBtn.addEventListener('click', handleCancel);
     }
     
-    // ✅ 모달 이벤트 리스너 추가
+    // 모달 이벤트 리스너
     const modal = document.getElementById('cancelModal');
     const modalClose = modal?.querySelector('#modalClose');
-    const cancelModalBtn = modal?.querySelector('#cancelModalBtn');
     const confirmCancelBtn = modal?.querySelector('#confirmCancelBtn');
     
     // X 버튼 클릭
@@ -220,11 +428,6 @@ document.addEventListener('DOMContentLoaded', async () => {
     const overlay = modal?.querySelector('.modal-overlay');
     if (overlay) {
         overlay.addEventListener('click', hideCancelModal);
-    }
-    
-    // 취소하기 버튼
-    if (cancelModalBtn) {
-        cancelModalBtn.addEventListener('click', hideCancelModal);
     }
     
     // 확인 버튼 - 목록으로 이동
