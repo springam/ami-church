@@ -296,19 +296,38 @@ async function handleSubmit(e) {
     
     try {
         if (isEditMode) {
-            console.log('🔄 동영상 수정:', editVideoId);
+            // 수정 모드
             const videoRef = doc(db, 'video', editVideoId);
-            // ⭐ 수정 시에는 썸네일 변경하지 않음 (기존 값 유지)
             delete videoData.thumbnail;
             await updateDoc(videoRef, videoData);
-            console.log('✅ 수정 완료');
             alert('동영상이 수정되었습니다.');
         } else {
+            // ⭐ 추가 모드 - orderNumber 자동 할당
             console.log('➕ 동영상 추가');
-            console.log('📸 선택된 썸네일:', videoData.thumbnail);
+            
+            // 같은 카테고리의 마지막 orderNumber 찾기
+            const videosRef = collection(db, 'video');
+            const q = query(videosRef, 
+                where('category', '==', category),
+                where('subCategory', '==', subCategory || ''),
+                orderBy('orderNumber', 'desc'),
+                limit(1)
+            );
+            
+            const querySnapshot = await getDocs(q);
+            let maxOrderNumber = 0;
+            
+            if (!querySnapshot.empty) {
+                const lastVideo = querySnapshot.docs[0].data();
+                maxOrderNumber = lastVideo.orderNumber || 0;
+            }
+            
+            // 새 orderNumber 할당
+            videoData.orderNumber = maxOrderNumber + 1;
             videoData.date = Timestamp.now();
+            
             await addDoc(collection(db, 'video'), videoData);
-            console.log('✅ 추가 완료');
+            console.log('✅ 추가 완료, orderNumber:', videoData.orderNumber);
             alert('동영상이 추가되었습니다.');
         }
         

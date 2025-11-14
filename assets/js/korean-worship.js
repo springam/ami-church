@@ -121,55 +121,26 @@ function formatDate(timestamp) {
 async function fetchVideos(subCategory, detailCategory = null) {
     try {
         console.log('=== 데이터 가져오기 시작 ===');
-        console.log('1. subCategory:', subCategory);
-        console.log('2. detailCategory:', detailCategory);
-        console.log('3. Firestore DB 연결 상태:', db ? 'OK' : 'FAIL');
         
         const videosRef = collection(db, 'video');
-        console.log('4. 컬렉션 참조 생성:', videosRef ? 'OK' : 'FAIL');
         
-        // ⭐ 단순 쿼리로 변경 - category만 필터링하고 나머지는 클라이언트에서 처리
+        // category만 필터링
         let q = query(
             videosRef,
             where('category', '==', 'sunday')
         );
-        console.log('5. 쿼리 생성 완료');
-
-        const querySnapshot = await getDocs(q);
-        console.log('6. 쿼리 실행 완료 - 문서 개수:', querySnapshot.size);
         
+        const querySnapshot = await getDocs(q);
         const videos = [];
         
         querySnapshot.forEach((doc) => {
             const data = doc.data();
-            console.log('7. 문서 데이터:', {
-                id: doc.id,
-                title: data.title,
-                category: data.category,
-                subCategory: data.subCategory,
-                detailCategory: data.detailCategory,
-                status: data.status,
-                date: data.date
-            });
-
-            // ⭐ 클라이언트 측 필터링
-            // 1. subCategory 체크
-            if (data.subCategory !== subCategory) {
-                return;
-            }
             
-            // 2. status 체크 (active만 표시)
-            if (data.status !== 'active') {
-                console.log('   ⏭️ 비활성 상태로 스킵:', data.title);
-                return;
-            }
+            // 클라이언트 측 필터링
+            if (data.subCategory !== subCategory) return;
+            if (data.status !== 'active') return;
+            if (detailCategory && data.detailCategory !== detailCategory) return;
             
-            // 3. detailCategory 체크 (필터가 있는 경우)
-            if (detailCategory && data.detailCategory !== detailCategory) {
-                return;
-            }
-            
-            // 모든 조건을 만족하면 추가
             videos.push({
                 id: doc.id,
                 title: data.title || '제목 없음',
@@ -181,27 +152,28 @@ async function fetchVideos(subCategory, detailCategory = null) {
                 preacher: data.preacher || '',
                 description: data.description || '',
                 thumbnail: data.thumbnail || 'assets/images/thumbnails/default-thumbnail.jpg',
-                videoUrl: data.videoUrl || ''
+                videoUrl: data.videoUrl || '',
+                orderNumber: data.orderNumber || 999999 // ⭐ orderNumber 추가
             });
         });
 
-        // 날짜 역순 정렬
+        // ⭐ orderNumber 기준 정렬, 없으면 날짜 역순
         videos.sort((a, b) => {
-            const dateA = a.dateObj?.toDate ? a.dateObj.toDate() : new Date(a.dateObj);
-            const dateB = b.dateObj?.toDate ? b.dateObj.toDate() : new Date(b.dateObj);
+            if (a.orderNumber !== b.orderNumber) {
+                return a.orderNumber - b.orderNumber;
+            }
+            const dateA = a.dateObj?.toDate ? a.dateObj.toDate() : new Date(0);
+            const dateB = b.dateObj?.toDate ? b.dateObj.toDate() : new Date(0);
             return dateB - dateA;
         });
         
         console.log('8. 최종 변환된 비디오 개수:', videos.length);
-        console.log('9. 변환된 비디오 목록:', videos);
         console.log('=== 데이터 가져오기 완료 ===\n');
         
         return videos;
         
     } catch (error) {
         console.error('❌ 오류 발생:', error);
-        console.error('오류 상세:', error.message);
-        console.error('오류 코드:', error.code);
         return [];
     }
 }

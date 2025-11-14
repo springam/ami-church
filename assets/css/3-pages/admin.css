@@ -315,6 +315,7 @@
 
 .video-table th:first-child {
     padding: 12px 0 12px 24px;
+    text-align: center;
 }
 
 .video-table th {
@@ -325,16 +326,25 @@
     color: #333;
 }
 
+.video-table th:nth-child(2) {
+    padding: 12px 0 12px 12px;
+}
+
 .video-table th:nth-child(4) {
-    padding-left: 10px;
+    padding-left: 0px;
 }
 
 .video-table th:nth-child(5) {
-    padding-left: 35px;
+    text-align: center;
 }
 
 .video-table th:nth-child(6) {
-    padding-left: 25px;
+    text-align: center;
+}
+
+.video-table th:last-child {
+    padding: 12px 24px 12px 0;
+    text-align: center;
 }
 
 .video-table td {
@@ -348,30 +358,44 @@
     vertical-align: middle;
 }
 
-.video-table tbody tr:hover {
+.video-table td:first-child {
+    padding: 12px 0 12px 24px;
+    color: #000;
+    text-align: center;
+}
+
+.video-table td:nth-child(2) {
+    padding: 12px 0 12px 12px;
+    color: #000;
+    text-align: left;
+}
+
+.video-table td:nth-child(5) {
+    text-align: center;
+}
+
+.video-table td:nth-child(6) {
+    text-align: center;
+}
+
+.video-table td:last-child {
+    text-align: center;
+}
+
+.video-table tr:hover {
     background: #F8F9FA;
 }
 
-/* .video-table tbody tr:last-child td {
-    border-bottom: none;
-} */
 
-.video-table tbody td:first-child {
-    padding: 12px 0 12px 24px;
-    font-size: 16px;
-    font-style: normal;
-    font-weight: 400;
-    line-height: 24px;
-    color: #000;
-}
 
-.video-table tbody td:last-child {
+.video-table td:last-child {
     padding: 12px 24px 12px 0;
     font-size: 16px;
     font-style: normal;
     font-weight: 400;
     line-height: 24px;
     color: #000;
+    text-align: center;
 }
 
 /* 제목 컬럼 */
@@ -415,6 +439,7 @@
 .action-buttons {
     display: flex;
     gap: 8px;
+    justify-content: center;
 }
 
 .icon-btn {
@@ -890,6 +915,149 @@
 
 .modal-btn-confirm:hover {
     background: #0F1F5C;
+}
+
+
+/* ==========================================
+   드래그 앤 드롭 스타일
+   ========================================== */
+
+/* 순서 변경 버튼 */
+.order-mode-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 8px 16px;
+    background: #fff;
+    border: 1px solid #DFDFDF;
+    border-radius: 8px;
+    font-size: 14px;
+    font-weight: 500;
+    color: #000;
+    cursor: pointer;
+    transition: all 0.3s;
+    margin-left: 12px;
+}
+
+.order-mode-btn:hover {
+    background: #F8F9FA;
+    border-color: #182B8C;
+}
+
+.order-mode-btn.active {
+    background: #182B8C;
+    color: #fff;
+    border-color: #182B8C;
+}
+
+.order-mode-btn svg {
+    width: 20px;
+    height: 20px;
+}
+
+/* 순서 변경 모드 안내 */
+.order-mode-notice {
+    display: none;
+    justify-content: space-between;
+    align-items: center;
+    padding: 16px 20px;
+    background: #EBF1F6;
+    border-radius: 8px;
+    margin-bottom: 20px;
+}
+
+.notice-content {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    font-size: 14px;
+    font-weight: 500;
+    color: #182B8C;
+}
+
+.notice-content svg {
+    width: 20px;
+    height: 20px;
+}
+
+.notice-actions {
+    display: flex;
+    gap: 8px;
+}
+
+.notice-btn {
+    padding: 6px 16px;
+    border-radius: 4px;
+    font-size: 14px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.3s;
+    border: none;
+}
+
+.notice-btn-cancel {
+    background: #fff;
+    color: #000;
+    border: 1px solid #DFDFDF;
+}
+
+.notice-btn-cancel:hover {
+    background: #F5F5F5;
+}
+
+.notice-btn-save {
+    background: #182B8C;
+    color: #fff;
+}
+
+.notice-btn-save:hover {
+    background: #0F1F5C;
+}
+
+/* 드래그 핸들 */
+.drag-handle {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: move;
+    padding: 4px;
+    color: #999;
+}
+
+.drag-handle:hover {
+    color: #182B8C;
+}
+
+/* 드래그 중인 행 스타일 */
+.sortable-ghost {
+    opacity: 0.4;
+    background: #F0F0F0;
+}
+
+.sortable-chosen {
+    background: #EBF1F6;
+}
+
+.sortable-drag {
+    opacity: 1;
+    cursor: move;
+}
+
+/* 순서 컬럼 */
+.order-column {
+    text-align: center;
+    font-weight: 500;
+}
+
+/* 드래그 모드일 때 버튼 비활성화 스타일 */
+tr.draggable .icon-btn:disabled {
+    opacity: 0.3;
+    cursor: not-allowed;
+}
+
+tr.draggable .status-select:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
 }
 
 @media (max-width: 480px) {
