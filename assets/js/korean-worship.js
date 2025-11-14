@@ -525,6 +525,11 @@ async function changeSubCategory(subCategory) {
     allVideos = await fetchVideos(subCategory);
     renderVideos(allVideos, currentPage);
     renderSubMenu();
+    
+    // ✨ 탭 전환 후 서브메뉴 체크
+    setTimeout(() => {
+        checkAndApplySubmenuClass();
+    }, 50);
 }
 
 /**
@@ -584,4 +589,41 @@ export async function initKoreanWorship() {
     renderSubMenu();
     
     console.log('✅ 초기화 완료!');
+    
+    // ✨ 서브메뉴 체크 (초기화 완료 직후)
+    setTimeout(() => {
+        checkAndApplySubmenuClass();
+    }, 100);
+}
+
+/**
+ * 서브메뉴 체크 및 클래스 적용
+ */
+function checkAndApplySubmenuClass() {
+    const worshipTabs = document.querySelector('.worship-tabs');
+    
+    console.log('🔍 worship-tabs 찾기:', worshipTabs);
+    
+    if (!worshipTabs) {
+        console.log('❌ worship-tabs 없음');
+        return;
+    }
+    
+    // ✨ sub-menu는 형제 요소이므로 부모에서 찾기
+    const subMenu = document.querySelector('.sub-menu');
+    
+    // sub-menu가 실제로 표시되는지 확인 (display: none이 아닌지)
+    const isSubMenuVisible = subMenu && subMenu.style.display !== 'none';
+    
+    console.log('🔍 sub-menu 요소:', subMenu);
+    console.log('🔍 sub-menu display:', subMenu ? subMenu.style.display : 'null');
+    console.log('🔍 서브메뉴 표시 여부:', isSubMenuVisible ? '있음' : '없음');
+    
+    if (isSubMenuVisible) {
+        worshipTabs.classList.add('has-submenu');
+        console.log('✅ has-submenu 클래스 추가됨');
+    } else {
+        worshipTabs.classList.remove('has-submenu');
+        console.log('✅ has-submenu 클래스 제거됨');
+    }
 }

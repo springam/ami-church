@@ -13,7 +13,7 @@
    헤더 영역
    ========================================== */
 .worship-header {
-    margin-bottom: 0;
+    margin-bottom: 0px;
 }
 
 .worship-header h2 {
@@ -25,18 +25,19 @@
 /* ==========================================
    탭 네비게이션
    ========================================== */
+
 .worship-tabs {
     display: flex;
     gap: 60px; 
-    margin-bottom: 0px;
+    margin-bottom: 40px;  /* 기본값 */
     padding: 24px 32px; 
     border-radius: 8px;
     background: #EEF3F8; 
 }
 
-/* 서브메뉴가 없을 때만 탭에 하단 마진 추가 */
-.worship-tabs:not(.has-submenu) {
-    margin-bottom: 40px !important; 
+/* 서브메뉴가 있을 때만 마진 제거 */
+.worship-tabs.has-submenu {
+    margin-bottom: 0px;
 }
 
 /* 서브메뉴 아래에 여백 추가 */
@@ -460,7 +461,7 @@
     height: 40px;
     border: 1px solid #e0e0e0;
     background: white;
-    border-radius: 4px;
+    border-radius: 50%;
     cursor: pointer;
     display: flex;
     align-items: center;
