@@ -1,4 +1,4 @@
-// admin-dashboard.js - 드래그 앤 드롭 기능 추가
+// admin-dashboard.js - 모달 기반으로 변경
 import { initializeApp } from "https://www.gstatic.com/firebasejs/12.4.0/firebase-app.js";
 import { getFirestore, collection, getDocs, updateDoc, deleteDoc, doc, query, orderBy, writeBatch } from "https://www.gstatic.com/firebasejs/12.4.0/firebase-firestore.js";
 import { checkAdminSession, logout } from './admin-auth.js';
@@ -98,7 +98,6 @@ async function fetchVideos() {
         console.log('📥 동영상 목록 로드 시작...');
         
         const videosRef = collection(db, 'video');
-        // ⭐ orderNumber 기준으로 정렬, 없으면 날짜 역순
         const q = query(videosRef, orderBy('orderNumber', 'asc'));
         const querySnapshot = await getDocs(q);
         
@@ -110,11 +109,10 @@ async function fetchVideos() {
                 id: docSnapshot.id,
                 ...data,
                 status: data.status || 'inactive',
-                orderNumber: data.orderNumber || 999999 // ⭐ 없으면 맨 뒤로
+                orderNumber: data.orderNumber || 999999
             });
         });
         
-        // orderNumber가 없는 항목은 날짜로 재정렬
         allVideos.sort((a, b) => {
             if (a.orderNumber !== b.orderNumber) {
                 return a.orderNumber - b.orderNumber;
@@ -155,7 +153,7 @@ function applyFilters() {
 }
 
 /**
- * ⭐ 테이블 렌더링 (드래그 모드 지원)
+ * ⭐ 테이블 렌더링
  */
 function renderTable() {
     const tbody = document.getElementById('videoTableBody');
@@ -195,13 +193,15 @@ function renderTable() {
             <td>
                 <div class="action-buttons">
                     <button class="icon-btn edit-btn" onclick="editVideo('${video.id}')" ${isOrderMode ? 'disabled' : ''}>
-                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none">
-                        <path d="M2.5 21.5003L8.04927 19.366C8.40421 19.2295 8.58168 19.1612 8.74772 19.0721C8.8952 18.9929 9.0358 18.9015 9.16804 18.7989C9.31692 18.6834 9.45137 18.5489 9.72028 18.28L21 7.0003C22.1046 5.89574 22.1046 4.10487 21 3.0003C19.8955 1.89573 18.1046 1.89573 17 3.0003L5.72028 14.28C5.45138 14.5489 5.31692 14.6834 5.20139 14.8323C5.09877 14.9645 5.0074 15.1051 4.92823 15.2526C4.83911 15.4186 4.77085 15.5961 4.63433 15.951L2.5 21.5003ZM2.5 21.5003L4.55812 16.1493C4.7054 15.7663 4.77903 15.5749 4.90534 15.4872C5.01572 15.4105 5.1523 15.3816 5.2843 15.4068C5.43533 15.4356 5.58038 15.5807 5.87048 15.8708L8.12957 18.1299C8.41967 18.4199 8.56472 18.565 8.59356 18.716C8.61877 18.848 8.58979 18.9846 8.51314 19.095C8.42545 19.2213 8.23399 19.2949 7.85107 19.4422L2.5 21.5003Z" stroke="black" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                        <svg class="edit-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/>
+                            <path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/>
                         </svg>
                     </button>
                     <button class="icon-btn delete-btn" onclick="deleteVideo('${video.id}')" ${isOrderMode ? 'disabled' : ''}>
-                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none">
-                        <path d="M9 3H15M3 6H21M19 6L18.2987 16.5193C18.1935 18.0975 18.1409 18.8867 17.8 19.485C17.4999 20.0118 17.0472 20.4353 16.5017 20.6997C15.882 21 15.0911 21 13.5093 21H10.4907C8.90891 21 8.11803 21 7.49834 20.6997C6.95276 20.4353 6.50009 20.0118 6.19998 19.485C5.85911 18.8867 5.8065 18.0975 5.70129 16.5193L5 6M10 10.5V15.5M14 10.5V15.5" stroke="black" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                        <svg class="delete-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <polyline points="3 6 5 6 21 6"/>
+                            <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/>
                         </svg>
                     </button>
                 </div>
@@ -209,14 +209,12 @@ function renderTable() {
         </tr>
     `).join('');
     
-    // 상태 변경 이벤트 리스너
     if (!isOrderMode) {
         document.querySelectorAll('.status-select').forEach(select => {
             select.addEventListener('change', handleStatusChange);
         });
     }
     
-    // ⭐ 드래그 모드일 때 Sortable 초기화
     if (isOrderMode) {
         initSortable();
     }
@@ -254,16 +252,11 @@ function toggleOrderMode() {
     const orderModeNotice = document.getElementById('orderModeNotice');
     
     if (isOrderMode) {
-        // 순서 변경 모드 활성화
         orderModeBtn.classList.add('active');
         orderModeNotice.style.display = 'flex';
-        
-        // 원래 순서 백업
         originalOrder = filteredVideos.map(v => v.id);
-        
         console.log('🔄 순서 변경 모드 활성화');
     } else {
-        // 순서 변경 모드 비활성화
         orderModeBtn.classList.remove('active');
         orderModeNotice.style.display = 'none';
         
@@ -280,6 +273,55 @@ function toggleOrderMode() {
 }
 
 /**
+ * ⭐ 취소 버튼 클릭 - 모달 표시
+ */
+function showCancelOrderModal() {
+    const modal = document.getElementById('cancelOrderModal');
+    if (modal) {
+        modal.classList.add('show');
+    }
+}
+
+/**
+ * ⭐ 취소 모달 숨김
+ */
+function hideCancelOrderModal() {
+    const modal = document.getElementById('cancelOrderModal');
+    if (modal) {
+        modal.classList.remove('show');
+    }
+}
+
+/**
+ * ⭐ 취소 확인
+ */
+function confirmCancelOrder() {
+    hideCancelOrderModal();
+    toggleOrderMode();
+    renderTable();
+}
+
+/**
+ * ⭐ 완료 버튼 클릭 - 저장 모달 표시
+ */
+function showSaveOrderModal() {
+    const modal = document.getElementById('saveOrderModal');
+    if (modal) {
+        modal.classList.add('show');
+    }
+}
+
+/**
+ * ⭐ 저장 모달 숨김
+ */
+function hideSaveOrderModal() {
+    const modal = document.getElementById('saveOrderModal');
+    if (modal) {
+        modal.classList.remove('show');
+    }
+}
+
+/**
  * ⭐ 순서 변경 저장
  */
 async function saveOrder() {
@@ -288,13 +330,10 @@ async function saveOrder() {
         
         const tbody = document.getElementById('videoTableBody');
         const rows = Array.from(tbody.querySelectorAll('tr'));
-        
-        // 새로운 순서 가져오기
         const newOrder = rows.map(row => row.dataset.videoId);
         
         console.log('📋 새로운 순서:', newOrder);
         
-        // Firestore batch update
         const batch = writeBatch(db);
         
         newOrder.forEach((videoId, index) => {
@@ -308,25 +347,17 @@ async function saveOrder() {
         await batch.commit();
         
         console.log('✅ 순서 변경 저장 완료');
-        alert('순서가 저장되었습니다.');
         
-        // 모드 해제 및 새로고침
+        hideSaveOrderModal();
         toggleOrderMode();
         await fetchVideos();
         
+        alert('순서가 저장되었습니다.');
+        
     } catch (error) {
         console.error('❌ 순서 저장 오류:', error);
+        hideSaveOrderModal();
         alert('순서 저장에 실패했습니다.');
-    }
-}
-
-/**
- * ⭐ 순서 변경 취소
- */
-function cancelOrder() {
-    if (confirm('변경사항을 취소하시겠습니까?')) {
-        toggleOrderMode();
-        renderTable();
     }
 }
 
@@ -520,16 +551,44 @@ document.addEventListener('DOMContentLoaded', async () => {
         orderModeBtn.addEventListener('click', toggleOrderMode);
     }
     
-    // ⭐ 저장/취소 버튼 이벤트
-    const saveOrderBtn = document.getElementById('saveOrderBtn');
+    // ⭐ 취소 버튼 클릭 - 모달 표시
     const cancelOrderBtn = document.getElementById('cancelOrderBtn');
-    
-    if (saveOrderBtn) {
-        saveOrderBtn.addEventListener('click', saveOrder);
+    if (cancelOrderBtn) {
+        cancelOrderBtn.addEventListener('click', showCancelOrderModal);
     }
     
-    if (cancelOrderBtn) {
-        cancelOrderBtn.addEventListener('click', cancelOrder);
+    // ⭐ 완료 버튼 클릭 - 저장 모달 표시
+    const saveOrderBtn = document.getElementById('saveOrderBtn');
+    if (saveOrderBtn) {
+        saveOrderBtn.addEventListener('click', showSaveOrderModal);
+    }
+    
+    // ⭐ 취소 모달 이벤트
+    const cancelOrderModal = document.getElementById('cancelOrderModal');
+    if (cancelOrderModal) {
+        const modalClose = cancelOrderModal.querySelector('#cancelOrderModalClose');
+        const overlay = cancelOrderModal.querySelector('.modal-overlay');
+        const cancelBtn = cancelOrderModal.querySelector('#cancelOrderModalCancel');
+        const confirmBtn = cancelOrderModal.querySelector('#confirmCancelOrderBtn');
+        
+        if (modalClose) modalClose.addEventListener('click', hideCancelOrderModal);
+        if (overlay) overlay.addEventListener('click', hideCancelOrderModal);
+        if (cancelBtn) cancelBtn.addEventListener('click', hideCancelOrderModal);
+        if (confirmBtn) confirmBtn.addEventListener('click', confirmCancelOrder);
+    }
+    
+    // ⭐ 저장 모달 이벤트
+    const saveOrderModal = document.getElementById('saveOrderModal');
+    if (saveOrderModal) {
+        const modalClose = saveOrderModal.querySelector('#saveOrderModalClose');
+        const overlay = saveOrderModal.querySelector('.modal-overlay');
+        const cancelBtn = saveOrderModal.querySelector('#saveOrderModalCancel');
+        const confirmBtn = saveOrderModal.querySelector('#confirmSaveOrderBtn');
+        
+        if (modalClose) modalClose.addEventListener('click', hideSaveOrderModal);
+        if (overlay) overlay.addEventListener('click', hideSaveOrderModal);
+        if (cancelBtn) cancelBtn.addEventListener('click', hideSaveOrderModal);
+        if (confirmBtn) confirmBtn.addEventListener('click', saveOrder);
     }
     
     // 삭제 모달 이벤트

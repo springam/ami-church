@@ -138,6 +138,44 @@
         </div>
     </div>
 
+    <!-- ⭐ 순서 변경 취소 모달 -->
+    <div class="cancel-order-modal" id="cancelOrderModal">
+        <div class="modal-overlay"></div>
+        <div class="modal-content">
+            <button class="modal-close" id="cancelOrderModalClose">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
+                    <path d="M18 6L6 18M6 6L18 18" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+                </svg>
+            </button>
+            <div class="modal-body">
+                <p class="modal-text">변경된 순서가 저장되지 않습니다.<br>취소하시겠습니까?</p>
+                <div class="modal-buttons">
+                    <button class="modal-btn modal-btn-cancel" id="cancelOrderModalCancel">취소</button>
+                    <button class="modal-btn modal-btn-confirm" id="confirmCancelOrderBtn">확인</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ⭐ 순서 변경 저장 모달 -->
+    <div class="save-order-modal" id="saveOrderModal">
+        <div class="modal-overlay"></div>
+        <div class="modal-content">
+            <button class="modal-close" id="saveOrderModalClose">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
+                    <path d="M18 6L6 18M6 6L18 18" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+                </svg>
+            </button>
+            <div class="modal-body">
+                <p class="modal-text">변경된 순서를 저장하시겠습니까?</p>
+                <div class="modal-buttons">
+                    <button class="modal-btn modal-btn-cancel" id="saveOrderModalCancel">취소</button>
+                    <button class="modal-btn modal-btn-confirm" id="confirmSaveOrderBtn">저장하기</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
     <!-- Scripts -->
     <script type="module" src="assets/js/admin-dashboard.js"></script>
 </body>

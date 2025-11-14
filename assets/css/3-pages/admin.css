@@ -1060,6 +1060,25 @@ tr.draggable .status-select:disabled {
     cursor: not-allowed;
 }
 
+/* ⭐ 순서 변경 모달들 (기존 모달과 동일한 스타일) */
+.cancel-order-modal,
+.save-order-modal {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 1000;
+    align-items: center;
+    justify-content: center;
+}
+
+.cancel-order-modal.show,
+.save-order-modal.show {
+    display: flex;
+}
+
 @media (max-width: 480px) {
     .modal-content {
         padding: 32px 24px 24px;
