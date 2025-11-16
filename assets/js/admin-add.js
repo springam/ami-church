@@ -1,6 +1,7 @@
 // admin-add.js
 import { initializeApp } from "https://www.gstatic.com/firebasejs/12.4.0/firebase-app.js";
-import { getFirestore, collection, addDoc, doc, getDoc, updateDoc, Timestamp } from "https://www.gstatic.com/firebasejs/12.4.0/firebase-firestore.js";
+import { getFirestore, collection, addDoc, doc, getDoc, updateDoc, Timestamp, query, where, orderBy, limit, getDocs } from "https://www.gstatic.com/firebasejs/12.4.0/firebase-firestore.js";
+import { getStorage, ref, uploadBytesResumable, getDownloadURL } from "https://www.gstatic.com/firebasejs/12.4.0/firebase-storage.js";
 import { checkAdminSession } from './admin-auth.js';
 
 console.log('📝 admin-add.js 로드됨');
@@ -18,9 +19,11 @@ const firebaseConfig = {
 
 const app = initializeApp(firebaseConfig);
 const db = getFirestore(app);
+const storage = getStorage(app); // ⭐ Storage 추가
 
 let isEditMode = false;
 let editVideoId = null;
+let currentContentType = 'video'; // ⭐ 현재 콘텐츠 타입 (video/pdf)
 
 // 카테고리 계층 구조 정의
 const categoryData = {
@@ -78,12 +81,99 @@ const categoryData = {
 };
 
 /**
+ * ⭐ 콘텐츠 타입에 따라 UI 전환
+ */
+function switchContentType(type) {
+    currentContentType = type;
+    
+    const videoUrlRow = document.getElementById('videoUrlRow');
+    const pdfUploadRow = document.getElementById('pdfUploadRow');
+    const videoUrl = document.getElementById('videoUrl');
+    const pdfFile = document.getElementById('pdfFile');
+    
+    if (type === 'pdf') {
+        // PDF 모드
+        videoUrlRow.style.display = 'none';
+        pdfUploadRow.style.display = 'flex';
+        if (videoUrl) videoUrl.removeAttribute('required');
+        if (videoUrl) videoUrl.value = '';
+    } else {
+        // 동영상 모드
+        videoUrlRow.style.display = 'flex';
+        pdfUploadRow.style.display = 'none';
+        if (pdfFile) pdfFile.value = '';
+        const pdfFileName = document.getElementById('pdfFileName');
+        if (pdfFileName) pdfFileName.textContent = '';
+    }
+    
+    console.log('📌 콘텐츠 타입 전환:', type);
+}
+
+/**
+ * ⭐ PDF 파일 업로드
+ */
+async function uploadPDFFile(file) {
+    return new Promise((resolve, reject) => {
+        // 파일명 생성 (타임스탬프 + 원본 파일명)
+        const timestamp = Date.now();
+        const fileName = `${timestamp}_${file.name}`;
+        const storageRef = ref(storage, `pdfs/${fileName}`);
+        
+        // 업로드 시작
+        const uploadTask = uploadBytesResumable(storageRef, file);
+        
+        // 진행 상황 표시
+        const progressDiv = document.getElementById('uploadProgress');
+        const progressBar = document.getElementById('progressBar');
+        const progressText = document.getElementById('progressText');
+        
+        if (progressDiv) progressDiv.style.display = 'block';
+        
+        uploadTask.on('state_changed',
+            (snapshot) => {
+                // 진행률 계산
+                const progress = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
+                if (progressBar) progressBar.style.width = progress + '%';
+                if (progressText) progressText.textContent = `업로드 중... ${Math.round(progress)}%`;
+                console.log('업로드 진행:', progress + '%');
+            },
+            (error) => {
+                // 에러 처리
+                console.error('❌ 업로드 오류:', error);
+                if (progressDiv) progressDiv.style.display = 'none';
+                reject(error);
+            },
+            async () => {
+                // 업로드 완료
+                try {
+                    const downloadURL = await getDownloadURL(uploadTask.snapshot.ref);
+                    if (progressText) progressText.textContent = '✅ 업로드 완료!';
+                    
+                    setTimeout(() => {
+                        if (progressDiv) progressDiv.style.display = 'none';
+                    }, 2000);
+                    
+                    console.log('✅ 업로드 완료:', downloadURL);
+                    resolve({
+                        url: downloadURL,
+                        fileName: file.name
+                    });
+                } catch (error) {
+                    reject(error);
+                }
+            }
+        );
+    });
+}
+
+/**
  * URL에서 파라미터 가져오기
  */
 function getUrlParameter(name) {
     const urlParams = new URLSearchParams(window.location.search);
     return urlParams.get(name);
 }
+
 
 /**
  * 두 번째 카테고리(subCategory) 업데이트
@@ -136,9 +226,18 @@ function updateDetailCategory(mainCategory, subCategory) {
         return;
     }
     
+    // ⭐ 목회자 칼럼인 경우 PDF 모드로 전환
+    if (subCategory === 'column') {
+        switchContentType('pdf');
+        category3.disabled = true;
+        return;
+    } else {
+        switchContentType('video');
+    }
+    
     const detailCategories = categoryData[mainCategory].detailCategories;
     
-    // detailCategory가 없는 경우 (이번주 설교, 목회자 칼럼)
+    // detailCategory가 없는 경우 (이번주 설교)
     if (!detailCategories || !detailCategories[subCategory] || detailCategories[subCategory].length === 0) {
         category3.disabled = true;
         return;
@@ -160,13 +259,13 @@ function updateDetailCategory(mainCategory, subCategory) {
  */
 async function loadVideoData(videoId) {
     try {
-        console.log('🔥 동영상 데이터 로드:', videoId);
+        console.log('🔥 콘텐츠 데이터 로드:', videoId);
         
         const videoRef = doc(db, 'video', videoId);
         const videoSnap = await getDoc(videoRef);
         
         if (!videoSnap.exists()) {
-            alert('동영상을 찾을 수 없습니다.');
+            alert('콘텐츠를 찾을 수 없습니다.');
             window.location.href = 'admin-dashboard.html';
             return;
         }
@@ -174,10 +273,22 @@ async function loadVideoData(videoId) {
         const videoData = videoSnap.data();
         console.log('✅ 데이터 로드 완료:', videoData);
         
+        // ⭐ 타입에 따라 UI 전환
+        switchContentType(videoData.type || 'video');
+        
         // 기본 정보 입력
         document.getElementById('videoTitle').value = videoData.title || '';
-        document.getElementById('videoUrl').value = videoData.videoUrl || '';
         document.getElementById('videoDescription').value = videoData.description || '';
+        
+        // ⭐ 타입별 필드 복원
+        if (videoData.type === 'pdf') {
+            const pdfFileName = document.getElementById('pdfFileName');
+            if (pdfFileName) {
+                pdfFileName.textContent = videoData.pdfFileName || '업로드된 PDF';
+            }
+        } else {
+            document.getElementById('videoUrl').value = videoData.videoUrl || '';
+        }
         
         // 카테고리 복원
         const category1 = document.getElementById('category1');
@@ -238,27 +349,20 @@ function getRandomThumbnail() {
 }
 
 /**
- * 폼 제출 처리
+ * ⭐ 폼 제출 처리 (PDF 지원 추가)
  */
 async function handleSubmit(e) {
     e.preventDefault();
     
     const title = document.getElementById('videoTitle').value.trim();
-    const videoUrl = document.getElementById('videoUrl').value.trim();
     const category = document.getElementById('category1').value;
     const subCategory = document.getElementById('category2').value;
     const detailCategory = document.getElementById('category3').value;
     const description = document.getElementById('videoDescription').value.trim();
     
     if (!title) {
-        alert('동영상 제목을 입력하세요.');
+        alert('제목을 입력하세요.');
         document.getElementById('videoTitle').focus();
-        return;
-    }
-    
-    if (!videoUrl) {
-        alert('YouTube URL을 입력하세요.');
-        document.getElementById('videoUrl').focus();
         return;
     }
     
@@ -268,44 +372,78 @@ async function handleSubmit(e) {
         return;
     }
     
-    if (!isValidYouTubeUrl(videoUrl)) {
-        alert('올바른 YouTube URL을 입력하세요.\n예: https://www.youtube.com/watch?v=VIDEO_ID');
-        document.getElementById('videoUrl').focus();
-        return;
-    }
-    
-    // 동영상 데이터 구성
-    const videoData = {
-        title: title,
-        videoUrl: videoUrl,
-        category: category,
-        description: description,
-        status: 'active', // 기본값은 활성
-        thumbnail: getRandomThumbnail() // ⭐ 랜덤 썸네일 추가
-    };
-    
-    // subCategory가 있는 경우에만 추가
-    if (subCategory) {
-        videoData.subCategory = subCategory;
-    }
-    
-    // detailCategory가 있는 경우에만 추가
-    if (detailCategory) {
-        videoData.detailCategory = detailCategory;
+    // ⭐ 타입별 검증
+    if (currentContentType === 'pdf') {
+        const pdfFile = document.getElementById('pdfFile').files[0];
+        
+        if (!isEditMode && !pdfFile) {
+            alert('PDF 파일을 선택하세요.');
+            return;
+        }
+    } else {
+        const videoUrl = document.getElementById('videoUrl').value.trim();
+        
+        if (!videoUrl) {
+            alert('YouTube URL을 입력하세요.');
+            document.getElementById('videoUrl').focus();
+            return;
+        }
+        
+        if (!isValidYouTubeUrl(videoUrl)) {
+            alert('올바른 YouTube URL을 입력하세요.\n예: https://www.youtube.com/watch?v=VIDEO_ID');
+            document.getElementById('videoUrl').focus();
+            return;
+        }
     }
     
     try {
+        // ⭐ 공통 데이터 구성
+        const videoData = {
+            type: currentContentType,
+            title: title,
+            category: category,
+            description: description,
+            status: 'active'
+        };
+        
+        // subCategory가 있는 경우에만 추가
+        if (subCategory) {
+            videoData.subCategory = subCategory;
+        }
+        
+        // detailCategory가 있는 경우에만 추가
+        if (detailCategory) {
+            videoData.detailCategory = detailCategory;
+        }
+        
+        // ⭐ 타입별 데이터 추가
+        if (currentContentType === 'pdf') {
+            const pdfFile = document.getElementById('pdfFile').files[0];
+            
+            if (pdfFile) {
+                // PDF 업로드
+                const uploadResult = await uploadPDFFile(pdfFile);
+                videoData.pdfUrl = uploadResult.url;
+                videoData.pdfFileName = uploadResult.fileName;
+            }
+        } else {
+            const videoUrl = document.getElementById('videoUrl').value.trim();
+            videoData.videoUrl = videoUrl;
+            
+            if (!isEditMode) {
+                videoData.thumbnail = getRandomThumbnail();
+            }
+        }
+        
         if (isEditMode) {
             // 수정 모드
             const videoRef = doc(db, 'video', editVideoId);
-            delete videoData.thumbnail;
             await updateDoc(videoRef, videoData);
-            alert('동영상이 수정되었습니다.');
+            alert('콘텐츠가 수정되었습니다.');
         } else {
-            // ⭐ 추가 모드 - orderNumber 자동 할당
-            console.log('➕ 동영상 추가');
+            // 추가 모드 - orderNumber 자동 할당
+            console.log('➕ 콘텐츠 추가');
             
-            // 같은 카테고리의 마지막 orderNumber 찾기
             const videosRef = collection(db, 'video');
             const q = query(videosRef, 
                 where('category', '==', category),
@@ -322,20 +460,19 @@ async function handleSubmit(e) {
                 maxOrderNumber = lastVideo.orderNumber || 0;
             }
             
-            // 새 orderNumber 할당
             videoData.orderNumber = maxOrderNumber + 1;
             videoData.date = Timestamp.now();
             
             await addDoc(collection(db, 'video'), videoData);
             console.log('✅ 추가 완료, orderNumber:', videoData.orderNumber);
-            alert('동영상이 추가되었습니다.');
+            alert('콘텐츠가 추가되었습니다.');
         }
         
         window.location.href = 'admin-dashboard.html';
         
     } catch (error) {
         console.error('❌ 저장 오류:', error);
-        alert('저장 중 오류가 발생했습니다.');
+        alert('저장 중 오류가 발생했습니다: ' + error.message);
     }
 }
 
@@ -408,6 +545,18 @@ document.addEventListener('DOMContentLoaded', async () => {
         category2.addEventListener('change', (e) => {
             const mainCategory = document.getElementById('category1').value;
             updateDetailCategory(mainCategory, e.target.value);
+        });
+    }
+    
+    // ⭐ PDF 파일 선택 시 파일명 표시
+    const pdfFile = document.getElementById('pdfFile');
+    if (pdfFile) {
+        pdfFile.addEventListener('change', (e) => {
+            const fileName = e.target.files[0]?.name || '';
+            const pdfFileName = document.getElementById('pdfFileName');
+            if (pdfFileName) {
+                pdfFileName.textContent = fileName ? `선택된 파일: ${fileName}` : '';
+            }
         });
     }
     
