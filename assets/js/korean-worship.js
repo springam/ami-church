@@ -153,7 +153,10 @@ async function fetchVideos(subCategory, detailCategory = null) {
                 description: data.description || '',
                 thumbnail: data.thumbnail || 'assets/images/thumbnails/default-thumbnail.jpg',
                 videoUrl: data.videoUrl || '',
-                orderNumber: data.orderNumber || 999999 // ⭐ orderNumber 추가
+                pdfUrl: data.pdfUrl || '',           // ⭐ PDF URL 추가
+                pdfFileName: data.pdfFileName || '', // ⭐ PDF 파일명 추가
+                type: data.type || 'video',          // ⭐ 콘텐츠 타입 추가
+                orderNumber: data.orderNumber || 999999
             });
         });
 
@@ -211,6 +214,14 @@ function renderVideos(videos, page = 1) {
         return;
     }
 
+    // ⭐ 목회자 칼럼인 경우 PDF 리스트로 렌더링
+    if (currentSubCategory === 'column') {
+        renderColumnList(pageVideos, startIndex);
+        totalPages = Math.ceil(videos.length / itemsPerPage);
+        renderPagination();
+        return;
+    }
+
     console.log('🔨 비디오 카드 HTML 생성 중...');
     const cardsHTML = pageVideos.map(video => {
         console.log('  카드 생성:', video.title);
@@ -245,6 +256,58 @@ function renderVideos(videos, page = 1) {
     totalPages = Math.ceil(videos.length / itemsPerPage);
     console.log('📊 총 페이지:', totalPages);
     renderPagination();
+}
+
+/**
+ * ⭐ 목회자 칼럼 리스트 렌더링 (PDF)
+ */
+function renderColumnList(columns, startIndex) {
+    const videoGrid = document.getElementById('videoGrid');
+    
+    const columnHTML = `
+        <div class="column-list">
+            ${columns.map((column, index) => `
+                <div class="column-item ${index === 0 ? 'featured' : ''}">
+                    <span class="column-number">${startIndex + index + 1}</span>
+                    <span class="column-title">${column.title}</span>
+                    <button class="column-download-btn" onclick="downloadPDF('${column.pdfUrl}', '${column.pdfFileName || column.title + '.pdf'}')">
+                        <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <path d="M10 13V3M10 13L7 10M10 13L13 10M3 17H17" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                        </svg>
+                        다운로드
+                    </button>
+                </div>
+            `).join('')}
+        </div>
+    `;
+    
+    videoGrid.innerHTML = columnHTML;
+    console.log('✅ 목회자 칼럼 리스트 렌더링 완료');
+}
+
+/**
+ * ⭐ PDF 다운로드 함수
+ */
+window.downloadPDF = function(pdfUrl, fileName) {
+    if (!pdfUrl) {
+        alert('PDF 파일을 찾을 수 없습니다.');
+        return;
+    }
+    
+    console.log('📥 PDF 다운로드:', fileName);
+    
+    // 새 탭에서 열기 (브라우저 내장 PDF 뷰어 사용)
+    const link = document.createElement('a');
+    link.href = pdfUrl;
+    link.download = fileName;
+    link.target = '_blank';
+    link.rel = 'noopener noreferrer';
+    
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+    
+    console.log('✅ PDF 다운로드 링크 클릭 완료');
 }
 
 /**
@@ -447,7 +510,7 @@ window.backToList = function() {
     }
     
     // 헤더와 그리드 뷰 다시 표시
-    if (videoGrid) videoGrid.style.display = 'grid';
+    if (videoGrid) videoGrid.style.display = currentSubCategory === 'column' ? 'block' : 'grid';
     if (pagination) pagination.style.display = 'flex';
     if (worshipHeader) worshipHeader.style.display = 'block';
     
