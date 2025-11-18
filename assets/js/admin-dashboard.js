@@ -137,7 +137,7 @@ async function fetchVideos() {
  */
 function applyFilters() {
     const searchTerm = document.getElementById('searchInput').value.toLowerCase();
-    const subCategory = document.getElementById('categoryFilter').value;
+    const subCategory = document.getElementById('subCategoryFilter').value;
     
     filteredVideos = allVideos.filter(video => {
         const matchesSearch = !searchTerm || video.title.toLowerCase().includes(searchTerm);
@@ -606,7 +606,7 @@ document.addEventListener('DOMContentLoaded', async () => {
     // 검색 이벤트
     const searchInput = document.getElementById('searchInput');
     const searchBtn = document.getElementById('searchBtn');
-    const categoryFilter = document.getElementById('categoryFilter');
+    const subCategoryFilter = document.getElementById('subCategoryFilter');
     
     if (searchInput) {
         searchInput.addEventListener('keypress', (e) => {
@@ -618,8 +618,8 @@ document.addEventListener('DOMContentLoaded', async () => {
         searchBtn.addEventListener('click', applyFilters);
     }
     
-    if (categoryFilter) {
-        categoryFilter.addEventListener('change', applyFilters);
+    if (subCategoryFilter) {
+        subCategoryFilter.addEventListener('change', applyFilters);
     }
     
     await fetchVideos();
