@@ -1,6 +1,6 @@
 // admin-add.js
 import { initializeApp } from "https://www.gstatic.com/firebasejs/12.4.0/firebase-app.js";
-import { getFirestore, collection, addDoc, doc, getDoc, updateDoc, Timestamp, query, where, orderBy, limit, getDocs } from "https://www.gstatic.com/firebasejs/12.4.0/firebase-firestore.js";
+import { getFirestore, collection, addDoc, doc, getDoc, updateDoc, deleteDoc, Timestamp, query, where, orderBy, limit, getDocs, writeBatch } from "https://www.gstatic.com/firebasejs/12.4.0/firebase-firestore.js";
 import { getStorage, ref, uploadBytesResumable, getDownloadURL } from "https://www.gstatic.com/firebasejs/12.4.0/firebase-storage.js";
 import { checkAdminSession } from './admin-auth.js';
 
@@ -37,26 +37,26 @@ const categoryData = {
         },
         detailCategories: {
             weekly: [],
-            scripture: [
-                '욥기서', '요나서', '마태복음 5장', '마태복음 13장', '마태복음 16장', 
-                '누가복음', '요한복음', '사도행전', '로마서', '로마서 9장~11장', 
-                '고린도 전서', '빌립보서', '빌레몬서', '야고보서'
-            ],
-            topic: [
-                '여자의 후손', '기독론', '성전', '천사', '기도', '격려', '전도론', 
-                '주기도문', '파라독스', '감람산', '아리랑족속', '저주와 복', '엘로힘', 
-                '바울', '하나님을 아는 자식', '천사학', '이스라엘', '기타'
-            ],
+            scripture: [],
+            topic: [],
             column: []
         }
     },
     aba: {
         name: 'ABA',
-        subCategories: {},
+        subCategories: {
+            aba: 'ABA'
+        },
         detailCategories: {
-            '': [
-                '1학기 하늘의 조직', '2학기 인간론', '3학기 창조론', '4학기 종말론', 
-                '5학기 구원론', '6학기 에베소서', '7학기 이슬람', '8학기 이스라엘 절기', 
+            aba: [
+                '1학기 하늘의 조직',
+                '2학기 인간론',
+                '3학기 창조론',
+                '4학기 종말론',
+                '5학기 구원론',
+                '6학기 에베소서',
+                '7학기 이슬람',
+                '8학기 이스라엘 절기',
                 '9학기 기독론'
             ]
         }
@@ -69,16 +69,71 @@ const categoryData = {
         },
         detailCategories: {
             avs: [
-                '제15기 여자의 후손', '제19기 산상수훈', '제21기 이세상과 저세상', 
+                '제15기 여자의 후손',
+                '제16기',
+                '제19기 산상수훈',
+                '제21기 이세상과 저세상',
                 '제23기 선지서 17권 개관'
             ],
             avck: [
-                '제 1기', '제 2기', '제 3기', '제 4기', '제 7기', '제 8기', 
-                '제 9기', '제 11기', '제 12기', '제 13기'
+                '제1기',
+                '제2기',
+                '제3기',
+                '제4기',
+                '제7기',
+                '제8기',
+                '제9기',
+                '제11기',
+                '제12기',
+                '제13기'
             ]
         }
     }
 };
+
+/**
+ * DB에서 detailCategories 로드
+ */
+async function loadDetailCategoriesForForm() {
+    try {
+        console.log('📂 폼용 detailCategories 로드 시작...');
+
+        const categoriesRef = collection(db, 'detailCategories');
+        const q = query(
+            categoriesRef,
+            where('isActive', '==', true)
+        );
+
+        const querySnapshot = await getDocs(q);
+
+        // 초기화
+        categoryData.sunday.detailCategories = {
+            weekly: [],
+            scripture: [],
+            topic: [],
+            column: []
+        };
+
+        querySnapshot.forEach((doc) => {
+            const data = doc.data();
+            const subCategory = data.subCategory;
+
+            if (categoryData.sunday.detailCategories.hasOwnProperty(subCategory)) {
+                categoryData.sunday.detailCategories[subCategory].push(data.categoryName);
+            }
+        });
+
+        // 정렬 (orderNumber 순)
+        Object.keys(categoryData.sunday.detailCategories).forEach(subCat => {
+            categoryData.sunday.detailCategories[subCat].sort();
+        });
+
+        console.log('✅ 폼용 detailCategories 로드 완료:', categoryData.sunday.detailCategories);
+
+    } catch (error) {
+        console.error('❌ detailCategories 로드 오류:', error);
+    }
+}
 
 /**
  * ⭐ 콘텐츠 타입에 따라 UI 전환
@@ -174,6 +229,48 @@ function getUrlParameter(name) {
     return urlParams.get(name);
 }
 
+/**
+ * 날짜 선택 옵션 초기화
+ */
+function initializeDateSelects() {
+    const yearSelect = document.getElementById('dateYear');
+    const monthSelect = document.getElementById('dateMonth');
+    const daySelect = document.getElementById('dateDay');
+
+    if (!yearSelect || !monthSelect || !daySelect) return;
+
+    // 년도: 2020년부터 현재 +1년까지
+    const currentYear = new Date().getFullYear();
+    for (let year = 1999; year <= currentYear + 1; year++) {
+        const option = document.createElement('option');
+        option.value = year;
+        option.textContent = year + '년';
+        yearSelect.appendChild(option);
+    }
+
+    // 월: 1~12월
+    for (let month = 1; month <= 12; month++) {
+        const option = document.createElement('option');
+        option.value = month;
+        option.textContent = month + '월';
+        monthSelect.appendChild(option);
+    }
+
+    // 일: 1~31일
+    for (let day = 1; day <= 31; day++) {
+        const option = document.createElement('option');
+        option.value = day;
+        option.textContent = day + '일';
+        daySelect.appendChild(option);
+    }
+
+    // 기본값: 오늘 날짜
+    const today = new Date();
+    yearSelect.value = today.getFullYear();
+    monthSelect.value = today.getMonth() + 1;
+    daySelect.value = today.getDate();
+}
+
 
 /**
  * 두 번째 카테고리(subCategory) 업데이트
@@ -181,26 +278,19 @@ function getUrlParameter(name) {
 function updateSubCategory(mainCategory) {
     const category2 = document.getElementById('category2');
     const category3 = document.getElementById('category3');
-    
+
     // 초기화
     category2.innerHTML = '<option value="">선택하세요</option>';
     category3.innerHTML = '<option value="">선택하세요</option>';
     category3.disabled = true;
-    
+
     if (!mainCategory || !categoryData[mainCategory]) {
         category2.disabled = true;
         return;
     }
-    
+
     const subCategories = categoryData[mainCategory].subCategories;
-    
-    // ABA의 경우 subCategory가 없고 바로 detailCategory로 이동
-    if (Object.keys(subCategories).length === 0) {
-        category2.disabled = true;
-        updateDetailCategory(mainCategory, '');
-        return;
-    }
-    
+
     // subCategory 옵션 추가
     Object.entries(subCategories).forEach(([value, label]) => {
         const option = document.createElement('option');
@@ -208,7 +298,7 @@ function updateSubCategory(mainCategory) {
         option.textContent = label;
         category2.appendChild(option);
     });
-    
+
     category2.disabled = false;
 }
 
@@ -217,32 +307,23 @@ function updateSubCategory(mainCategory) {
  */
 function updateDetailCategory(mainCategory, subCategory) {
     const category3 = document.getElementById('category3');
-    
+
     // 초기화
     category3.innerHTML = '<option value="">선택하세요</option>';
-    
+
     if (!mainCategory || !categoryData[mainCategory]) {
         category3.disabled = true;
         return;
     }
-    
-    // ⭐ 목회자 칼럼인 경우 PDF 모드로 전환
-    if (subCategory === 'column') {
-        switchContentType('pdf');
-        category3.disabled = true;
-        return;
-    } else {
-        switchContentType('video');
-    }
-    
+
     const detailCategories = categoryData[mainCategory].detailCategories;
-    
-    // detailCategory가 없는 경우 (이번주 설교)
+
+    // detailCategory가 없는 경우 (이번주 설교, 목회자 칼럼)
     if (!detailCategories || !detailCategories[subCategory] || detailCategories[subCategory].length === 0) {
         category3.disabled = true;
         return;
     }
-    
+
     // detailCategory 옵션 추가
     detailCategories[subCategory].forEach(label => {
         const option = document.createElement('option');
@@ -250,7 +331,7 @@ function updateDetailCategory(mainCategory, subCategory) {
         option.textContent = label;
         category3.appendChild(option);
     });
-    
+
     category3.disabled = false;
 }
 
@@ -272,22 +353,18 @@ async function loadVideoData(videoId) {
         
         const videoData = videoSnap.data();
         console.log('✅ 데이터 로드 완료:', videoData);
-        
-        // ⭐ 타입에 따라 UI 전환
-        switchContentType(videoData.type || 'video');
-        
+
         // 기본 정보 입력
         document.getElementById('videoTitle').value = videoData.title || '';
         document.getElementById('videoDescription').value = videoData.description || '';
-        
-        // ⭐ 타입별 필드 복원
-        if (videoData.type === 'pdf') {
-            const pdfFileName = document.getElementById('pdfFileName');
-            if (pdfFileName) {
-                pdfFileName.textContent = videoData.pdfFileName || '업로드된 PDF';
-            }
-        } else {
-            document.getElementById('videoUrl').value = videoData.videoUrl || '';
+        document.getElementById('videoUrl').value = videoData.videoUrl || '';
+
+        // 날짜 복원
+        if (videoData.date) {
+            const date = videoData.date.toDate ? videoData.date.toDate() : new Date(videoData.date);
+            document.getElementById('dateYear').value = date.getFullYear();
+            document.getElementById('dateMonth').value = date.getMonth() + 1;
+            document.getElementById('dateDay').value = date.getDate();
         }
         
         // 카테고리 복원
@@ -359,80 +436,77 @@ async function handleSubmit(e) {
     const subCategory = document.getElementById('category2').value;
     const detailCategory = document.getElementById('category3').value;
     const description = document.getElementById('videoDescription').value.trim();
-    
+
+    const dateYear = document.getElementById('dateYear').value;
+    const dateMonth = document.getElementById('dateMonth').value;
+    const dateDay = document.getElementById('dateDay').value;
+
     if (!title) {
         alert('제목을 입력하세요.');
         document.getElementById('videoTitle').focus();
         return;
     }
-    
+
     if (!category) {
         alert('카테고리를 선택하세요.');
         document.getElementById('category1').focus();
         return;
     }
+
+    if (!dateYear || !dateMonth || !dateDay) {
+        alert('날짜를 선택하세요.');
+        return;
+    }
     
-    // ⭐ 타입별 검증
-    if (currentContentType === 'pdf') {
-        const pdfFile = document.getElementById('pdfFile').files[0];
-        
-        if (!isEditMode && !pdfFile) {
-            alert('PDF 파일을 선택하세요.');
-            return;
-        }
-    } else {
-        const videoUrl = document.getElementById('videoUrl').value.trim();
-        
-        if (!videoUrl) {
-            alert('YouTube URL을 입력하세요.');
-            document.getElementById('videoUrl').focus();
-            return;
-        }
-        
-        if (!isValidYouTubeUrl(videoUrl)) {
-            alert('올바른 YouTube URL을 입력하세요.\n예: https://www.youtube.com/watch?v=VIDEO_ID');
-            document.getElementById('videoUrl').focus();
-            return;
-        }
+    // URL 검증
+    const videoUrl = document.getElementById('videoUrl').value.trim();
+
+    if (!videoUrl) {
+        alert('URL을 입력하세요.');
+        document.getElementById('videoUrl').focus();
+        return;
+    }
+
+    // 목회자 칼럼은 일반 URL, 그 외는 YouTube URL 검증
+    if (subCategory !== 'column' && !isValidYouTubeUrl(videoUrl)) {
+        alert('올바른 YouTube URL을 입력하세요.\n예: https://www.youtube.com/watch?v=VIDEO_ID');
+        document.getElementById('videoUrl').focus();
+        return;
     }
     
     try {
-        // ⭐ 공통 데이터 구성
+        // 선택한 날짜를 Timestamp로 변환
+        const selectedDate = new Date(
+            parseInt(dateYear),
+            parseInt(dateMonth) - 1, // JavaScript 월은 0부터 시작
+            parseInt(dateDay)
+        );
+        const dateTimestamp = Timestamp.fromDate(selectedDate);
+
+        // 공통 데이터 구성
         const videoData = {
-            type: currentContentType,
+            type: 'video',
             title: title,
             category: category,
             description: description,
-            status: 'active'
+            status: 'active',
+            date: dateTimestamp,
+            videoUrl: videoUrl
         };
-        
+
         // subCategory가 있는 경우에만 추가
         if (subCategory) {
             videoData.subCategory = subCategory;
         }
-        
+
         // detailCategory가 있는 경우에만 추가
         if (detailCategory) {
             videoData.detailCategory = detailCategory;
         }
-        
-        // ⭐ 타입별 데이터 추가
-        if (currentContentType === 'pdf') {
-            const pdfFile = document.getElementById('pdfFile').files[0];
-            
-            if (pdfFile) {
-                // PDF 업로드
-                const uploadResult = await uploadPDFFile(pdfFile);
-                videoData.pdfUrl = uploadResult.url;
-                videoData.pdfFileName = uploadResult.fileName;
-            }
-        } else {
-            const videoUrl = document.getElementById('videoUrl').value.trim();
-            videoData.videoUrl = videoUrl;
-            
-            if (!isEditMode) {
-                videoData.thumbnail = getRandomThumbnail();
-            }
+
+        // 썸네일 추가 (수정 모드가 아닐 때만)
+        if (!isEditMode) {
+            videoData.thumbnail = getRandomThumbnail();
         }
         
         if (isEditMode) {
@@ -459,10 +533,9 @@ async function handleSubmit(e) {
                 const lastVideo = querySnapshot.docs[0].data();
                 maxOrderNumber = lastVideo.orderNumber || 0;
             }
-            
+
             videoData.orderNumber = maxOrderNumber + 1;
-            videoData.date = Timestamp.now();
-            
+
             await addDoc(collection(db, 'video'), videoData);
             console.log('✅ 추가 완료, orderNumber:', videoData.orderNumber);
             alert('콘텐츠가 추가되었습니다.');
@@ -481,12 +554,14 @@ async function handleSubmit(e) {
  */
 function isValidYouTubeUrl(url) {
     const patterns = [
-        /^https?:\/\/(www\.)?youtube\.com\/watch\?v=[\w-]+/,
-        /^https?:\/\/youtu\.be\/[\w-]+/,
-        /^https?:\/\/(www\.)?youtube\.com\/embed\/[\w-]+/,
-        /^https?:\/\/(www\.)?youtube\.com\/live\/[\w-]+/  // YouTube 라이브 URL
+        /^https?:\/\/(www\.)?youtube\.com\/watch\?v=[\w-]+/,        // 일반 동영상
+        /^https?:\/\/youtu\.be\/[\w-]+/,                             // 짧은 URL
+        /^https?:\/\/(www\.)?youtube\.com\/embed\/[\w-]+/,          // 임베드 URL
+        /^https?:\/\/(www\.)?youtube\.com\/live\/[\w-]+/,           // 라이브 URL
+        /^https?:\/\/(www\.)?youtube\.com\/post\/[\w-]+/,           // 커뮤니티 게시물
+        /^https?:\/\/(www\.)?youtube\.com\/shorts\/[\w-]+/          // Shorts
     ];
-    
+
     return patterns.some(pattern => pattern.test(url));
 }
 
@@ -522,15 +597,21 @@ function handleCancel() {
  */
 document.addEventListener('DOMContentLoaded', async () => {
     console.log('✅ DOM 로드 완료 (추가/수정 페이지)');
-    
+
     const adminUser = checkAdminSession();
     if (!adminUser) {
         console.log('⏸️ 세션 없음 - 초기화 중단');
         return;
     }
-    
+
     console.log('👤 로그인 사용자:', adminUser.name);
-    
+
+    // ⭐ DB에서 카테고리 로드
+    await loadDetailCategoriesForForm();
+
+    // ⭐ 날짜 선택 옵션 초기화
+    initializeDateSelects();
+
     // 카테고리 이벤트 리스너 등록
     const category1 = document.getElementById('category1');
     const category2 = document.getElementById('category2');
@@ -602,6 +683,398 @@ document.addEventListener('DOMContentLoaded', async () => {
     if (confirmCancelBtn) {
         confirmCancelBtn.addEventListener('click', () => {
             window.location.href = 'admin-dashboard.html';
+        });
+    }
+
+    // ⭐ 카테고리 관리 버튼 이벤트
+    const categoryManageBtn = document.getElementById('categoryManageBtn');
+    if (categoryManageBtn) {
+        categoryManageBtn.addEventListener('click', openCategoryModal);
+    }
+});
+
+// ==========================================
+// 카테고리 관리 기능
+// ==========================================
+
+let currentModalSubCategory = 'scripture'; // 모달에서 선택된 서브카테고리 (기본값: 성서강해 설교)
+let categories = []; // 현재 로드된 카테고리 목록
+let sortable = null; // Sortable.js 인스턴스
+
+/**
+ * 카테고리 관리 모달 열기
+ */
+function openCategoryModal() {
+    const modal = document.getElementById('categoryModal');
+    if (modal) {
+        modal.classList.add('show');
+
+        // 첫 번째 탭 활성화 (성서강해 설교)
+        const firstTab = document.querySelector('.category-tab[data-subcategory="scripture"]');
+        if (firstTab) {
+            switchCategoryTab('scripture');
+            firstTab.classList.add('active');
+        }
+    }
+}
+
+/**
+ * 카테고리 관리 모달 닫기
+ */
+function closeCategoryModal() {
+    const modal = document.getElementById('categoryModal');
+    if (modal) {
+        modal.classList.remove('show');
+    }
+}
+
+/**
+ * 카테고리 탭 전환
+ */
+async function switchCategoryTab(subCategory) {
+    currentModalSubCategory = subCategory;
+
+    // 탭 활성화 상태 변경
+    document.querySelectorAll('.category-tab').forEach(tab => {
+        tab.classList.remove('active');
+        if (tab.dataset.subcategory === subCategory) {
+            tab.classList.add('active');
+        }
+    });
+
+    // 카테고리 목록 로드
+    await loadCategories(subCategory);
+}
+
+/**
+ * DB에서 카테고리 목록 로드
+ */
+async function loadCategories(subCategory) {
+    try {
+        console.log('📂 카테고리 로드:', subCategory);
+
+        const categoriesRef = collection(db, 'detailCategories');
+        const q = query(
+            categoriesRef,
+            where('subCategory', '==', subCategory),
+            where('isActive', '==', true)
+        );
+
+        const querySnapshot = await getDocs(q);
+        categories = [];
+
+        querySnapshot.forEach((doc) => {
+            categories.push({
+                id: doc.id,
+                ...doc.data()
+            });
+        });
+
+        // 클라이언트 측 정렬
+        categories.sort((a, b) => (a.orderNumber || 0) - (b.orderNumber || 0));
+
+        console.log('✅ 카테고리 로드 완료:', categories.length, '개');
+        console.log('📋 로드된 카테고리:', categories);
+
+        renderCategories();
+
+    } catch (error) {
+        console.error('❌ 카테고리 로드 오류:', error);
+        console.error('오류 상세:', error.message);
+        categories = [];
+        renderCategories();
+    }
+}
+
+/**
+ * 카테고리 목록 렌더링
+ */
+function renderCategories() {
+    const categoryList = document.getElementById('categoryList');
+    if (!categoryList) return;
+
+    if (categories.length === 0) {
+        categoryList.innerHTML = '';
+        return;
+    }
+
+    categoryList.innerHTML = categories.map((category, index) => {
+        const isEditable = category.isEditable !== false; // 기본값 true
+
+        return `
+            <div class="category-item ${!isEditable ? 'non-editable' : ''}" data-id="${category.id}">
+                <div class="category-drag-handle">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                        <path d="M9 5h2M9 12h2M9 19h2M15 5h2M15 12h2M15 19h2" stroke-width="2" stroke-linecap="round"/>
+                    </svg>
+                </div>
+                <span class="category-order">${index + 1}</span>
+                <span class="category-name">${category.categoryName}</span>
+                <div class="category-actions">
+                    ${isEditable ? `
+                        <button class="category-action-btn edit-btn" onclick="editCategory('${category.id}')" title="수정">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none">
+                                <path d="M2.5 21.5003L8.04927 19.366C8.40421 19.2295 8.58168 19.1612 8.74772 19.0721C8.8952 18.9929 9.0358 18.9015 9.16804 18.7989C9.31692 18.6834 9.45137 18.5489 9.72028 18.28L21 7.0003C22.1046 5.89574 22.1046 4.10487 21 3.0003C19.8955 1.89573 18.1046 1.89573 17 3.0003L5.72028 14.28C5.45138 14.5489 5.31692 14.6834 5.20139 14.8323C5.09877 14.9645 5.0074 15.1051 4.92823 15.2526C4.83911 15.4186 4.77085 15.5961 4.63433 15.951L2.5 21.5003ZM2.5 21.5003L4.55812 16.1493C4.7054 15.7663 4.77903 15.5749 4.90534 15.4872C5.01572 15.4105 5.1523 15.3816 5.2843 15.4068C5.43533 15.4356 5.58038 15.5807 5.87048 15.8708L8.12957 18.1299C8.41967 18.4199 8.56472 18.565 8.59356 18.716C8.61877 18.848 8.58979 18.9846 8.51314 19.095C8.42545 19.2213 8.23399 19.2949 7.85107 19.4422L2.5 21.5003Z" stroke="black" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                            </svg>
+                        </button>
+                        <button class="category-action-btn delete-btn" onclick="deleteCategory('${category.id}')" title="삭제">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 20 20" fill="none">
+                                <path d="M7 1H13M1 4H19M17 4L16.2987 14.5193C16.1935 16.0975 16.1409 16.8867 15.8 17.485C15.4999 18.0118 15.0472 18.4353 14.5017 18.6997C13.882 19 13.0911 19 11.5093 19H8.49065C6.90891 19 6.11803 19 5.49834 18.6997C4.95276 18.4353 4.50009 18.0118 4.19998 17.485C3.85911 16.8867 3.8065 16.0975 3.70129 14.5193L3 4M8 8.5V13.5M12 8.5V13.5" stroke="black" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                            </svg>
+                        </button>
+                    ` : `
+                        <span class="category-locked-badge">고정</span>
+                    `}
+                </div>
+            </div>
+        `;
+    }).join('');
+
+    // Sortable.js 초기화
+    initializeSortable();
+}
+
+/**
+ * Sortable.js 초기화 (드래그 앤 드롭)
+ */
+function initializeSortable() {
+    const categoryList = document.getElementById('categoryList');
+    if (!categoryList) return;
+
+    // 기존 sortable 제거
+    if (sortable) {
+        sortable.destroy();
+    }
+
+    // Sortable.js CDN 로드 확인
+    if (typeof Sortable === 'undefined') {
+        console.warn('⚠️ Sortable.js 라이브러리가 로드되지 않았습니다.');
+        loadSortableLibrary();
+        return;
+    }
+
+    sortable = Sortable.create(categoryList, {
+        animation: 150,
+        ghostClass: 'sortable-ghost',
+        chosenClass: 'sortable-chosen',
+        dragClass: 'sortable-drag',
+        handle: '.category-drag-handle',
+        filter: '.non-editable',
+        onEnd: async function(evt) {
+            // 순서 변경 저장
+            await saveCategoryOrder();
+        }
+    });
+}
+
+/**
+ * Sortable.js 라이브러리 동적 로드
+ */
+function loadSortableLibrary() {
+    const script = document.createElement('script');
+    script.src = 'https://cdn.jsdelivr.net/npm/sortablejs@1.15.0/Sortable.min.js';
+    script.onload = () => {
+        console.log('✅ Sortable.js 로드 완료');
+        initializeSortable();
+    };
+    document.head.appendChild(script);
+}
+
+/**
+ * 카테고리 추가
+ */
+async function addCategory() {
+    const input = document.getElementById('newCategoryInput');
+    const categoryName = input.value.trim();
+
+    if (!categoryName) {
+        alert('카테고리 이름을 입력하세요.');
+        input.focus();
+        return;
+    }
+
+    // 중복 체크
+    const duplicate = categories.find(cat => cat.categoryName === categoryName);
+    if (duplicate) {
+        alert('이미 존재하는 카테고리 이름입니다.');
+        input.focus();
+        return;
+    }
+
+    try {
+        // orderNumber 계산
+        const maxOrder = categories.length > 0
+            ? Math.max(...categories.map(c => c.orderNumber || 0))
+            : 0;
+
+        const newCategory = {
+            subCategory: currentModalSubCategory,
+            categoryName: categoryName,
+            orderNumber: maxOrder + 1,
+            isActive: true,
+            isEditable: true,
+            createdAt: Timestamp.now(),
+            updatedAt: Timestamp.now()
+        };
+
+        const docRef = await addDoc(collection(db, 'detailCategories'), newCategory);
+        console.log('✅ 카테고리 추가 완료:', categoryName);
+        console.log('📄 추가된 문서 ID:', docRef.id);
+        console.log('📋 추가된 데이터:', newCategory);
+
+        // 입력 필드 초기화
+        input.value = '';
+
+        // 목록 새로고침
+        await loadCategories(currentModalSubCategory);
+
+    } catch (error) {
+        console.error('❌ 카테고리 추가 오류:', error);
+        alert('카테고리 추가 중 오류가 발생했습니다.');
+    }
+}
+
+/**
+ * 카테고리 수정
+ */
+window.editCategory = async function(categoryId) {
+    const category = categories.find(c => c.id === categoryId);
+    if (!category) return;
+
+    const newName = prompt('카테고리 이름을 수정하세요:', category.categoryName);
+
+    if (!newName || newName.trim() === '') {
+        return;
+    }
+
+    const trimmedName = newName.trim();
+
+    // 중복 체크 (자기 자신 제외)
+    const duplicate = categories.find(c => c.id !== categoryId && c.categoryName === trimmedName);
+    if (duplicate) {
+        alert('이미 존재하는 카테고리 이름입니다.');
+        return;
+    }
+
+    try {
+        const categoryRef = doc(db, 'detailCategories', categoryId);
+        await updateDoc(categoryRef, {
+            categoryName: trimmedName,
+            updatedAt: Timestamp.now()
+        });
+
+        console.log('✅ 카테고리 수정 완료:', trimmedName);
+
+        // 목록 새로고침
+        await loadCategories(currentModalSubCategory);
+
+    } catch (error) {
+        console.error('❌ 카테고리 수정 오류:', error);
+        alert('카테고리 수정 중 오류가 발생했습니다.');
+    }
+}
+
+/**
+ * 카테고리 삭제
+ */
+window.deleteCategory = async function(categoryId) {
+    const category = categories.find(c => c.id === categoryId);
+    if (!category) return;
+
+    if (!confirm(`"${category.categoryName}" 카테고리를 삭제하시겠습니까?`)) {
+        return;
+    }
+
+    try {
+        const categoryRef = doc(db, 'detailCategories', categoryId);
+        await deleteDoc(categoryRef);
+
+        console.log('✅ 카테고리 삭제 완료:', category.categoryName);
+
+        // 목록 새로고침
+        await loadCategories(currentModalSubCategory);
+
+    } catch (error) {
+        console.error('❌ 카테고리 삭제 오류:', error);
+        alert('카테고리 삭제 중 오류가 발생했습니다.');
+    }
+}
+
+/**
+ * 카테고리 순서 저장 (드래그 앤 드롭 후)
+ */
+async function saveCategoryOrder() {
+    try {
+        const categoryList = document.getElementById('categoryList');
+        const items = categoryList.querySelectorAll('.category-item');
+
+        const batch = writeBatch(db);
+
+        items.forEach((item, index) => {
+            const categoryId = item.dataset.id;
+            const categoryRef = doc(db, 'detailCategories', categoryId);
+
+            batch.update(categoryRef, {
+                orderNumber: index + 1,
+                updatedAt: Timestamp.now()
+            });
+        });
+
+        await batch.commit();
+        console.log('✅ 카테고리 순서 저장 완료');
+
+        // 목록 새로고침
+        await loadCategories(currentModalSubCategory);
+
+    } catch (error) {
+        console.error('❌ 순서 저장 오류:', error);
+        alert('순서 저장 중 오류가 발생했습니다.');
+    }
+}
+
+// 카테고리 관리 모달 이벤트 리스너
+document.addEventListener('DOMContentLoaded', () => {
+    // 모달 닫기 버튼
+    const categoryModalClose = document.getElementById('categoryModalClose');
+    if (categoryModalClose) {
+        categoryModalClose.addEventListener('click', closeCategoryModal);
+    }
+
+    // 완료 버튼
+    const closeCategoryModalBtn = document.getElementById('closeCategoryModalBtn');
+    if (closeCategoryModalBtn) {
+        closeCategoryModalBtn.addEventListener('click', closeCategoryModal);
+    }
+
+    // 오버레이 클릭
+    const categoryModal = document.getElementById('categoryModal');
+    const categoryOverlay = categoryModal?.querySelector('.modal-overlay');
+    if (categoryOverlay) {
+        categoryOverlay.addEventListener('click', closeCategoryModal);
+    }
+
+    // 카테고리 탭 클릭
+    document.querySelectorAll('.category-tab').forEach(tab => {
+        tab.addEventListener('click', () => {
+            const subCategory = tab.dataset.subcategory;
+            switchCategoryTab(subCategory);
+        });
+    });
+
+    // 카테고리 추가 버튼
+    const addCategoryBtn = document.getElementById('addCategoryBtn');
+    if (addCategoryBtn) {
+        addCategoryBtn.addEventListener('click', addCategory);
+    }
+
+    // Enter 키로 추가
+    const newCategoryInput = document.getElementById('newCategoryInput');
+    if (newCategoryInput) {
+        newCategoryInput.addEventListener('keypress', (e) => {
+            if (e.key === 'Enter') {
+                e.preventDefault();
+                addCategory();
+            }
         });
     }
 });

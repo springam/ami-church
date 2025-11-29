@@ -41,39 +41,55 @@
        3. 페이지별 스크립트 로드 함수
        ======================================== */
     async function loadPageScript(page) {
-        // korean-worship 페이지인 경우 전용 스크립트 로드
-        if (page === 'koreanworship') {
-            console.log('📄 korean-worship 스크립트 로드 시작...');
-            
-            // 기존 스크립트가 있다면 제거
-            const existingScript = document.querySelector('script[src="assets/js/korean-worship.js"]');
-            if (existingScript) {
-                existingScript.remove();
+        // 페이지별 스크립트 설정
+        const scriptConfig = {
+            koreanworship: {
+                src: '/assets/js/korean-worship.js',
+                initFunction: 'initKoreanWorship'
+            },
+            aba: {
+                src: '/assets/js/aba.js',
+                initFunction: 'initABA'
+            },
+            avs: {
+                src: '/assets/js/avs.js',
+                initFunction: 'initAVS'
             }
-            
-            // 새로운 스크립트 동적 로드
-            const script = document.createElement('script');
-            script.type = 'module';
-            script.src = '/assets/js/korean-worship.js';
-            
-            script.onload = async () => {
-                console.log('✅ korean-worship.js 로드 완료');
-                try {
-                    const module = await import('/assets/js/korean-worship.js');
-                    if (module.initKoreanWorship) {
-                        await module.initKoreanWorship();
-                    }
-                } catch (error) {
-                    console.error('❌ korean-worship 초기화 실패:', error);
-                }
-            };
-            
-            script.onerror = (error) => {
-                console.error('❌ korean-worship.js 로드 실패:', error);
-            };
-            
-            document.body.appendChild(script);
+        };
+
+        const config = scriptConfig[page];
+        if (!config) return;
+
+        console.log(`📄 ${page} 스크립트 로드 시작...`);
+
+        // 기존 스크립트가 있다면 제거
+        const existingScript = document.querySelector(`script[src="${config.src}"]`);
+        if (existingScript) {
+            existingScript.remove();
         }
+
+        // 새로운 스크립트 동적 로드
+        const script = document.createElement('script');
+        script.type = 'module';
+        script.src = config.src;
+
+        script.onload = async () => {
+            console.log(`✅ ${page}.js 로드 완료`);
+            try {
+                const module = await import(config.src);
+                if (module[config.initFunction]) {
+                    await module[config.initFunction]();
+                }
+            } catch (error) {
+                console.error(`❌ ${page} 초기화 실패:`, error);
+            }
+        };
+
+        script.onerror = (error) => {
+            console.error(`❌ ${page}.js 로드 실패:`, error);
+        };
+
+        document.body.appendChild(script);
     }
 
     /* ========================================

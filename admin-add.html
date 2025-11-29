@@ -77,32 +77,52 @@
 
                     <div class="form-row">
                         <label class="form-label">카테고리 입력</label>
-                        <div class="category-selects">
-                            <select class="form-select" id="category1" required>
-                                <option value="">선택하세요</option>
-                                <option value="sunday">주일 예배</option>
-                                <option value="aba">ABA</option>
-                                <option value="avs">AVS/AVCK</option>
-                            </select>
-                            <span class="category-arrow">›</span>
-                            <select class="form-select" id="category2" disabled>
-                                <option value="">선택하세요</option>
-                            </select>
-                            <span class="category-arrow">›</span>
-                            <select class="form-select" id="category3" disabled>
-                                <option value="">선택하세요</option>
-                            </select>
+                        <div class="category-selects-wrapper">
+                            <div class="category-selects">
+                                <select class="form-select" id="category1" required>
+                                    <option value="">선택하세요</option>
+                                    <option value="sunday">주일 예배</option>
+                                    <option value="aba">ABA</option>
+                                    <option value="avs">AVS/AVCK</option>
+                                </select>
+                                <span class="category-arrow">›</span>
+                                <select class="form-select" id="category2" disabled>
+                                    <option value="">선택하세요</option>
+                                </select>
+                                <span class="category-arrow">›</span>
+                                <select class="form-select" id="category3" disabled>
+                                    <option value="">선택하세요</option>
+                                </select>
+                            </div>
+                            <button type="button" class="category-manage-btn" id="categoryManageBtn">
+                                카테고리 추가
+                            </button>
                         </div>
                     </div>
 
                     <div class="form-row">
                         <label class="form-label">본문</label>
-                        <input 
+                        <input
                             type="text"
-                            class="form-field" 
+                            class="form-field"
                             id="videoDescription"
                             placeholder="설교 본문을 입력하세요"
                         >
+                    </div>
+
+                    <div class="form-row">
+                        <label class="form-label">날짜</label>
+                        <div class="date-selects">
+                            <select class="form-select" id="dateYear" required>
+                                <option value="">년도</option>
+                            </select>
+                            <select class="form-select" id="dateMonth" required>
+                                <option value="">월</option>
+                            </select>
+                            <select class="form-select" id="dateDay" required>
+                                <option value="">일</option>
+                            </select>
+                        </div>
                     </div>
                 </div>
                 
@@ -137,6 +157,54 @@
                 <div class="modal-buttons">
                     <!-- <button class="modal-btn modal-btn-cancel" id="cancelModalBtn">취소하기</button> -->
                     <button class="modal-btn modal-btn-confirm" id="confirmCancelBtn">취소하기</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 카테고리 관리 모달 -->
+    <div class="category-modal" id="categoryModal">
+        <div class="modal-overlay"></div>
+        <div class="modal-content category-modal-content">
+            <button class="modal-close" id="categoryModalClose">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
+                    <path d="M18 6L6 18M6 6L18 18" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+                </svg>
+            </button>
+            <div class="modal-body">
+                <h2 class="modal-title">카테고리 관리</h2>
+
+                <!-- 서브카테고리 선택 탭 -->
+                <div class="category-tabs">
+                    <button class="category-tab" data-subcategory="scripture">성서강해 설교</button>
+                    <button class="category-tab" data-subcategory="topic">주제별 설교</button>
+                </div>
+
+                <!-- 카테고리 추가 입력 -->
+                <div class="category-add-form">
+                    <input
+                        type="text"
+                        id="newCategoryInput"
+                        class="category-input"
+                        placeholder="새 카테고리 이름을 입력하세요"
+                        maxlength="30"
+                    >
+                    <button type="button" class="category-add-btn" id="addCategoryBtn">추가</button>
+                </div>
+
+                <!-- 카테고리 리스트 (드래그 앤 드롭) -->
+                <div class="category-list-wrapper">
+                    <div class="category-list-header">
+                        <span>카테고리 목록</span>
+                        <span class="category-list-hint">드래그하여 순서를 변경할 수 있습니다</span>
+                    </div>
+                    <div class="category-list" id="categoryList">
+                        <!-- 동적으로 카테고리 항목이 추가됩니다 -->
+                    </div>
+                </div>
+
+                <div class="modal-buttons">
+                    <button class="modal-btn modal-btn-confirm" id="closeCategoryModalBtn">완료</button>
                 </div>
             </div>
         </div>

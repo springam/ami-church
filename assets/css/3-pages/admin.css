@@ -689,6 +689,13 @@
     gap: 12px;
 }
 
+.date-selects {
+    display: flex;
+    align-items: center;
+    width: 100%;
+    gap: 12px;
+}
+
 .form-select {
     flex: 1;
     padding: 8px 40px 8px 16px;
@@ -1080,17 +1087,365 @@ tr.draggable .status-select:disabled {
     display: flex;
 }
 
+/* ==========================================
+   카테고리 관리 모달
+   ========================================== */
+.category-modal {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 1000;
+    align-items: center;
+    justify-content: center;
+}
+
+.category-modal.show {
+    display: flex;
+}
+
+.category-modal-content {
+    width: 600px;
+    height: auto;
+    max-height: 80vh;
+    padding: 40px 32px 32px;
+}
+
+.modal-title {
+    font-size: 24px;
+    font-weight: 700;
+    color: #000;
+    margin: 0 0 24px 0;
+    text-align: center;
+}
+
+/* 카테고리 선택 탭 */
+.category-tabs {
+    display: flex;
+    gap: 8px;
+    margin-bottom: 24px;
+    border-bottom: 2px solid #E0E0E0;
+}
+
+.category-tab {
+    flex: 1;
+    padding: 12px 16px;
+    background: none;
+    border: none;
+    border-bottom: 2px solid transparent;
+    font-size: 14px;
+    font-weight: 500;
+    color: #666;
+    cursor: pointer;
+    transition: all 0.3s;
+    margin-bottom: -2px;
+}
+
+.category-tab:hover {
+    color: #182B8C;
+}
+
+.category-tab.active {
+    color: #182B8C;
+    font-weight: 700;
+    border-bottom-color: #182B8C;
+}
+
+/* 카테고리 추가 폼 */
+.category-add-form {
+    display: flex;
+    gap: 8px;
+    margin-bottom: 24px;
+}
+
+.category-input {
+    flex: 1;
+    padding: 10px 16px;
+    border: 1px solid #DFDFDF;
+    border-radius: 8px;
+    font-size: 14px;
+    color: #000;
+    transition: all 0.3s;
+}
+
+.category-input::placeholder {
+    color: #999;
+}
+
+.category-input:focus {
+    outline: none;
+    border-color: #182B8C;
+    box-shadow: 0 0 0 3px rgba(24, 43, 140, 0.1);
+}
+
+.category-add-btn {
+    padding: 10px 20px;
+    background: #182B8C;
+    color: #fff;
+    border: none;
+    border-radius: 8px;
+    font-size: 14px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.3s;
+    white-space: nowrap;
+}
+
+.category-add-btn:hover {
+    background: #0F1F5C;
+}
+
+.category-add-btn:disabled {
+    background: #ccc;
+    cursor: not-allowed;
+}
+
+/* 카테고리 리스트 */
+.category-list-wrapper {
+    border: 1px solid #E0E0E0;
+    border-radius: 8px;
+    overflow: hidden;
+    margin-bottom: 24px;
+}
+
+.category-list-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 12px 16px;
+    background: #F5F5F5;
+    border-bottom: 1px solid #E0E0E0;
+}
+
+.category-list-header span:first-child {
+    font-size: 14px;
+    font-weight: 600;
+    color: #000;
+}
+
+.category-list-hint {
+    font-size: 12px;
+    color: #999;
+}
+
+.category-list {
+    max-height: 300px;
+    overflow-y: auto;
+    background: #fff;
+}
+
+.category-list:empty::before {
+    content: '카테고리가 없습니다.';
+    display: block;
+    padding: 40px 20px;
+    text-align: center;
+    color: #999;
+    font-size: 14px;
+}
+
+/* 카테고리 아이템 */
+.category-item {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 12px 16px;
+    border-bottom: 1px solid #F0F0F0;
+    background: #fff;
+    cursor: move;
+    transition: background 0.2s;
+}
+
+.category-item:last-child {
+    border-bottom: none;
+}
+
+.category-item:hover {
+    background: #F8F9FA;
+}
+
+.category-item.sortable-ghost {
+    opacity: 0.4;
+    background: #F0F0F0;
+}
+
+.category-item.sortable-chosen {
+    background: #EBF1F6;
+}
+
+.category-item.non-editable {
+    cursor: default;
+    opacity: 0.6;
+}
+
+.category-item.non-editable:hover {
+    background: #fff;
+}
+
+/* 드래그 핸들 (카테고리 아이템용) */
+.category-drag-handle {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: move;
+    color: #999;
+    width: 20px;
+    flex-shrink: 0;
+}
+
+.category-item.non-editable .category-drag-handle {
+    cursor: default;
+    opacity: 0.3;
+}
+
+.category-drag-handle svg {
+    width: 16px;
+    height: 16px;
+}
+
+/* 카테고리 순서 번호 */
+.category-order {
+    font-size: 13px;
+    color: #999;
+    width: 24px;
+    text-align: center;
+    flex-shrink: 0;
+}
+
+/* 카테고리 이름 */
+.category-name {
+    flex: 1;
+    font-size: 14px;
+    color: #000;
+    padding: 4px 0;
+}
+
+.category-name.editing {
+    display: none;
+}
+
+.category-name-input {
+    flex: 1;
+    padding: 4px 8px;
+    border: 1px solid #182B8C;
+    border-radius: 4px;
+    font-size: 14px;
+    color: #000;
+}
+
+.category-name-input:focus {
+    outline: none;
+    box-shadow: 0 0 0 2px rgba(24, 43, 140, 0.1);
+}
+
+/* 카테고리 액션 버튼 */
+.category-actions {
+    display: flex;
+    gap: 4px;
+    flex-shrink: 0;
+}
+
+.category-action-btn {
+    width: 28px;
+    height: 28px;
+    border: none;
+    background: none;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 4px;
+    transition: all 0.2s;
+    color: #666;
+}
+
+.category-action-btn:hover {
+    background: #F0F0F0;
+}
+
+.category-action-btn.edit-btn:hover {
+    color: #182B8C;
+}
+
+.category-action-btn.delete-btn:hover {
+    color: #d32f2f;
+}
+
+.category-action-btn svg {
+    width: 16px;
+    height: 16px;
+}
+
+.category-action-btn:disabled {
+    opacity: 0.3;
+    cursor: not-allowed;
+}
+
+/* 카테고리 관리 버튼 */
+.category-selects-wrapper {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    width: 100%;
+}
+
+.category-manage-btn {
+    padding: 8px 16px;
+    background: #182B8C;
+    color: #fff;
+    border: none;
+    border-radius: 8px;
+    font-size: 14px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.3s;
+    white-space: nowrap;
+    flex-shrink: 0;
+}
+
+.category-manage-btn:hover {
+    background: #0F1F5C;
+    transform: translateY(-1px);
+    box-shadow: 0 2px 8px rgba(24, 43, 140, 0.3);
+}
+
+/* 수정 불가 표시 */
+.category-locked-badge {
+    font-size: 11px;
+    padding: 2px 8px;
+    background: #F5F5F5;
+    color: #999;
+    border-radius: 12px;
+    white-space: nowrap;
+}
+
 @media (max-width: 480px) {
     .modal-content {
         padding: 32px 24px 24px;
     }
-    
+
     .modal-text {
         font-size: 15px;
         margin-bottom: 24px;
     }
-    
+
     .modal-buttons {
         flex-direction: column;
+    }
+
+    .category-modal-content {
+        width: 90%;
+        max-width: 90%;
+    }
+
+    .category-tabs {
+        flex-direction: column;
+        gap: 0;
+    }
+
+    .category-tab {
+        border-bottom: 1px solid #E0E0E0;
+        margin-bottom: 0;
     }
 }
