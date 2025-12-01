@@ -3,7 +3,7 @@
    ========================================== */
 .greeting-quote {
     color: #182B8C;
-    margin: 60px 0 40px 0;
+    margin: 60px 0 10px 0;
     font-size: 32px;
     font-weight: 700;
     line-height: 44px;
@@ -14,8 +14,8 @@
     font-style: normal;
     font-weight: 400;
     line-height: 32px; 
-    margin-bottom: 20px;
-    color: #0000FF;
+    margin-bottom: 40px;
+    color: #182B8C;
 }
 
 .greeting-text {

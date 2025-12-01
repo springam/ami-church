@@ -114,12 +114,23 @@ async function loadDetailCategoriesForForm() {
             column: []
         };
 
+        categoryData.avs.detailCategories = {
+            avs: [],
+            avck: []
+        };
+
         querySnapshot.forEach((doc) => {
             const data = doc.data();
             const subCategory = data.subCategory;
 
+            // 주일 예배 카테고리
             if (categoryData.sunday.detailCategories.hasOwnProperty(subCategory)) {
                 categoryData.sunday.detailCategories[subCategory].push(data.categoryName);
+            }
+
+            // AVS/AVCK 카테고리
+            if (categoryData.avs.detailCategories.hasOwnProperty(subCategory)) {
+                categoryData.avs.detailCategories[subCategory].push(data.categoryName);
             }
         });
 
@@ -128,7 +139,11 @@ async function loadDetailCategoriesForForm() {
             categoryData.sunday.detailCategories[subCat].sort();
         });
 
-        console.log('✅ 폼용 detailCategories 로드 완료:', categoryData.sunday.detailCategories);
+        Object.keys(categoryData.avs.detailCategories).forEach(subCat => {
+            categoryData.avs.detailCategories[subCat].sort();
+        });
+
+        console.log('✅ 폼용 detailCategories 로드 완료:', categoryData.sunday.detailCategories, categoryData.avs.detailCategories);
 
     } catch (error) {
         console.error('❌ detailCategories 로드 오류:', error);
@@ -709,10 +724,11 @@ function openCategoryModal() {
     if (modal) {
         modal.classList.add('show');
 
-        // 첫 번째 탭 활성화 (성서강해 설교)
-        const firstTab = document.querySelector('.category-tab[data-subcategory="scripture"]');
+        // 첫 번째 탭 활성화
+        const firstTab = document.querySelector('.category-tab');
         if (firstTab) {
-            switchCategoryTab('scripture');
+            const firstSubCategory = firstTab.dataset.subcategory;
+            switchCategoryTab(firstSubCategory);
             firstTab.classList.add('active');
         }
     }
