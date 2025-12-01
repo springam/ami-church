@@ -24,6 +24,14 @@
     line-height: 1.5;
 }
 
+.intro-text-first-line {
+    font-size: 20px;
+    font-weight: 400;
+    line-height: 1.8; 
+    color: #000; 
+    margin-bottom: 20px;
+}
+
 .intro-text {
     font-size: 20px;
     font-weight: 400;
@@ -32,13 +40,32 @@
     margin-bottom: 40px;
 }
 
-.intro-signature {
+.intro-signature-line {
+    display: flex;
+    margin-left: auto;
+    margin-right: 0;
+    gap: 10px;
+    justify-content: flex-end;
+}
+
+.intro-signature-title {
+    display: flex;
     font-size: 20px;
     font-style: normal;
     font-weight: 700;
     line-height: 32px;
+    align-items: flex-end;
     color: #000;
-    margin-top: 40px;
+    margin-bottom: 0;
+    padding-top: 6px;
+}
+
+.intro-signature {
+    font-size: 32px;
+    font-style: normal;
+    font-weight: 700;
+    line-height: 1;
+    color: #000;
     margin-bottom: 0;
 }
 
