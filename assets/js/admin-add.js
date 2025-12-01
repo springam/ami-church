@@ -1,7 +1,6 @@
 // admin-add.js
 import { initializeApp } from "https://www.gstatic.com/firebasejs/12.4.0/firebase-app.js";
 import { getFirestore, collection, addDoc, doc, getDoc, updateDoc, deleteDoc, Timestamp, query, where, orderBy, limit, getDocs, writeBatch } from "https://www.gstatic.com/firebasejs/12.4.0/firebase-firestore.js";
-import { getStorage, ref, uploadBytesResumable, getDownloadURL } from "https://www.gstatic.com/firebasejs/12.4.0/firebase-storage.js";
 import { checkAdminSession } from './admin-auth.js';
 
 console.log('📝 admin-add.js 로드됨');
@@ -19,11 +18,9 @@ const firebaseConfig = {
 
 const app = initializeApp(firebaseConfig);
 const db = getFirestore(app);
-const storage = getStorage(app); // ⭐ Storage 추가
 
 let isEditMode = false;
 let editVideoId = null;
-let currentContentType = 'video'; // ⭐ 현재 콘텐츠 타입 (video/pdf)
 
 // 카테고리 계층 구조 정의
 const categoryData = {
@@ -48,17 +45,7 @@ const categoryData = {
             aba: 'ABA'
         },
         detailCategories: {
-            aba: [
-                '1학기 하늘의 조직',
-                '2학기 인간론',
-                '3학기 창조론',
-                '4학기 종말론',
-                '5학기 구원론',
-                '6학기 에베소서',
-                '7학기 이슬람',
-                '8학기 이스라엘 절기',
-                '9학기 기독론'
-            ]
+            aba: []
         }
     },
     avs: {
@@ -68,25 +55,8 @@ const categoryData = {
             avck: 'AVCK'
         },
         detailCategories: {
-            avs: [
-                '제15기 여자의 후손',
-                '제16기',
-                '제19기 산상수훈',
-                '제21기 이세상과 저세상',
-                '제23기 선지서 17권 개관'
-            ],
-            avck: [
-                '제1기',
-                '제2기',
-                '제3기',
-                '제4기',
-                '제7기',
-                '제8기',
-                '제9기',
-                '제11기',
-                '제12기',
-                '제13기'
-            ]
+            avs: [],
+            avck: []
         }
     }
 };
@@ -148,92 +118,6 @@ async function loadDetailCategoriesForForm() {
     } catch (error) {
         console.error('❌ detailCategories 로드 오류:', error);
     }
-}
-
-/**
- * ⭐ 콘텐츠 타입에 따라 UI 전환
- */
-function switchContentType(type) {
-    currentContentType = type;
-    
-    const videoUrlRow = document.getElementById('videoUrlRow');
-    const pdfUploadRow = document.getElementById('pdfUploadRow');
-    const videoUrl = document.getElementById('videoUrl');
-    const pdfFile = document.getElementById('pdfFile');
-    
-    if (type === 'pdf') {
-        // PDF 모드
-        videoUrlRow.style.display = 'none';
-        pdfUploadRow.style.display = 'flex';
-        if (videoUrl) videoUrl.removeAttribute('required');
-        if (videoUrl) videoUrl.value = '';
-    } else {
-        // 동영상 모드
-        videoUrlRow.style.display = 'flex';
-        pdfUploadRow.style.display = 'none';
-        if (pdfFile) pdfFile.value = '';
-        const pdfFileName = document.getElementById('pdfFileName');
-        if (pdfFileName) pdfFileName.textContent = '';
-    }
-    
-    console.log('📌 콘텐츠 타입 전환:', type);
-}
-
-/**
- * ⭐ PDF 파일 업로드
- */
-async function uploadPDFFile(file) {
-    return new Promise((resolve, reject) => {
-        // 파일명 생성 (타임스탬프 + 원본 파일명)
-        const timestamp = Date.now();
-        const fileName = `${timestamp}_${file.name}`;
-        const storageRef = ref(storage, `pdfs/${fileName}`);
-        
-        // 업로드 시작
-        const uploadTask = uploadBytesResumable(storageRef, file);
-        
-        // 진행 상황 표시
-        const progressDiv = document.getElementById('uploadProgress');
-        const progressBar = document.getElementById('progressBar');
-        const progressText = document.getElementById('progressText');
-        
-        if (progressDiv) progressDiv.style.display = 'block';
-        
-        uploadTask.on('state_changed',
-            (snapshot) => {
-                // 진행률 계산
-                const progress = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
-                if (progressBar) progressBar.style.width = progress + '%';
-                if (progressText) progressText.textContent = `업로드 중... ${Math.round(progress)}%`;
-                console.log('업로드 진행:', progress + '%');
-            },
-            (error) => {
-                // 에러 처리
-                console.error('❌ 업로드 오류:', error);
-                if (progressDiv) progressDiv.style.display = 'none';
-                reject(error);
-            },
-            async () => {
-                // 업로드 완료
-                try {
-                    const downloadURL = await getDownloadURL(uploadTask.snapshot.ref);
-                    if (progressText) progressText.textContent = '✅ 업로드 완료!';
-                    
-                    setTimeout(() => {
-                        if (progressDiv) progressDiv.style.display = 'none';
-                    }, 2000);
-                    
-                    console.log('✅ 업로드 완료:', downloadURL);
-                    resolve({
-                        url: downloadURL,
-                        fileName: file.name
-                    });
-                } catch (error) {
-                    reject(error);
-                }
-            }
-        );
-    });
 }
 
 /**
@@ -441,7 +325,7 @@ function getRandomThumbnail() {
 }
 
 /**
- * ⭐ 폼 제출 처리 (PDF 지원 추가)
+ * 폼 제출 처리
  */
 async function handleSubmit(e) {
     e.preventDefault();
@@ -643,19 +527,7 @@ document.addEventListener('DOMContentLoaded', async () => {
             updateDetailCategory(mainCategory, e.target.value);
         });
     }
-    
-    // ⭐ PDF 파일 선택 시 파일명 표시
-    const pdfFile = document.getElementById('pdfFile');
-    if (pdfFile) {
-        pdfFile.addEventListener('change', (e) => {
-            const fileName = e.target.files[0]?.name || '';
-            const pdfFileName = document.getElementById('pdfFileName');
-            if (pdfFileName) {
-                pdfFileName.textContent = fileName ? `선택된 파일: ${fileName}` : '';
-            }
-        });
-    }
-    
+
     // 수정 모드 체크
     editVideoId = getUrlParameter('edit');
     if (editVideoId) {

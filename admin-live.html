@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AMI 교회 - 라이브 정보</title>
+    <!-- CSS -->
+    <link rel="stylesheet" href="assets/css/main.css">
+    <link rel="stylesheet" href="assets/css/3-pages/admin.css">
+    <!-- Pretendard 폰트 -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.min.css" />
+</head>
+<body>
+    <div class="admin-dashboard">
+        <!-- Header -->
+        <header class="admin-header">
+            <div class="admin-header-container">
+                <div class="admin-logo">
+                    <a href="index.html"><img src="assets/images/logo/logo-blue.png" alt="AMI 교회"></a>
+                </div>
+                <nav class="admin-tabs">
+                    <a href="admin-dashboard.html" class="admin-tab">동영상 목록보기</a>
+                    <a href="admin-add.html" class="admin-tab">동영상 추가하기</a>
+                    <a href="admin-live.html" class="admin-tab active">라이브 정보</a>
+                </nav>
+            </div>
+        </header>
+
+        <!-- Content -->
+        <main class="admin-content">
+            <h1 class="page-title">라이브 방송 설정</h1>
+
+            <!-- Form -->
+            <form class="video-form" id="liveForm">
+                <div class="video-form-container">
+                    <!-- 라이브 활성화 -->
+                    <div class="form-row">
+                        <label class="form-label">라이브 방송 기능</label>
+                        <div class="toggle-container">
+                            <label class="toggle-switch">
+                                <input type="checkbox" id="isLiveActive">
+                                <span class="toggle-slider"></span>
+                            </label>
+                            <span class="toggle-label" id="toggleLabel">비활성화</span>
+                        </div>
+                    </div>
+
+                    <!-- 라이브 URL -->
+                    <small class="form-hint">YouTube 라이브 임베드 URL을 입력하세요</small>
+                    <div class="form-row">
+                        <label class="form-label">라이브 방송 URL</label>
+                        <input
+                            type="url"
+                            class="form-field"
+                            id="liveUrl"
+                            placeholder="https://www.youtube.com/embed/LIVE_VIDEO_ID"
+                        >
+                        
+                    </div>
+
+                    <!-- 요일 선택 -->
+                    <div class="form-row">
+                        <label class="form-label">방송 요일</label>
+                        <select class="form-field" id="dayOfWeek">
+                            <option value="0" selected>일요일</option>
+                            <option value="1">월요일</option>
+                            <option value="2">화요일</option>
+                            <option value="3">수요일</option>
+                            <option value="4">목요일</option>
+                            <option value="5">금요일</option>
+                            <option value="6">토요일</option>
+                        </select>
+                    </div>
+
+                    <!-- 시작 시간 -->
+                    <div class="form-row">
+                        <label class="form-label">시작 시간</label>
+                        <input
+                            type="time"
+                            class="form-field"
+                            id="startTime"
+                            value="10:45"
+                        >
+                    </div>
+
+                    <!-- 종료 시간 -->
+                    <div class="form-row">
+                        <label class="form-label">종료 시간</label>
+                        <input
+                            type="time"
+                            class="form-field"
+                            id="endTime"
+                            value="13:00"
+                        >
+                    </div>
+
+                    <!-- 현재 상태 표시 -->
+                    <div class="form-row">
+                        <label class="form-label">현재 상태</label>
+                        <div class="live-status" id="liveStatus">
+                            <span class="status-text">로딩 중...</span>
+                        </div>
+                    </div>
+
+                    <!-- 버튼 -->
+                    <div class="form-buttons">
+                        <button type="button" class="btn-cancel" id="cancelBtn">취소하기</button>
+                        <button type="submit" class="btn-submit" id="submitBtn">저장하기</button>
+                    </div>
+                </div>
+            </form>
+        </main>
+    </div>
+
+    <!-- 취소 확인 모달 -->
+    <div id="cancelModal" class="cancel-modal">
+        <div class="modal-overlay"></div>
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 class="modal-title">취소하시겠습니까?</h3>
+                <button class="modal-close" id="modalClose">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                        <path d="M18 6L6 18M6 6l12 12" stroke-width="2"/>
+                    </svg>
+                </button>
+            </div>
+            <div class="modal-body">
+                <p>변경사항이 저장되지 않습니다.</p>
+            </div>
+            <div class="modal-footer">
+                <button class="modal-btn modal-btn-secondary" id="modalCancel">돌아가기</button>
+                <button class="modal-btn modal-btn-primary" id="confirmCancelBtn">취소하기</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- JavaScript -->
+    <script type="module" src="assets/js/admin-live.js"></script>
+</body>
+</html>
