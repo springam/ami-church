@@ -145,32 +145,44 @@ function getYouTubeEmbedUrl(url) {
 }
 
 /**
- * Firestore Timestamp를 날짜 문자열로 변환
+ * 날짜 데이터를 문자열로 변환 (datePrecision에 따라 표시)
  */
-function formatDate(timestamp) {
-    if (!timestamp) return '';
-    
-    if (timestamp.toDate) {
-        const date = timestamp.toDate();
-        return date.toLocaleDateString('ko-KR', { 
-            year: 'numeric', 
-            month: '2-digit', 
-            day: '2-digit' 
+function formatDate(dateData, datePrecision) {
+    if (!dateData) return '';
+
+    // Timestamp 형식
+    if (dateData.toDate) {
+        const date = dateData.toDate();
+        const year = date.getFullYear();
+        const month = date.getMonth() + 1;
+        const day = date.getDate();
+
+        // precision이 없으면 'day'로 간주 (기존 데이터)
+        const precision = datePrecision || 'day';
+
+        if (precision === 'year') {
+            return year + '년';
+        } else if (precision === 'month') {
+            return year + '년 ' + month + '월';
+        } else {  // 'day'
+            return year + '년 ' + month + '월 ' + day + '일';
+        }
+    }
+
+    // 문자열인 경우
+    if (typeof dateData === 'string') {
+        return dateData;
+    }
+
+    // Date 객체인 경우
+    if (dateData instanceof Date) {
+        return dateData.toLocaleDateString('ko-KR', {
+            year: 'numeric',
+            month: '2-digit',
+            day: '2-digit'
         }).replace(/\. /g, '.').replace(/\.$/, '');
     }
-    
-    if (typeof timestamp === 'string') {
-        return timestamp;
-    }
-    
-    if (timestamp instanceof Date) {
-        return timestamp.toLocaleDateString('ko-KR', { 
-            year: 'numeric', 
-            month: '2-digit', 
-            day: '2-digit' 
-        }).replace(/\. /g, '.').replace(/\.$/, '');
-    }
-    
+
     return '';
 }
 
@@ -204,8 +216,9 @@ async function fetchVideos(subCategory, detailCategory = null) {
             videos.push({
                 id: doc.id,
                 title: data.title || '제목 없음',
-                date: formatDate(data.date),
+                date: formatDate(data.date, data.datePrecision),
                 dateObj: data.date,
+                datePrecision: data.datePrecision,
                 category: data.category,
                 subCategory: data.subCategory || '',
                 detailCategory: data.detailCategory || '',
@@ -225,6 +238,8 @@ async function fetchVideos(subCategory, detailCategory = null) {
             if (a.orderNumber !== b.orderNumber) {
                 return a.orderNumber - b.orderNumber;
             }
+
+            // 날짜 비교 (Timestamp)
             const dateA = a.dateObj?.toDate ? a.dateObj.toDate() : new Date(0);
             const dateB = b.dateObj?.toDate ? b.dateObj.toDate() : new Date(0);
             return dateB - dateA;

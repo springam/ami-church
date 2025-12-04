@@ -52,24 +52,26 @@
 
             <div class="filter-select-box">
                 <div class="filter-select-container">
-                    <select class="filter-select" id="categoryFilter">
+                    <select class="filter-select" id="category1">
                         <option value="">전체</option>
-                        <option value="weekly">주일 예배</option>
-                        <!-- <option value="scripture">ABA</option>
-                        <option value="topic">AVS/AVCK</option> -->
+                        <option value="sunday">주일 예배</option>
+                        <option value="aba">ABA</option>
+                        <option value="avs">AVS/AVCK</option>
                     </select>
                 </div>
 
                 <div class="filter-select-container">
-                    <select class="filter-select" id="subCategoryFilter">
-                        <option value="">전체</option>
-                        <option value="weekly">이번주 설교</option>
-                        <option value="scripture">성서강해 설교</option>
-                        <option value="topic">주제별 설교</option>
-                        <option value="column">목회자 칼럼</option>
+                    <select class="filter-select" id="category2" disabled>
+                        <option value="">선택하세요</option>
                     </select>
                 </div>
-                
+
+                <div class="filter-select-container">
+                    <select class="filter-select" id="category3" disabled>
+                        <option value="">선택하세요</option>
+                    </select>
+                </div>
+
                 <!-- ⭐ 순서 변경 모드 토글 버튼 -->
                 <button class="order-mode-btn" id="orderModeBtn">
                     <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">

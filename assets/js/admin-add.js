@@ -84,6 +84,10 @@ async function loadDetailCategoriesForForm() {
             column: []
         };
 
+        categoryData.aba.detailCategories = {
+            aba: []
+        };
+
         categoryData.avs.detailCategories = {
             avs: [],
             avck: []
@@ -98,6 +102,11 @@ async function loadDetailCategoriesForForm() {
                 categoryData.sunday.detailCategories[subCategory].push(data.categoryName);
             }
 
+            // ABA 카테고리
+            if (categoryData.aba.detailCategories.hasOwnProperty(subCategory)) {
+                categoryData.aba.detailCategories[subCategory].push(data.categoryName);
+            }
+
             // AVS/AVCK 카테고리
             if (categoryData.avs.detailCategories.hasOwnProperty(subCategory)) {
                 categoryData.avs.detailCategories[subCategory].push(data.categoryName);
@@ -109,11 +118,15 @@ async function loadDetailCategoriesForForm() {
             categoryData.sunday.detailCategories[subCat].sort();
         });
 
+        Object.keys(categoryData.aba.detailCategories).forEach(subCat => {
+            categoryData.aba.detailCategories[subCat].sort();
+        });
+
         Object.keys(categoryData.avs.detailCategories).forEach(subCat => {
             categoryData.avs.detailCategories[subCat].sort();
         });
 
-        console.log('✅ 폼용 detailCategories 로드 완료:', categoryData.sunday.detailCategories, categoryData.avs.detailCategories);
+        console.log('✅ 폼용 detailCategories 로드 완료:', categoryData.sunday.detailCategories, categoryData.aba.detailCategories, categoryData.avs.detailCategories);
 
     } catch (error) {
         console.error('❌ detailCategories 로드 오류:', error);
@@ -138,7 +151,7 @@ function initializeDateSelects() {
 
     if (!yearSelect || !monthSelect || !daySelect) return;
 
-    // 년도: 2020년부터 현재 +1년까지
+    // 년도: 1999년부터 현재 +1년까지
     const currentYear = new Date().getFullYear();
     for (let year = 1999; year <= currentYear + 1; year++) {
         const option = document.createElement('option');
@@ -163,11 +176,8 @@ function initializeDateSelects() {
         daySelect.appendChild(option);
     }
 
-    // 기본값: 오늘 날짜
-    const today = new Date();
-    yearSelect.value = today.getFullYear();
-    monthSelect.value = today.getMonth() + 1;
-    daySelect.value = today.getDate();
+    // 기본값: 선택 안 함 (placeholder 상태 유지)
+    // yearSelect.value, monthSelect.value, daySelect.value는 빈 문자열로 유지
 }
 
 
@@ -259,11 +269,19 @@ async function loadVideoData(videoId) {
         document.getElementById('videoUrl').value = videoData.videoUrl || '';
 
         // 날짜 복원
-        if (videoData.date) {
-            const date = videoData.date.toDate ? videoData.date.toDate() : new Date(videoData.date);
+        if (videoData.date && videoData.date.toDate) {
+            const date = videoData.date.toDate();
+            const precision = videoData.datePrecision || 'day'; // 없으면 day로 간주
+
             document.getElementById('dateYear').value = date.getFullYear();
-            document.getElementById('dateMonth').value = date.getMonth() + 1;
-            document.getElementById('dateDay').value = date.getDate();
+
+            if (precision === 'month' || precision === 'day') {
+                document.getElementById('dateMonth').value = date.getMonth() + 1;
+            }
+
+            if (precision === 'day') {
+                document.getElementById('dateDay').value = date.getDate();
+            }
         }
         
         // 카테고리 복원
@@ -352,11 +370,6 @@ async function handleSubmit(e) {
         return;
     }
 
-    if (!dateYear || !dateMonth || !dateDay) {
-        alert('날짜를 선택하세요.');
-        return;
-    }
-    
     // URL 검증
     const videoUrl = document.getElementById('videoUrl').value.trim();
 
@@ -372,16 +385,8 @@ async function handleSubmit(e) {
         document.getElementById('videoUrl').focus();
         return;
     }
-    
-    try {
-        // 선택한 날짜를 Timestamp로 변환
-        const selectedDate = new Date(
-            parseInt(dateYear),
-            parseInt(dateMonth) - 1, // JavaScript 월은 0부터 시작
-            parseInt(dateDay)
-        );
-        const dateTimestamp = Timestamp.fromDate(selectedDate);
 
+    try {
         // 공통 데이터 구성
         const videoData = {
             type: 'video',
@@ -389,9 +394,31 @@ async function handleSubmit(e) {
             category: category,
             description: description,
             status: 'active',
-            date: dateTimestamp,
             videoUrl: videoUrl
         };
+
+        // 날짜 데이터 생성 (선택된 경우만)
+        if (dateYear) {
+            let year = parseInt(dateYear);
+            let month = 1;  // 기본값
+            let day = 1;    // 기본값
+            let precision = 'year';
+
+            if (dateMonth) {
+                month = parseInt(dateMonth);
+                precision = 'month';
+
+                if (dateDay) {
+                    day = parseInt(dateDay);
+                    precision = 'day';
+                }
+            }
+
+            // Timestamp 생성
+            const selectedDate = new Date(year, month - 1, day);
+            videoData.date = Timestamp.fromDate(selectedDate);
+            videoData.datePrecision = precision;
+        }
 
         // subCategory가 있는 경우에만 추가
         if (subCategory) {
@@ -609,10 +636,33 @@ function openCategoryModal() {
 /**
  * 카테고리 관리 모달 닫기
  */
-function closeCategoryModal() {
+async function closeCategoryModal() {
     const modal = document.getElementById('categoryModal');
     if (modal) {
         modal.classList.remove('show');
+
+        // ⭐ 모달 닫을 때 카테고리 다시 로드
+        await loadDetailCategoriesForForm();
+
+        // 현재 선택된 카테고리 유지하면서 업데이트
+        const category1 = document.getElementById('category1');
+        const category2 = document.getElementById('category2');
+
+        if (category1 && category1.value) {
+            const savedCategory1 = category1.value;
+            const savedCategory2 = category2.value;
+
+            // category2 업데이트
+            updateSubCategory(savedCategory1);
+
+            // 이전 선택값 복원
+            setTimeout(() => {
+                if (savedCategory2) {
+                    category2.value = savedCategory2;
+                    updateDetailCategory(savedCategory1, savedCategory2);
+                }
+            }, 50);
+        }
     }
 }
 

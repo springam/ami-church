@@ -37,28 +37,61 @@ let totalPages = 1;
 let allVideos = [];
 let currentVideoIndex = -1;
 
-// AVS/AVCK detail-categories (하드코딩)
-const DETAIL_CATEGORIES = {
-    avs: [
-        '제15기 여자의 후손',
-        '제16기',
-        '제19기 산상수훈',
-        '제21기 이세상과 저세상',
-        '제23기 선지서 17권 개관'
-    ],
-    avck: [
-        '제1기',
-        '제2기',
-        '제3기',
-        '제4기',
-        '제7기',
-        '제8기',
-        '제9기',
-        '제11기',
-        '제12기',
-        '제13기'
-    ]
+// AVS/AVCK detail-categories (DB에서 로드)
+let DETAIL_CATEGORIES = {
+    avs: [],
+    avck: []
 };
+
+/**
+ * DB에서 detailCategories 로드
+ */
+async function loadDetailCategories() {
+    try {
+        console.log('📂 detailCategories 로드 시작...');
+
+        const categoriesRef = collection(db, 'detailCategories');
+        const querySnapshot = await getDocs(categoriesRef);
+
+        // 초기화
+        DETAIL_CATEGORIES.avs = [];
+        DETAIL_CATEGORIES.avck = [];
+
+        querySnapshot.forEach((doc) => {
+            const data = doc.data();
+            if (!data.isActive) return; // 비활성 카테고리 제외
+
+            const subCategory = data.subCategory;
+            const categoryName = data.categoryName;
+
+            // AVS 또는 AVCK 카테고리만 처리
+            if (subCategory === 'avs') {
+                DETAIL_CATEGORIES.avs.push({
+                    name: categoryName,
+                    orderNumber: data.orderNumber || 999
+                });
+            } else if (subCategory === 'avck') {
+                DETAIL_CATEGORIES.avck.push({
+                    name: categoryName,
+                    orderNumber: data.orderNumber || 999
+                });
+            }
+        });
+
+        // orderNumber 기준 정렬
+        DETAIL_CATEGORIES.avs.sort((a, b) => a.orderNumber - b.orderNumber);
+        DETAIL_CATEGORIES.avck.sort((a, b) => a.orderNumber - b.orderNumber);
+
+        // 이름만 추출
+        DETAIL_CATEGORIES.avs = DETAIL_CATEGORIES.avs.map(cat => cat.name);
+        DETAIL_CATEGORIES.avck = DETAIL_CATEGORIES.avck.map(cat => cat.name);
+
+        console.log('✅ detailCategories 로드 완료:', DETAIL_CATEGORIES);
+
+    } catch (error) {
+        console.error('❌ detailCategories 로드 오류:', error);
+    }
+}
 
 /**
  * YouTube URL을 임베드 URL로 변환
@@ -105,26 +138,38 @@ function getYouTubeEmbedUrl(url) {
 }
 
 /**
- * Firestore Timestamp를 날짜 문자열로 변환
+ * 날짜 데이터를 문자열로 변환 (datePrecision에 따라 표시)
  */
-function formatDate(timestamp) {
-    if (!timestamp) return '';
+function formatDate(dateData, datePrecision) {
+    if (!dateData) return '';
 
-    if (timestamp.toDate) {
-        const date = timestamp.toDate();
-        return date.toLocaleDateString('ko-KR', {
-            year: 'numeric',
-            month: '2-digit',
-            day: '2-digit'
-        }).replace(/\. /g, '.').replace(/\.$/, '');
+    // Timestamp 형식
+    if (dateData.toDate) {
+        const date = dateData.toDate();
+        const year = date.getFullYear();
+        const month = date.getMonth() + 1;
+        const day = date.getDate();
+
+        // precision이 없으면 'day'로 간주 (기존 데이터)
+        const precision = datePrecision || 'day';
+
+        if (precision === 'year') {
+            return year + '년';
+        } else if (precision === 'month') {
+            return year + '년 ' + month + '월';
+        } else {  // 'day'
+            return year + '년 ' + month + '월 ' + day + '일';
+        }
     }
 
-    if (typeof timestamp === 'string') {
-        return timestamp;
+    // 문자열인 경우
+    if (typeof dateData === 'string') {
+        return dateData;
     }
 
-    if (timestamp instanceof Date) {
-        return timestamp.toLocaleDateString('ko-KR', {
+    // Date 객체인 경우
+    if (dateData instanceof Date) {
+        return dateData.toLocaleDateString('ko-KR', {
             year: 'numeric',
             month: '2-digit',
             day: '2-digit'
@@ -163,8 +208,9 @@ async function fetchVideos(subCategory, detailCategory = null) {
             videos.push({
                 id: doc.id,
                 title: data.title || '제목 없음',
-                date: formatDate(data.date),
+                date: formatDate(data.date, data.datePrecision),
                 dateObj: data.date,
+                datePrecision: data.datePrecision,
                 category: data.category,
                 subCategory: data.subCategory || '',
                 detailCategory: data.detailCategory || '',
@@ -181,6 +227,8 @@ async function fetchVideos(subCategory, detailCategory = null) {
             if (a.orderNumber !== b.orderNumber) {
                 return a.orderNumber - b.orderNumber;
             }
+
+            // 날짜 비교 (Timestamp)
             const dateA = a.dateObj?.toDate ? a.dateObj.toDate() : new Date(0);
             const dateB = b.dateObj?.toDate ? b.dateObj.toDate() : new Date(0);
             return dateB - dateA;
@@ -495,6 +543,9 @@ async function changeSubCategory(subCategory) {
         pagination.innerHTML = '';
     }
 
+    // ⭐ 카테고리 다시 로드 (최신 상태 반영)
+    await loadDetailCategories();
+
     // 데이터 로드
     allVideos = await fetchVideos(subCategory);
     renderVideos(allVideos, currentPage);
@@ -540,6 +591,9 @@ window.changeDetailCategory = async function(detailCategory) {
  */
 export async function initAVS() {
     console.log('🚀 initAVS() 실행');
+
+    // ⭐ DB에서 카테고리 먼저 로드
+    await loadDetailCategories();
 
     // worship-tabs 이벤트 리스너
     const tabs = document.querySelectorAll('.worship-tab');
