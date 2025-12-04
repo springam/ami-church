@@ -37,18 +37,8 @@ let totalPages = 1;
 let allVideos = [];
 let currentVideoIndex = -1;
 
-// ABA detail-categories (하드코딩)
-const DETAIL_CATEGORIES = [
-    '1학기 하늘의 조직',
-    '2학기 인간론',
-    '3학기 창조론',
-    '4학기 종말론',
-    '5학기 구원론',
-    '6학기 에베소서',
-    '7학기 이슬람',
-    '8학기 이스라엘 절기',
-    '9학기 기독론'
-];
+// ABA detail-categories (DB에서 로드)
+let DETAIL_CATEGORIES = [];
 
 /**
  * YouTube URL을 임베드 URL로 변환
@@ -92,6 +82,46 @@ function getYouTubeEmbedUrl(url) {
     }
 
     return url;
+}
+
+/**
+ * Firestore에서 detail-categories 로드
+ */
+async function loadDetailCategories() {
+    try {
+        console.log('📂 ABA detailCategories 로드 시작...');
+
+        const categoriesRef = collection(db, 'detailCategories');
+        const querySnapshot = await getDocs(categoriesRef);
+
+        // 초기화
+        const categories = [];
+
+        querySnapshot.forEach((doc) => {
+            const data = doc.data();
+            if (!data.isActive) return; // 비활성 카테고리 제외
+
+            const subCategory = data.subCategory;
+            const categoryName = data.categoryName;
+
+            // ABA 카테고리만 처리
+            if (subCategory === 'aba') {
+                categories.push({
+                    name: categoryName,
+                    orderNumber: data.orderNumber || 999999
+                });
+            }
+        });
+
+        // orderNumber로 정렬
+        categories.sort((a, b) => a.orderNumber - b.orderNumber);
+        DETAIL_CATEGORIES = categories.map(c => c.name);
+
+        console.log('✅ ABA Detail Categories 로드 완료:', DETAIL_CATEGORIES);
+    } catch (error) {
+        console.error('❌ Detail Categories 로드 실패:', error);
+        DETAIL_CATEGORIES = [];
+    }
 }
 
 /**
@@ -508,6 +538,9 @@ export async function initABA() {
     });
 
     console.log('🔥 초기 데이터 로드 시작...');
+
+    // detail-categories 로드
+    await loadDetailCategories();
 
     // 초기 데이터 로드
     allVideos = await fetchVideos();

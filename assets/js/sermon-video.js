@@ -44,15 +44,15 @@
         // 페이지별 스크립트 설정
         const scriptConfig = {
             koreanworship: {
-                src: '/assets/js/korean-worship.js',
+                src: '/assets/js/korean-worship.js?v=2',
                 initFunction: 'initKoreanWorship'
             },
             aba: {
-                src: '/assets/js/aba.js',
+                src: '/assets/js/aba.js?v=2',
                 initFunction: 'initABA'
             },
             avs: {
-                src: '/assets/js/avs.js',
+                src: '/assets/js/avs.js?v=2',
                 initFunction: 'initAVS'
             }
         };

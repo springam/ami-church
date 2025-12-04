@@ -172,7 +172,8 @@ function isValidYouTubeUrl(url) {
         /^https?:\/\/(www\.)?youtube\.com\/watch\?v=[\w-]+/,
         /^https?:\/\/youtu\.be\/[\w-]+/,
         /^https?:\/\/(www\.)?youtube\.com\/embed\/[\w-]+/,
-        /^https?:\/\/(www\.)?youtube\.com\/live\/[\w-]+/
+        /^https?:\/\/(www\.)?youtube\.com\/live\/[\w-]+/,
+        /^https?:\/\/(www\.)?youtube\.com\/@[\w-]+\/live/
     ];
 
     return patterns.some(pattern => pattern.test(url));
