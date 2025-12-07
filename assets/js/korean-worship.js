@@ -234,8 +234,14 @@ async function fetchVideos(subCategory, detailCategory = null) {
         });
 
         // ⭐ orderNumber 기준 정렬, 없으면 날짜 역순
+        // 이번주 설교, 목회자 컬럼은 내림차순(높은 숫자 → 낮은 숫자), 나머지는 오름차순
         videos.sort((a, b) => {
             if (a.orderNumber !== b.orderNumber) {
+                // 이번주 설교, 목회자 컬럼인 경우 내림차순
+                if (subCategory === 'weekly' || subCategory === 'column') {
+                    return b.orderNumber - a.orderNumber;
+                }
+                // 나머지는 오름차순
                 return a.orderNumber - b.orderNumber;
             }
 
@@ -379,11 +385,11 @@ window.openColumnUrl = function(url) {
 function renderSubMenu() {
     const subMenu = document.getElementById('subMenu');
     const subMenuItems = document.getElementById('subMenuItems');
-    
+
     if (!subMenu || !subMenuItems) return;
 
     const detailCategories = DETAIL_CATEGORIES[currentSubCategory];
-    
+
     // detailCategory가 없는 경우 (이번주 설교, 목회자 칼럼)
     if (!detailCategories || detailCategories.length === 0) {
         subMenu.style.display = 'none';
@@ -392,18 +398,26 @@ function renderSubMenu() {
 
     // 서브메뉴 표시 및 항목 생성
     subMenu.style.display = 'block';
-    
-    subMenuItems.innerHTML = `
-        <div class="sub-menu-item ${!currentDetailCategory ? 'active' : ''}" onclick="changeDetailCategory(null)">
-            전체
-        </div>
-        ${detailCategories.map(category => `
-            <div class="sub-menu-item ${currentDetailCategory === category ? 'active' : ''}" 
-                 onclick="changeDetailCategory('${category}')">
-                ${category}
-            </div>
-        `).join('')}
-    `;
+
+    // "전체" 버튼 생성
+    const allButton = document.createElement('div');
+    allButton.className = `sub-menu-item ${!currentDetailCategory ? 'active' : ''}`;
+    allButton.textContent = '전체';
+    allButton.addEventListener('click', () => changeDetailCategoryKoreanWorship(null));
+
+    // 카테고리 버튼들 생성
+    const categoryButtons = detailCategories.map(category => {
+        const button = document.createElement('div');
+        button.className = `sub-menu-item ${currentDetailCategory === category ? 'active' : ''}`;
+        button.textContent = category;
+        button.addEventListener('click', () => changeDetailCategoryKoreanWorship(category));
+        return button;
+    });
+
+    // subMenuItems 초기화 및 버튼 추가
+    subMenuItems.innerHTML = '';
+    subMenuItems.appendChild(allButton);
+    categoryButtons.forEach(button => subMenuItems.appendChild(button));
 }
 
 /**
@@ -636,8 +650,11 @@ async function changeSubCategory(subCategory) {
 /**
  * detailCategory 변경 (sub-menu 클릭)
  */
-window.changeDetailCategory = async function(detailCategory) {
-    if (currentDetailCategory === detailCategory) return;
+async function changeDetailCategoryKoreanWorship(detailCategory) {
+    console.log('🔄 [Korean Worship] changeDetailCategory 호출:', detailCategory);
+    console.log('  - 현재 detailCategory:', currentDetailCategory);
+    console.log('  - 현재 subCategory:', currentSubCategory);
+    console.log('  - 현재 allVideos 개수:', allVideos.length);
 
     currentDetailCategory = detailCategory;
     currentPage = 1;
@@ -646,9 +663,16 @@ window.changeDetailCategory = async function(detailCategory) {
     document.querySelectorAll('.sub-menu-item').forEach(item => {
         item.classList.remove('active');
     });
-    
+
     if (detailCategory === null) {
         document.querySelector('.sub-menu-item:first-child')?.classList.add('active');
+    } else {
+        // 선택된 카테고리에 active 추가
+        document.querySelectorAll('.sub-menu-item').forEach(item => {
+            if (item.textContent.trim() === detailCategory) {
+                item.classList.add('active');
+            }
+        });
     }
 
     // 로딩 표시
@@ -658,7 +682,9 @@ window.changeDetailCategory = async function(detailCategory) {
     }
 
     // 데이터 로드
+    console.log('📂 fetchVideos 호출:', currentSubCategory, detailCategory);
     allVideos = await fetchVideos(currentSubCategory, detailCategory);
+    console.log('✅ 로드된 비디오 개수:', allVideos.length);
     renderVideos(allVideos, currentPage);
 }
 
@@ -667,6 +693,25 @@ window.changeDetailCategory = async function(detailCategory) {
  */
 export async function initKoreanWorship() {
     console.log('🚀 initKoreanWorship() 실행');
+
+    // ⭐ 전역 변수 초기화 (다른 페이지에서 남은 데이터 제거)
+    currentSubCategory = 'weekly';
+    currentDetailCategory = null;
+    currentPage = 1;
+    allVideos = [];
+    currentVideoIndex = -1;
+    console.log('✅ 전역 변수 초기화 완료');
+
+    // ⭐ 화면 초기화 (이전 페이지 HTML 제거)
+    const videoGrid = document.getElementById('videoGrid');
+    if (videoGrid) {
+        videoGrid.innerHTML = '<div class="loading">콘텐츠를 불러오는 중...</div>';
+    }
+    const pagination = document.getElementById('pagination');
+    if (pagination) {
+        pagination.innerHTML = '';
+    }
+    console.log('✅ 화면 초기화 완료');
 
     // ⭐ 1. 먼저 카테고리 로드
     await loadDetailCategories();

@@ -1,23 +1,24 @@
 // Home 페이지 전용 기능
-import { initializeApp } from "https://www.gstatic.com/firebasejs/12.4.0/firebase-app.js";
-import { getFirestore, doc, getDoc } from "https://www.gstatic.com/firebasejs/12.4.0/firebase-firestore.js";
+// Firebase는 라이브 방송 URL 전환 기능에만 사용되므로 현재 비활성화
+// import { initializeApp } from "https://www.gstatic.com/firebasejs/12.4.0/firebase-app.js";
+// import { getFirestore, doc, getDoc } from "https://www.gstatic.com/firebasejs/12.4.0/firebase-firestore.js";
 
 (function() {
     'use strict';
 
-    // Firebase 설정
-    const firebaseConfig = {
-        apiKey: "AIzaSyDovIYMknqYQeSpveyEfugar-yQ1PUeL9A",
-        authDomain: "ami-church.firebaseapp.com",
-        projectId: "ami-church",
-        storageBucket: "ami-church.firebasestorage.app",
-        messagingSenderId: "858840781541",
-        appId: "1:858840781541:web:4c76fac2dd5ed376cd7a0c",
-        measurementId: "G-ZKNQHKK26V"
-    };
-
-    const app = initializeApp(firebaseConfig);
-    const db = getFirestore(app);
+    // Firebase 설정 (사용 안 함)
+    // const firebaseConfig = {
+    //     apiKey: "AIzaSyDovIYMknqYQeSpveyEfugar-yQ1PUeL9A",
+    //     authDomain: "ami-church.firebaseapp.com",
+    //     projectId: "ami-church",
+    //     storageBucket: "ami-church.firebasestorage.app",
+    //     messagingSenderId: "858840781541",
+    //     appId: "1:858840781541:web:4c76fac2dd5ed376cd7a0c",
+    //     measurementId: "G-ZKNQHKK26V"
+    // };
+    //
+    // const app = initializeApp(firebaseConfig);
+    // const db = getFirestore(app);
 
     // Hero 슬라이더 변수
     let heroImages, heroTitles, indicators;
@@ -81,70 +82,17 @@ import { getFirestore, doc, getDoc } from "https://www.gstatic.com/firebasejs/12
     }
 
     // ==========================================
-    // 라이브 방송 URL 전환 기능
+    // 라이브 방송 URL 전환 기능 (사용 안 함)
     // ==========================================
-
-    const DEFAULT_PLAYLIST_URL = "https://www.youtube.com/embed?listType=playlist&list=PLgX4703ro_nUfPOx5DgD2qBZu9LyozTmj";
-
-    /**
-     * 라이브 방송 시간인지 체크
-     */
-    function checkLiveStatus(liveConfig) {
-        if (!liveConfig || !liveConfig.isLiveActive) {
-            return false;
-        }
-
-        const now = new Date();
-        const currentDay = now.getDay();
-        const currentTime = `${String(now.getHours()).padStart(2, '0')}:${String(now.getMinutes()).padStart(2, '0')}`;
-
-        const { dayOfWeek, startTime, endTime } = liveConfig.liveSchedule;
-
-        const isLiveDay = currentDay === dayOfWeek;
-        const isLiveTime = currentTime >= startTime && currentTime < endTime;
-
-        return isLiveDay && isLiveTime;
-    }
-
-    /**
-     * iframe URL 업데이트
-     */
-    function updateIframeSrc(url) {
-        const iframe = document.querySelector('.media-section iframe');
-        if (iframe && iframe.src !== url) {
-            console.log('🔄 iframe URL 변경:', url);
-            iframe.src = url;
-        }
-    }
-
-    /**
-     * 라이브 설정 로드 및 URL 전환
-     */
-    async function checkAndUpdateLiveUrl() {
-        try {
-            const liveRef = doc(db, 'settings', 'liveConfig');
-            const liveSnap = await getDoc(liveRef);
-
-            if (liveSnap.exists()) {
-                const liveConfig = liveSnap.data();
-                const isLive = checkLiveStatus(liveConfig);
-
-                if (isLive && liveConfig.liveUrl) {
-                    console.log('🔴 라이브 방송 중 - URL 전환:', liveConfig.liveUrl);
-                    updateIframeSrc(liveConfig.liveUrl);
-                } else {
-                    console.log('📺 일반 플레이리스트 표시');
-                    updateIframeSrc(DEFAULT_PLAYLIST_URL);
-                }
-            } else {
-                console.log('⚠️ 라이브 설정 없음 - 기본 URL 사용');
-                updateIframeSrc(DEFAULT_PLAYLIST_URL);
-            }
-        } catch (error) {
-            console.error('❌ 라이브 설정 로드 오류:', error);
-            updateIframeSrc(DEFAULT_PLAYLIST_URL);
-        }
-    }
+    //
+    // 현재 index.html의 iframe src가 라이브 방송 임베드 주소로 하드코딩되어 있음
+    // 필요시 admin-live.js와 함께 다시 활성화 가능
+    //
+    // const DEFAULT_PLAYLIST_URL = "https://www.youtube.com/embed?listType=playlist&list=PLgX4703ro_nUfPOx5DgD2qBZu9LyozTmj";
+    //
+    // function checkLiveStatus(liveConfig) { ... }
+    // function updateIframeSrc(url) { ... }
+    // async function checkAndUpdateLiveUrl() { ... }
 
     // 초기화 타이밍 처리
     let initialized = false;
@@ -158,11 +106,9 @@ import { getFirestore, doc, getDoc } from "https://www.gstatic.com/firebasejs/12
             initialized = true;
             initHeroSlider();
 
-            // 라이브 URL 체크
-            checkAndUpdateLiveUrl();
-
-            // 1분마다 라이브 상태 체크
-            setInterval(checkAndUpdateLiveUrl, 60000);
+            // 라이브 URL 체크 (비활성화)
+            // checkAndUpdateLiveUrl();
+            // setInterval(checkAndUpdateLiveUrl, 60000);
         } else {
             console.log('⏳ Hero section 대기 중...');
         }

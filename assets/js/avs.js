@@ -314,17 +314,25 @@ function renderSubMenu() {
     // 서브메뉴 표시 및 항목 생성
     subMenu.style.display = 'block';
 
-    subMenuItems.innerHTML = `
-        <div class="sub-menu-item ${!currentDetailCategory ? 'active' : ''}" onclick="changeDetailCategory(null)">
-            전체
-        </div>
-        ${detailCategories.map(category => `
-            <div class="sub-menu-item ${currentDetailCategory === category ? 'active' : ''}"
-                 onclick="changeDetailCategory('${category}')">
-                ${category}
-            </div>
-        `).join('')}
-    `;
+    // "전체" 버튼 생성
+    const allButton = document.createElement('div');
+    allButton.className = `sub-menu-item ${!currentDetailCategory ? 'active' : ''}`;
+    allButton.textContent = '전체';
+    allButton.addEventListener('click', () => changeDetailCategoryAVS(null));
+
+    // 카테고리 버튼들 생성
+    const categoryButtons = detailCategories.map(category => {
+        const button = document.createElement('div');
+        button.className = `sub-menu-item ${currentDetailCategory === category ? 'active' : ''}`;
+        button.textContent = category;
+        button.addEventListener('click', () => changeDetailCategoryAVS(category));
+        return button;
+    });
+
+    // subMenuItems 초기화 및 버튼 추가
+    subMenuItems.innerHTML = '';
+    subMenuItems.appendChild(allButton);
+    categoryButtons.forEach(button => subMenuItems.appendChild(button));
 }
 
 /**
@@ -560,8 +568,10 @@ async function changeSubCategory(subCategory) {
 /**
  * detailCategory 변경
  */
-window.changeDetailCategory = async function(detailCategory) {
-    if (currentDetailCategory === detailCategory) return;
+async function changeDetailCategoryAVS(detailCategory) {
+    console.log('🔄 [AVS] changeDetailCategory 호출:', detailCategory);
+    console.log('현재 detailCategory:', currentDetailCategory);
+    console.log('현재 allVideos 개수:', allVideos.length);
 
     currentDetailCategory = detailCategory;
     currentPage = 1;
@@ -569,11 +579,16 @@ window.changeDetailCategory = async function(detailCategory) {
     // 서브메뉴 활성화 상태 변경
     document.querySelectorAll('.sub-menu-item').forEach(item => {
         item.classList.remove('active');
-    });
 
-    if (detailCategory === null) {
-        document.querySelector('.sub-menu-item:first-child')?.classList.add('active');
-    }
+        // null인 경우 "전체" 버튼 활성화
+        if (detailCategory === null && item.textContent.trim() === '전체') {
+            item.classList.add('active');
+        }
+        // 특정 카테고리인 경우 해당 버튼 활성화
+        else if (detailCategory !== null && item.textContent.trim() === detailCategory) {
+            item.classList.add('active');
+        }
+    });
 
     // 로딩 표시
     const videoGrid = document.getElementById('videoGrid');
@@ -591,6 +606,25 @@ window.changeDetailCategory = async function(detailCategory) {
  */
 export async function initAVS() {
     console.log('🚀 initAVS() 실행');
+
+    // ⭐ 전역 변수 초기화 (다른 페이지에서 남은 데이터 제거)
+    currentSubCategory = 'avs';
+    currentDetailCategory = null;
+    currentPage = 1;
+    allVideos = [];
+    currentVideoIndex = -1;
+    console.log('✅ 전역 변수 초기화 완료');
+
+    // ⭐ 화면 초기화 (이전 페이지 HTML 제거)
+    const videoGrid = document.getElementById('videoGrid');
+    if (videoGrid) {
+        videoGrid.innerHTML = '<div class="loading">콘텐츠를 불러오는 중...</div>';
+    }
+    const pagination = document.getElementById('pagination');
+    if (pagination) {
+        pagination.innerHTML = '';
+    }
+    console.log('✅ 화면 초기화 완료');
 
     // ⭐ DB에서 카테고리 먼저 로드
     await loadDetailCategories();

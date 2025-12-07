@@ -89,8 +89,6 @@ function getYouTubeEmbedUrl(url) {
  */
 async function loadDetailCategories() {
     try {
-        console.log('📂 ABA detailCategories 로드 시작...');
-
         const categoriesRef = collection(db, 'detailCategories');
         const querySnapshot = await getDocs(categoriesRef);
 
@@ -116,8 +114,6 @@ async function loadDetailCategories() {
         // orderNumber로 정렬
         categories.sort((a, b) => a.orderNumber - b.orderNumber);
         DETAIL_CATEGORIES = categories.map(c => c.name);
-
-        console.log('✅ ABA Detail Categories 로드 완료:', DETAIL_CATEGORIES);
     } catch (error) {
         console.error('❌ Detail Categories 로드 실패:', error);
         DETAIL_CATEGORIES = [];
@@ -171,8 +167,6 @@ function formatDate(dateData, datePrecision) {
  */
 async function fetchVideos(detailCategory = null) {
     try {
-        console.log('=== 데이터 가져오기 시작 ===');
-
         const videosRef = collection(db, 'video');
 
         // category만 필터링
@@ -183,14 +177,22 @@ async function fetchVideos(detailCategory = null) {
 
         const querySnapshot = await getDocs(q);
         const videos = [];
+        let filteredCount = 0;
 
         querySnapshot.forEach((doc) => {
             const data = doc.data();
 
             // 클라이언트 측 필터링
-            if (data.subCategory !== SUBCATEGORY) return;
-            if (data.status !== 'active') return;
-            if (detailCategory && data.detailCategory !== detailCategory) return;
+            if (data.subCategory !== SUBCATEGORY) {
+                return;
+            }
+            if (data.status !== 'active') {
+                return;
+            }
+            if (detailCategory && data.detailCategory !== detailCategory) {
+                filteredCount++;
+                return;
+            }
 
             videos.push({
                 id: doc.id,
@@ -221,9 +223,6 @@ async function fetchVideos(detailCategory = null) {
             return dateB - dateA;
         });
 
-        console.log('최종 변환된 비디오 개수:', videos.length);
-        console.log('=== 데이터 가져오기 완료 ===\n');
-
         return videos;
 
     } catch (error) {
@@ -236,8 +235,6 @@ async function fetchVideos(detailCategory = null) {
  * 비디오 리스트 렌더링
  */
 function renderVideos(videos, page = 1) {
-    console.log('🎨 renderVideos 호출:', videos.length, '개');
-
     const videoGrid = document.getElementById('videoGrid');
     if (!videoGrid) {
         console.error('❌ videoGrid 요소를 찾을 수 없음!');
@@ -294,17 +291,25 @@ function renderSubMenu() {
     // 서브메뉴 표시 및 항목 생성
     subMenu.style.display = 'block';
 
-    subMenuItems.innerHTML = `
-        <div class="sub-menu-item ${!currentDetailCategory ? 'active' : ''}" onclick="changeDetailCategory(null)">
-            전체
-        </div>
-        ${DETAIL_CATEGORIES.map(category => `
-            <div class="sub-menu-item ${currentDetailCategory === category ? 'active' : ''}"
-                 onclick="changeDetailCategory('${category}')">
-                ${category}
-            </div>
-        `).join('')}
-    `;
+    // "전체" 버튼 생성
+    const allButton = document.createElement('div');
+    allButton.className = `sub-menu-item ${!currentDetailCategory ? 'active' : ''}`;
+    allButton.textContent = '전체';
+    allButton.addEventListener('click', () => changeDetailCategoryABA(null));
+
+    // 카테고리 버튼들 생성
+    const categoryButtons = DETAIL_CATEGORIES.map(category => {
+        const button = document.createElement('div');
+        button.className = `sub-menu-item ${currentDetailCategory === category ? 'active' : ''}`;
+        button.textContent = category;
+        button.addEventListener('click', () => changeDetailCategoryABA(category));
+        return button;
+    });
+
+    // subMenuItems 초기화 및 버튼 추가
+    subMenuItems.innerHTML = '';
+    subMenuItems.appendChild(allButton);
+    categoryButtons.forEach(button => subMenuItems.appendChild(button));
 }
 
 /**
@@ -494,20 +499,23 @@ window.backToList = function() {
 /**
  * detailCategory 변경
  */
-window.changeDetailCategory = async function(detailCategory) {
-    if (currentDetailCategory === detailCategory) return;
-
+async function changeDetailCategoryABA(detailCategory) {
     currentDetailCategory = detailCategory;
     currentPage = 1;
 
     // 서브메뉴 활성화 상태 변경
     document.querySelectorAll('.sub-menu-item').forEach(item => {
         item.classList.remove('active');
-    });
 
-    if (detailCategory === null) {
-        document.querySelector('.sub-menu-item:first-child')?.classList.add('active');
-    }
+        // null인 경우 "전체" 버튼 활성화
+        if (detailCategory === null && item.textContent.trim() === '전체') {
+            item.classList.add('active');
+        }
+        // 특정 카테고리인 경우 해당 버튼 활성화
+        else if (detailCategory !== null && item.textContent.trim() === detailCategory) {
+            item.classList.add('active');
+        }
+    });
 
     // 로딩 표시
     const videoGrid = document.getElementById('videoGrid');
@@ -524,20 +532,30 @@ window.changeDetailCategory = async function(detailCategory) {
  * 초기화
  */
 export async function initABA() {
-    console.log('🚀 initABA() 실행');
+    // ⭐ 전역 변수 초기화 (다른 페이지에서 남은 데이터 제거)
+    currentDetailCategory = null;
+    currentPage = 1;
+    allVideos = [];
+    currentVideoIndex = -1;
+
+    // ⭐ 화면 초기화 (이전 페이지 HTML 제거)
+    const videoGrid = document.getElementById('videoGrid');
+    if (videoGrid) {
+        videoGrid.innerHTML = '<div class="loading">콘텐츠를 불러오는 중...</div>';
+    }
+    const pagination = document.getElementById('pagination');
+    if (pagination) {
+        pagination.innerHTML = '';
+    }
 
     // 브라우저 뒤로가기/앞으로가기 이벤트 처리
     window.addEventListener('popstate', (event) => {
-        console.log('popstate 이벤트 발생:', event.state);
-
         // 상세 뷰가 열려있으면 목록으로 돌아가기
         const detailView = document.getElementById('videoDetailView');
         if (detailView && detailView.classList.contains('active')) {
             backToList();
         }
     });
-
-    console.log('🔥 초기 데이터 로드 시작...');
 
     // detail-categories 로드
     await loadDetailCategories();
@@ -546,11 +564,7 @@ export async function initABA() {
     allVideos = await fetchVideos();
     renderVideos(allVideos, currentPage);
 
-    console.log('📦 로드된 데이터:', allVideos);
-
     renderSubMenu();
-
-    console.log('✅ 초기화 완료!');
 
     // ✨ 서브메뉴 체크 (초기화 완료 직후)
     setTimeout(() => {
