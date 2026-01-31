@@ -603,3 +603,40 @@ function checkAndApplySubmenuClass() {
         console.log('✅ has-submenu 클래스 제거됨');
     }
 }
+
+/**
+ * 아바 성격 학교 팝업 열기
+ */
+window.openABASchoolPopups = function() {
+    const popup = document.getElementById('abaSchoolPopup');
+
+    if (popup) {
+        popup.classList.add('active');
+        // body 스크롤 방지
+        document.body.style.overflow = 'hidden';
+    }
+}
+
+/**
+ * 아바 성격 학교 팝업 닫기
+ */
+window.closeABASchoolPopup = function() {
+    const popup = document.getElementById('abaSchoolPopup');
+
+    if (popup) {
+        popup.classList.remove('active');
+        // body 스크롤 복구
+        document.body.style.overflow = '';
+    }
+}
+
+/**
+ * 팝업 외부 클릭 시 닫기
+ */
+window.addEventListener('click', function(event) {
+    const popup = document.getElementById('abaSchoolPopup');
+
+    if (event.target === popup) {
+        closeABASchoolPopup();
+    }
+});

@@ -6,7 +6,10 @@
 <body>
     <div class="worship-container">
         <div class="worship-header">
-            <h2>ABA</h2>
+            <div class="worship-header-top">
+                <h2>ABA</h2>
+                <button class="aba-school-btn" onclick="openABASchoolPopups()">아바 성경 학교</button>
+            </div>
             <div class="worship-tabs">
                 <div class="worship-tab active" data-category="aba">ABA</div>
             </div>
@@ -26,6 +29,179 @@
         <div id="pagination" class="pagination"></div>
 
         <!-- 비디오 상세 뷰는 JavaScript에서 동적으로 생성됩니다 -->
+    </div>
+
+    <!-- 아바 성경 학교 팝업 -->
+    <div id="abaSchoolPopup" class="aba-popup-overlay">
+        <div class="aba-popup-wrapper">
+            <!-- 고정 닫기 버튼 -->
+            <button class="aba-popup-close" onclick="closeABASchoolPopup()">&times;</button>
+            <div class="aba-popup-content">
+                <!-- 첫번째 popup content -->
+                <div class="aba-popup-image-header">
+                <h3 class="aba-popup-title">아바 성경학교<br>입학 안내</h3>
+            </div>
+            <div class="aba-popup-lower">
+                <div class="aba-popup-left-section">
+                    <p>아바(ABA)성경학교</p>
+                </div>
+                <div class="aba-popup-body">
+                    <p>아바(ABA)는 Ami Bible Academy의 첫 알파벳 글자로 이루어진 말로서, 
+                        ‘아미성경학교’의 의미를 가지고 있습니다. 즉 아미선교센터와 아미교회의 담임목사이신 황용현 목사의 강의와 설교를 통해 하나님의 말씀인 성경을 공부하는 교육 프로그램입니다. </p>
+                </div>
+            </div>
+
+            <div class="aba-popup-lower">
+                <div class="aba-popup-left-section">
+                    <p>AMI 선교센터 AMI 교회 소개</p>
+                </div>
+                <div class="aba-popup-body">
+                    <p>AMI는 Antioch Mission International의 첫 글자들을 조합해 만든 이름으로, 1세기 사도바울을 선교사로 파송해서 로마제국을 복음화하는데 앞장 섰던 안디옥 교회를 모델로, 
+                        미전도족속 복음화에 사역의 초점을 두고 일하는 선교단체이자, 같은 비전을 가진 사람들이 모여 함께 예배드리는 교회입니다.</p>
+                </div>
+            </div>
+
+            <div class="aba-popup-lower">
+                <div class="aba-popup-left-section">
+                    <p>황용현 목사 소개</p>
+                </div>
+                <div class="aba-popup-body">
+                    <p>경기 중.고등학교, 서울대 졸업 후 미국 미시간주립대, 피츠버그 주립대와 대학원(M.B.A), 미주지역에서 전문경영인으로 활동하던 중 하나님의 부르심을 받아 캐나다 틴데일신학대악원(M.Div), 
+                        미국 시카고의 트리니티 신학대학원(Ph.D)를 졸업 후 틴데일 신대원 교수 및 운영이사, 미국 얼라이언스 신대원 교수 역임 중 GCOWE’95 실행총무로 발탁되어 한국에 왔다가 AMI선교센터를 
+                        한국으로 옮겨 외국인 노동자들을 위한 아미신학교를 설립하고, 지금까지 전세게 25개국에 6,000여 명의 제자들을 양육하고 있습니다.    
+                        대표적인 저서로는: <여자의후손>, <사복음서와지상명령>, <이세상은 무엇인가>, <황용현칼럼>(22,년 23년도판) 등이 있습니다.</p>
+                </div>
+            </div>
+
+            <div class="aba-popup-lower">
+                <div class="aba-popup-left-section">
+                    <p>황용현 목사 소개</p>
+                </div>
+                <div class="aba-popup-body">
+                    <p>경기 중.고등학교, 서울대 졸업 후 미국 미시간주립대, 피츠버그 주립대와 대학원(M.B.A), 미주지역에서 전문경영인으로 활동하던 중 하나님의 부르심을 받아 캐나다 틴데일신학대악원(M.Div), 
+                        미국 시카고의 트리니티 신학대학원(Ph.D)를 졸업 후 틴데일 신대원 교수 및 운영이사, 미국 얼라이언스 신대원 교수 역임 중 GCOWE’95 실행총무로 발탁되어 한국에 왔다가 AMI선교센터를 
+                        한국으로 옮겨 외국인 노동자들을 위한 아미신학교를 설립하고, 지금까지 전세게 25개국에 6,000여 명의 제자들을 양육하고 있습니다.    
+                        대표적인 저서로는: <여자의후손>, <사복음서와지상명령>, <이세상은 무엇인가>, <황용현칼럼>(22,년 23년도판) 등이 있습니다.</p>
+                </div>
+            </div>
+
+            <div class="aba-popup-lower">
+                <div class="aba-popup-left-section">
+                    <p>아바성경학교의 주제 성구</p>
+                </div>
+                <div class="aba-popup-body">
+                    <p>“내 아들아 그러므로 너는 그리스도 예수 안에 있는 은혜 가운데서 강하고/ 또 네가 많은 증인 앞에서 내게 들은 바를 충성된 사람들에게 부탁하라 그들이 또 다른 사람들을 가르칠 수 있으리라/ 
+                        너는 그리스도 예수의 좋은 병사로 나와 함께 고난을 받으라”(딤후2:1-3) </p>
+                </div>
+            </div>
+
+            <div class="aba-popup-lower">
+                <div class="aba-popup-left-section">
+                    <p>아바성경학교의 목표</p>
+                </div>
+                <div class="aba-popup-body">
+                    <p>사도바울이 순교직전 영적 아들인 디모데에게 부탁한 딤후 2:1-3의 말씀을 토대로 한 아바성경학교 훈련 목표는 다음과 같습니다.<br>
+                        1.	예수님의 좋은 병사가 되자.<br>
+                        2.	제자 양육이 가능한 좋은 선생이 되자.<br>
+                        3.	부르심에 합당한 성도가 되자(엡 4:1-4)</p>
+                </div>
+            </div>
+
+            <div class="aba-popup-lower aba-popup-section-last">
+                <div class="aba-popup-left-section">
+                    <p>입학 및 수료 회비</p>
+                </div>
+                <div class="aba-popup-body">
+                    <p>1. 소정의 입학원서를 작성한 후, 입학담당자에게 제출한다.<br>
+                       2. 입학담당자와 상담 후 반을 배정 받는다.<br>
+                       3. 기본과정(아바 1-9학기)을 마친 분에게는 수료패를 수여한다.<br>
+                       4. 회비는 월1만원으로, 분기별 3만원을 온라인 입금한다.</p></br>
+
+                    <p>입학 담당자 : 정영희 권사(010-3281-4810)</p>
+                </div>
+            </div>
+
+            <!-- 두번째 popup content -->
+
+            <div class="aba-popup-image-header">
+                <h3 class="aba-popup-title">예수님과 함께 가는<br>신나는 아바여행~~</h3>
+            </div>
+
+            <div class="aba-popup-lower">
+                <div class="aba-popup-left-section">
+                    <p>학습과정 소개</p></br>기본과정반시간
+                    <table class="aba-schedule-table">
+                        <tbody>
+                            <tr>
+                                <td rowspan="2">화</td>
+                                <td>오전 10:00</td>
+                            </tr>
+                            <tr>
+                                <td>저녁 7:30</td>
+                            </tr>
+                            <tr>
+                                <td>목</td>
+                                <td>저녁 7:30</td>
+                            </tr>
+                            <tr>
+                                <td rowspan="2">금</td>
+                                <td>오전 10:00</td>
+                            </tr>
+                            <tr>
+                                <td>저녁 7:30</td>
+                            </tr>
+                            <tr>
+                                <td>토</td>
+                                <td>오전 10:00</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+                <div class="aba-popup-body">
+                    <p>아바성경학교 학습과정은 크게 세 과정으로 이루어져 있습니다.</br>
+                        1.	기본과정(Basic Stage): 이는 기독교의 기본이 되는 조직신학을 공부함으로써 “하나님을 아는 지식”을 갖게 되는 과정입니다. 이 과정에서 공부할 과목은 총 9과목으로 다음과 같습니다.</br>
+                        1)	1학기: 하늘의 조직</br>
+                        2)	2학기: 인간론</br>
+                        3)	3학기: 창조론</br>
+                        4)	4학기: 종말론</br>
+                        5)	5학기: 구원론</br>
+                        6)	6학기: 에베소서</br>
+                        7)	7학기: 이슬람</br>
+                        8)	8학기: 이스라엘의 7절기</br>
+                        9)	9학기: 기독론             소요기간: 약 2.5년</br>
+                        </br>
+                        2.	연구과정(Research Course)은 다시 두 단계로 나뉩니다.</br>
+                        1)	연구1단계(R1) 주제: ‘영적 분별력을 갖자’(롬 12:2), 
+                        1,2,3,4,5,6차 일본세미나, 일본시리즈</br>
+                        2)	연구2단계(R2) 주제: ‘예수님의 모델을 따라가자’(빌 2:5-6) 
+                        빌립보서(전,후), 산상수훈, 야고보서, 바울시리즈 등.</br>
+                        3)	연구3단계(R3): 주제: ‘예수님을 힘써 알자’(호 6:3) 
+                        이스라엘 시리즈, 하나님을 아는 지식 시리즈, 엘로힘 시리즈</br>
+                        3.	심화과정(Advanced Research Course) 주제: ‘네 신을 벗어라’(출 3:5) 
+                        요한복음, 누가복음, 로마서, 사도행전, 요한계시록 중 택1</p>
+                </div>
+            </div>
+
+            <div class="aba-popup-lower">
+                    <div class="aba-popup-left-section">
+                    <p>학습방법</p>
+                    </div>
+                    <div class="aba-popup-body">
+                        <p>1. 먼저 유튜브에서 해당 강의 동영상을 다운받아 듣고,</br>
+                            2. 강의 내용을 녹취 수준으로 노트에 쓰고,</br>
+                            3. 정해진 시간에 단톡방에 설치된 팀링크에 들어와 리더의 인도에 따라 문제를 풀어가면서 강의내용을 이해하도록 한다.</br>
+                            4. 팀링크에서 수업할 때, 발표할 때는 “음소거 해제”를 누른 후 말을 하고, 발언 후에는 꼭 “음소거”를 눌러 소음이 들어가지 않게 한다.</br>
+                            5. 수업 5분 전까지는 꼭 팀링크에 들어오고, 수업 후에는 “회의를 종료합니다”를 누르고 팀링크에서 나간다.</br></p>
+                    </div>
+            </div>
+
+            <!-- close button -->
+
+                <div class="aba-popup-footer">
+                    <button class="aba-popup-close-btn" onclick="closeABASchoolPopup()">닫기</button>
+                </div>
+            </div>
+        </div>
     </div>
 </body>
 </html>

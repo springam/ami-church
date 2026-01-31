@@ -6,9 +6,9 @@
        1. 페이지 설정 - 각 메뉴와 HTML 파일 매핑
        ======================================== */
     const pageFiles = {
-        koreanworship: 'pages/korean-worship.html',
-        aba: 'pages/aba.html',
-        avs: 'pages/avs.html'
+        koreanworship: 'pages/korean-worship.html?v=202601301',
+        aba: 'pages/aba.html?v=202601301',
+        avs: 'pages/avs.html?v=202601301'
     };
 
     /* ========================================

@@ -382,17 +382,24 @@ function applyFilters() {
  */
 function renderTable() {
     const tbody = document.getElementById('videoTableBody');
-    
+
     if (filteredVideos.length === 0) {
         showEmptyState('등록된 동영상이 없습니다.');
         return;
     }
-    
-    const startIndex = (currentPage - 1) * itemsPerPage;
-    const endIndex = startIndex + itemsPerPage;
-    const pageVideos = filteredVideos.slice(startIndex, endIndex);
-    
-    tbody.innerHTML = pageVideos.map((video, index) => `
+
+    // ⭐ 순서 변경 모드일 때는 전체 리스트 표시
+    let displayVideos, startIndex;
+    if (isOrderMode) {
+        displayVideos = filteredVideos;
+        startIndex = 0;
+    } else {
+        startIndex = (currentPage - 1) * itemsPerPage;
+        const endIndex = startIndex + itemsPerPage;
+        displayVideos = filteredVideos.slice(startIndex, endIndex);
+    }
+
+    tbody.innerHTML = displayVideos.map((video, index) => `
         <tr data-video-id="${video.id}" ${isOrderMode ? 'class="draggable"' : ''}>
             <td class="order-column">
                 ${isOrderMode ? `
@@ -431,13 +438,13 @@ function renderTable() {
             </td>
         </tr>
     `).join('');
-    
+
     if (!isOrderMode) {
         document.querySelectorAll('.status-select').forEach(select => {
             select.addEventListener('change', handleStatusChange);
         });
     }
-    
+
     if (isOrderMode) {
         initSortable();
     }
@@ -550,33 +557,33 @@ function hideSaveOrderModal() {
 async function saveOrder() {
     try {
         console.log('💾 순서 변경 저장 시작...');
-        
+
         const tbody = document.getElementById('videoTableBody');
         const rows = Array.from(tbody.querySelectorAll('tr'));
         const newOrder = rows.map(row => row.dataset.videoId);
-        
+
         console.log('📋 새로운 순서:', newOrder);
-        
+
         const batch = writeBatch(db);
-        
+
+        // ⭐ 전체 리스트 기준으로 orderNumber 설정
         newOrder.forEach((videoId, index) => {
             const videoRef = doc(db, 'video', videoId);
-            const startIndex = (currentPage - 1) * itemsPerPage;
-            batch.update(videoRef, { 
-                orderNumber: startIndex + index + 1 
+            batch.update(videoRef, {
+                orderNumber: index + 1
             });
         });
-        
+
         await batch.commit();
-        
+
         console.log('✅ 순서 변경 저장 완료');
-        
+
         hideSaveOrderModal();
         toggleOrderMode();
         await fetchVideos();
-        
+
         alert('순서가 저장되었습니다.');
-        
+
     } catch (error) {
         console.error('❌ 순서 저장 오류:', error);
         hideSaveOrderModal();
@@ -606,56 +613,63 @@ function showEmptyState(message) {
  */
 function renderPagination() {
     const pagination = document.getElementById('pagination');
+
+    // ⭐ 순서 변경 모드일 때는 페이지네이션 숨김
+    if (isOrderMode) {
+        pagination.innerHTML = '';
+        return;
+    }
+
     const totalPages = Math.ceil(filteredVideos.length / itemsPerPage);
-    
+
     if (totalPages <= 1) {
         pagination.innerHTML = '';
         return;
     }
-    
+
     let html = '';
-    
+
     html += `
-        <button class="pagination-btn pagination-arrow" onclick="changePage(1)" ${currentPage === 1 || isOrderMode ? 'disabled' : ''}>
+        <button class="pagination-btn pagination-arrow" onclick="changePage(1)" ${currentPage === 1 ? 'disabled' : ''}>
             <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
                 <path d="M12 4L8 8L12 12M8 4L4 8L8 12" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
             </svg>
         </button>
-        <button class="pagination-btn pagination-arrow" onclick="changePage(${currentPage - 1})" ${currentPage === 1 || isOrderMode ? 'disabled' : ''}>
+        <button class="pagination-btn pagination-arrow" onclick="changePage(${currentPage - 1})" ${currentPage === 1 ? 'disabled' : ''}>
             <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
                 <path d="M10 4L6 8L10 12" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
             </svg>
         </button>
     `;
-    
+
     let startPage = Math.max(1, currentPage - 2);
     let endPage = Math.min(totalPages, startPage + 4);
-    
+
     if (endPage - startPage < 4) {
         startPage = Math.max(1, endPage - 4);
     }
-    
+
     for (let i = startPage; i <= endPage; i++) {
         html += `
-            <button class="pagination-btn ${i === currentPage ? 'active' : ''}" onclick="changePage(${i})" ${isOrderMode ? 'disabled' : ''}>
+            <button class="pagination-btn ${i === currentPage ? 'active' : ''}" onclick="changePage(${i})">
                 ${i}
             </button>
         `;
     }
-    
+
     html += `
-        <button class="pagination-btn pagination-arrow" onclick="changePage(${currentPage + 1})" ${currentPage === totalPages || isOrderMode ? 'disabled' : ''}>
+        <button class="pagination-btn pagination-arrow" onclick="changePage(${currentPage + 1})" ${currentPage === totalPages ? 'disabled' : ''}>
             <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
                 <path d="M6 4L10 8L6 12" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
             </svg>
         </button>
-        <button class="pagination-btn pagination-arrow" onclick="changePage(${totalPages})" ${currentPage === totalPages || isOrderMode ? 'disabled' : ''}>
+        <button class="pagination-btn pagination-arrow" onclick="changePage(${totalPages})" ${currentPage === totalPages ? 'disabled' : ''}>
             <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
                 <path d="M4 4L8 8L4 12M8 4L12 8L8 12" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
             </svg>
         </button>
     `;
-    
+
     pagination.innerHTML = html;
 }
 
@@ -664,12 +678,12 @@ function renderPagination() {
  */
 window.changePage = function(page) {
     const totalPages = Math.ceil(filteredVideos.length / itemsPerPage);
-    if (page < 1 || page > totalPages || isOrderMode) return;
-    
+    if (page < 1 || page > totalPages) return;
+
     currentPage = page;
     renderTable();
     renderPagination();
-    
+
     window.scrollTo({ top: 0, behavior: 'smooth' });
 };
 
