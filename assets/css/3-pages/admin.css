@@ -593,7 +593,7 @@
 }
 
 .form-label {
-    flex: 130px;
+    flex: 0 0 130px;
     display: block;
     font-size: 14px;
     font-style: normal;

@@ -13,7 +13,7 @@
     font-size: 23px;
     font-style: normal;
     font-weight: 400;
-    line-height: 42px;
+    line-height: 36px;
     margin-bottom: 40px;
     color: #182B8C;
 }
@@ -65,6 +65,15 @@
         font-size: 31px;
         line-height: 47px;
         margin: 40px 0 30px 0;
+    }
+
+    .greeting-text-first-line {
+        font-size: 18px;
+        font-style: normal;
+        font-weight: 400;
+        line-height: 30px;
+        margin-bottom: 40px;
+        color: #182B8C;
     }
 
     .greeting-text {

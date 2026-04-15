@@ -215,6 +215,15 @@
         document.querySelectorAll(`[data-page="${page}"]`).forEach(link => {
             link.classList.add('active');
         });
+
+        // 모바일 lnb-toggle 텍스트 업데이트
+        const toggle = document.querySelector('.lnb-toggle');
+        if (toggle) {
+            const activeLink = document.querySelector('.lnb a.active');
+            if (activeLink) {
+                toggle.querySelector('span').textContent = activeLink.textContent;
+            }
+        }
     }
 
     /* ========================================

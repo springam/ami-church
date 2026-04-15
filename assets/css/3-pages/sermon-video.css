@@ -24,7 +24,7 @@
 }
 
 .worship-header h2 {
-    font-size: 62px;
+    font-size: 36px;
     color: #000;
     margin-bottom: 60px;
 }
@@ -726,7 +726,7 @@
    ========================================== */
 @media (max-width: 768px) {
     .worship-header h2 {
-        font-size: 42px;
+        font-size: 36px;
         font-style: normal;
         font-weight: 700;
         line-height: 57px;

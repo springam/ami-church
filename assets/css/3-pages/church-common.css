@@ -147,7 +147,7 @@
         padding: 0 20px;
     }
     
-    .content-area h2 {
+    /* .content-area h2 {
         font-size: 22px;
         font-style: normal;
         font-weight: 700;
@@ -155,6 +155,14 @@
         padding: 0;
         margin-bottom: 16px;
         text-align: left;
+    } */
+
+    .content-area h2 {
+        font-size: 36px;
+        font-style: normal;
+        font-weight: 700;
+        line-height: 57px;
+        margin-bottom: 40px;
     }
 
     /* Breadcrumb */
