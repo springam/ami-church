@@ -4,25 +4,25 @@
 .greeting-quote {
     color: #182B8C;
     margin: 60px 0 10px 0;
-    font-size: 32px;
+    font-size: 42px;
     font-weight: 700;
-    line-height: 44px;
+    line-height: 57px;
 }
 
 .greeting-text-first-line {
-    font-size: 18px;
+    font-size: 23px;
     font-style: normal;
     font-weight: 400;
-    line-height: 32px; 
+    line-height: 42px;
     margin-bottom: 40px;
     color: #182B8C;
 }
 
 .greeting-text {
-    font-size: 20px;
+    font-size: 26px;
     font-style: normal;
     font-weight: 400;
-    line-height: 32px; 
+    line-height: 42px;
     margin-bottom: 40px;
     color: #000;
 }
@@ -43,7 +43,7 @@
 }
 
 .signature-name {
-    font-size: 32px;
+    font-size: 42px;
     font-weight: 700;
     color: #000;
     margin-bottom: 10px;
@@ -51,10 +51,10 @@
 
 .signature-title {
     font-family: Pretendard;
-    font-size: 24px;
+    font-size: 31px;
     font-style: normal;
     font-weight: 700;
-    line-height: 36px;
+    line-height: 47px;
 }
 
 /* ==========================================
@@ -62,14 +62,14 @@
    ========================================== */
 @media (max-width: 768px) {
     .greeting-quote {
-        font-size: 24px;
-        line-height: 36px;
+        font-size: 31px;
+        line-height: 47px;
         margin: 40px 0 30px 0;
     }
 
     .greeting-text {
-        font-size: 16px;
-        line-height: 28px;
+        font-size: 21px;
+        line-height: 36px;
         margin-bottom: 20px;
     }
 
@@ -83,11 +83,11 @@
     }
 
     .signature-name {
-        font-size: 24px;
+        font-size: 31px;
     }
 
     .signature-title {
-        font-size: 20px;
-        line-height: 30px;
+        font-size: 26px;
+        line-height: 39px;
     }
 }

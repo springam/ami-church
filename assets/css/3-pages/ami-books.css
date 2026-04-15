@@ -1,0 +1,126 @@
+/* ==========================================
+   AMI 도서 페이지
+   ========================================== */
+
+.books-container {
+    max-width: 900px;
+}
+
+/* 구매 안내 섹션 */
+.books-section-title {
+    font-size: 20px;
+    font-weight: 700;
+    color: #222;
+    padding-left: 12px;
+    border-left: 4px solid #E87722;
+    margin-bottom: 16px;
+}
+
+.books-intro {
+    font-size: 14px;
+    color: #444;
+    margin-bottom: 12px;
+}
+
+.books-purchase-details {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    margin-bottom: 40px;
+}
+
+.books-purchase-row {
+    font-size: 14px;
+    color: #444;
+    display: flex;
+    gap: 12px;
+}
+
+.books-purchase-label {
+    font-weight: 600;
+    min-width: 60px;
+}
+
+.books-purchase-value {
+    color: #555;
+}
+
+/* 도서 목록 */
+.book-list {
+    display: flex;
+    flex-direction: column;
+}
+
+.book-item {
+    display: flex;
+    gap: 28px;
+    padding: 24px 0;
+    border-bottom: 1px solid #ddd;
+}
+
+.book-item:first-child {
+    border-top: 1px solid #ddd;
+}
+
+.book-cover {
+    width: 110px;
+    flex-shrink: 0;
+}
+
+.book-cover img {
+    width: 100%;
+    display: block;
+    object-fit: cover;
+}
+
+.book-cover-placeholder {
+    width: 110px;
+    height: 155px;
+    background: #e8e8e8;
+}
+
+.book-info {
+    flex: 1;
+    min-width: 0;
+}
+
+.book-title {
+    font-size: 17px;
+    font-weight: 700;
+    color: #222;
+    margin-bottom: 12px;
+    line-height: 1.4;
+}
+
+.book-description {
+    font-size: 14px;
+    color: #555;
+    line-height: 1.8;
+}
+
+.books-empty {
+    color: #888;
+    font-size: 14px;
+    padding: 40px 0;
+    text-align: center;
+}
+
+/* 모바일 */
+@media (max-width: 600px) {
+    .book-item {
+        gap: 16px;
+    }
+
+    .book-cover {
+        width: 80px;
+    }
+
+    .book-cover-placeholder {
+        width: 80px;
+        height: 113px;
+    }
+
+    .book-title {
+        font-size: 15px;
+    }
+}

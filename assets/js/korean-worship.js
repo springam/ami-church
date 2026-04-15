@@ -34,6 +34,7 @@ let currentPage = 1;
 const itemsPerPage = 9;
 let totalPages = 1;
 let allVideos = [];
+const videosCache = {}; // { subCategory: [...] } — 탭별 캐시
 let currentVideoIndex = -1;
 
 // ⭐ subCategory별 detailCategory 설정 (DB에서 로드)
@@ -193,69 +194,66 @@ function formatDate(dateData, datePrecision) {
 async function fetchVideos(subCategory, detailCategory = null) {
     try {
         console.log('=== 데이터 가져오기 시작 ===');
-        
-        const videosRef = collection(db, 'video');
-        
-        // category만 필터링
-        let q = query(
-            videosRef,
-            where('category', '==', 'sunday')
-        );
-        
-        const querySnapshot = await getDocs(q);
-        const videos = [];
-        
-        querySnapshot.forEach((doc) => {
-            const data = doc.data();
-            
-            // 클라이언트 측 필터링
-            if (data.subCategory !== subCategory) return;
-            if (data.status !== 'active') return;
-            if (detailCategory && data.detailCategory !== detailCategory) return;
-            
-            videos.push({
-                id: doc.id,
-                title: data.title || '제목 없음',
-                date: formatDate(data.date, data.datePrecision),
-                dateObj: data.date,
-                datePrecision: data.datePrecision,
-                category: data.category,
-                subCategory: data.subCategory || '',
-                detailCategory: data.detailCategory || '',
-                preacher: data.preacher || '',
-                description: data.description || '',
-                thumbnail: data.thumbnail || 'assets/images/thumbnails/default-thumbnail.jpg',
-                videoUrl: data.videoUrl || '',
-                pdfUrl: data.pdfUrl || '',           // ⭐ PDF URL 추가
-                pdfFileName: data.pdfFileName || '', // ⭐ PDF 파일명 추가
-                type: data.type || 'video',          // ⭐ 콘텐츠 타입 추가
-                orderNumber: data.orderNumber || 999999
+
+        // 캐시가 없으면 DB에서 조회
+        if (!videosCache[subCategory]) {
+            const videosRef = collection(db, 'video');
+            const q = query(
+                videosRef,
+                where('category', '==', 'sunday'),
+                where('subCategory', '==', subCategory),
+                where('status', '==', 'active')
+            );
+            const querySnapshot = await getDocs(q);
+            const videos = [];
+
+            querySnapshot.forEach((doc) => {
+                const data = doc.data();
+                videos.push({
+                    id: doc.id,
+                    title: data.title || '제목 없음',
+                    date: formatDate(data.date, data.datePrecision),
+                    dateObj: data.date,
+                    datePrecision: data.datePrecision,
+                    category: data.category,
+                    subCategory: data.subCategory || '',
+                    detailCategory: data.detailCategory || '',
+                    preacher: data.preacher || '',
+                    description: data.description || '',
+                    thumbnail: data.thumbnail || 'assets/images/thumbnails/default-thumbnail.jpg',
+                    videoUrl: data.videoUrl || '',
+                    pdfUrl: data.pdfUrl || '',
+                    pdfFileName: data.pdfFileName || '',
+                    type: data.type || 'video',
+                    orderNumber: data.orderNumber || 999999
+                });
             });
-        });
 
-        // ⭐ orderNumber 기준 정렬, 없으면 날짜 역순
-        // 이번주 설교, 목회자 컬럼은 내림차순(높은 숫자 → 낮은 숫자), 나머지는 오름차순
-        videos.sort((a, b) => {
-            if (a.orderNumber !== b.orderNumber) {
-                // 이번주 설교, 목회자 컬럼인 경우 내림차순
-                if (subCategory === 'weekly' || subCategory === 'column') {
-                    return b.orderNumber - a.orderNumber;
+            // ⭐ orderNumber 기준 정렬 (이번주 설교·목회자 칼럼은 내림차순)
+            videos.sort((a, b) => {
+                if (a.orderNumber !== b.orderNumber) {
+                    if (subCategory === 'weekly' || subCategory === 'column') {
+                        return b.orderNumber - a.orderNumber;
+                    }
+                    return a.orderNumber - b.orderNumber;
                 }
-                // 나머지는 오름차순
-                return a.orderNumber - b.orderNumber;
-            }
+                const dateA = a.dateObj?.toDate ? a.dateObj.toDate() : new Date(0);
+                const dateB = b.dateObj?.toDate ? b.dateObj.toDate() : new Date(0);
+                return dateB - dateA;
+            });
 
-            // 날짜 비교 (Timestamp)
-            const dateA = a.dateObj?.toDate ? a.dateObj.toDate() : new Date(0);
-            const dateB = b.dateObj?.toDate ? b.dateObj.toDate() : new Date(0);
-            return dateB - dateA;
-        });
-        
-        console.log('8. 최종 변환된 비디오 개수:', videos.length);
+            videosCache[subCategory] = videos;
+        }
+
+        // 캐시에서 detailCategory 필터링
+        const cached = videosCache[subCategory];
+        const result = detailCategory ? cached.filter(v => v.detailCategory === detailCategory) : cached;
+
+        console.log('최종 변환된 비디오 개수:', result.length);
         console.log('=== 데이터 가져오기 완료 ===\n');
-        
-        return videos;
-        
+
+        return result;
+
     } catch (error) {
         console.error('❌ 오류 발생:', error);
         return [];
@@ -699,6 +697,7 @@ export async function initKoreanWorship() {
     currentDetailCategory = null;
     currentPage = 1;
     allVideos = [];
+    for (const key of Object.keys(videosCache)) delete videosCache[key];
     currentVideoIndex = -1;
     console.log('✅ 전역 변수 초기화 완료');
 

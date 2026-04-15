@@ -24,7 +24,7 @@
 }
 
 .worship-header h2 {
-    font-size: 48px;
+    font-size: 62px;
     color: #000;
     margin-bottom: 60px;
 }
@@ -78,10 +78,10 @@
 
 .worship-tab {
     font-family: Pretendard;
-    font-size: 18px;
+    font-size: 23px;
     font-style: normal;
     font-weight: 500;
-    line-height: 28px;
+    line-height: 36px;
     color: #000; 
     cursor: pointer;
     transition: 0.3s;
@@ -93,7 +93,7 @@
 }
 
 .worship-tab.active {
-    font-size: 18px;
+    font-size: 23px;
     font-style: normal;
     font-weight: 700;
     /* line-height: 28px; */
@@ -124,10 +124,10 @@
 
 .sub-menu-item {
     background: #fff;
-    font-size: 16px;
+    font-size: 21px;
     font-style: normal;
     font-weight: 400;
-    line-height: 24px;
+    line-height: 31px;
     color: #666;
     cursor: pointer;
     transition: 0.3s;
@@ -189,10 +189,10 @@
 }
 
 .video-title {
-    font-size: 20px;
+    font-size: 26px;
     font-style: normal;
     font-weight: 400;
-    line-height: 32px;
+    line-height: 42px;
     color: #000;
     margin-bottom: 12px;
     display: -webkit-box;
@@ -210,10 +210,10 @@
 
 .video-description {
     display: inline;
-    font-size: 14px;
+    font-size: 18px;
     font-style: normal;
     font-weight: 400;
-    line-height: 24px; 
+    line-height: 31px; 
     color: #333;
     background: #E3DFF5;
     border-radius: 4px;
@@ -235,10 +235,10 @@
 }
 
 .video-date {
-    font-size: 16px;
+    font-size: 21px;
     font-style: normal;
     font-weight: 400;
-    line-height: 24px;
+    line-height: 31px;
     color: #767676;
 }
 
@@ -338,7 +338,7 @@
 }
 
 .video-detail-title {
-    font-size: 36px;
+    font-size: 47px;
     font-weight: 700;
     color: #1a1a1a;
     margin-bottom: 16px;
@@ -346,7 +346,7 @@
 }
 
 .video-detail-meta {
-    font-size: 16px;
+    font-size: 21px;
     color: #666;
     display: flex;
     gap: 20px;
@@ -404,7 +404,7 @@
 }
 
 .video-nav-label {
-    font-size: 16px;
+    font-size: 21px;
     font-weight: 400;
     color: #000;
     display: flex;
@@ -418,7 +418,7 @@
 }
 
 .video-nav-title {
-    font-size: 18px;
+    font-size: 23px;
     font-weight: 700;
     color: #959595;
     display: -webkit-box;
@@ -456,7 +456,7 @@
     color: white;
     border: none;
     border-radius: 6px;
-    font-size: 16px;
+    font-size: 21px;
     font-weight: 500;
     cursor: pointer;
     transition: all 0.3s ease;
@@ -587,7 +587,7 @@
 }
 
 .column-number {
-    font-size: 18px;
+    font-size: 23px;
     font-weight: 400;
     color: #000;
     display: inline-block  ;
@@ -597,7 +597,7 @@
 
 .column-title {
     flex: 1;
-    font-size: 18px;
+    font-size: 23px;
     font-weight: 400;
     color: #000;
     line-height: 1.5;
@@ -612,7 +612,7 @@
     color: #000;
     border: 1px solid #DFDFDF;
     border-radius: 4px;
-    font-size: 16px;
+    font-size: 21px;
     font-weight: 500;
     cursor: pointer;
     transition: all 0.3s ease;
@@ -726,10 +726,10 @@
    ========================================== */
 @media (max-width: 768px) {
     .worship-header h2 {
-        font-size: 32px;
+        font-size: 42px;
         font-style: normal;
         font-weight: 700;
-        line-height: 44px;
+        line-height: 57px;
         margin-bottom: 40px;
     }
     
@@ -740,18 +740,18 @@
     }
     
     .worship-tab {
-        font-size: 14px;
+        font-size: 18px;
         font-style: normal;
         font-weight: 500;
-        line-height: 24px;
+        line-height: 31px;
         padding: 0;
     }
 
     .worship-tab.active {
-        font-size: 14px;
+        font-size: 18px;
         font-style: normal;
         font-weight: 500;
-        line-height: 24px;
+        line-height: 31px;
         padding: 0;
         color: #182B8C;
     }
@@ -767,18 +767,18 @@
     }
 
     .video-title {
-        font-size: 16px;
-        line-height: 24px;
+        font-size: 21px;
+        line-height: 31px;
     }
 
     .video-description {
-        font-size: 12px;
-        line-height: 16px;
+        font-size: 16px;
+        line-height: 21px;
     }
 
     .video-date {
-        font-size: 12px;
-        line-height: 16px;
+        font-size: 16px;
+        line-height: 21px;
         color: #767676;
     }
     
@@ -787,10 +787,10 @@
     }
 
     .video-detail-meta {
-        font-size: 14px;
+        font-size: 18px;
         font-style: normal;
         font-weight: 400;
-        line-height: 24px;
+        line-height: 31px;
     }
 
     .video-detail-player {
@@ -847,10 +847,10 @@
     }
 
     .video-nav-label {
-        font-size: 12px;
+        font-size: 16px;
         font-style: normal;
         font-weight: 400;
-        line-height: 16px;
+        line-height: 21px;
     }
 
     .video-nav-label svg {
@@ -859,10 +859,10 @@
 
     .video-nav-title {
         padding: 0;
-        font-size: 16px;
+        font-size: 21px;
         font-style: normal;
         font-weight: 700;
-        line-height: 24px;
+        line-height: 31px;
     }
 
     .video-nav-card.next .video-nav-label {
@@ -881,10 +881,10 @@
     .back-to-list {
         border-radius: 8px;
         padding: 16px 24px;
-        font-size: 16px;
+        font-size: 21px;
         font-style: normal;
         font-weight: 400;
-        line-height: 24px;
+        line-height: 31px;
     }
     
     .back-to-list svg {
@@ -908,7 +908,7 @@
     }
 
     .column-number {
-        font-size: 14px;
+        font-size: 18px;
     }
 
     .column-download-btn {
@@ -916,7 +916,7 @@
         /* align-items: center; */
         gap: 4px;
         padding: 4px 8px;
-        font-size: 14px;
+        font-size: 18px;
     }
 
     
@@ -930,7 +930,7 @@
     }
     
     .sub-menu-item {
-        font-size: 13px;
+        font-size: 17px;
         padding: 4px 8px;
     }
     
@@ -965,19 +965,19 @@
     }
 
     .video-card-title {
-        font-size: 16px; 
+        font-size: 21px;
     }
-    
+
     .video-card.featured .video-card-title {
-        font-size: 16px; 
+        font-size: 21px;
     }
 
     .video-card-meta {
-        font-size: 12px;
+        font-size: 16px;
     }
     
     .column-title {
-        font-size: 14px;
+        font-size: 18px;
         overflow: hidden;
         text-overflow: ellipsis;
         white-space: nowrap;

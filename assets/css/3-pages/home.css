@@ -36,9 +36,9 @@
 }
 
 .home .hero h1 {
-    font-size: 72px;
+    font-size: 94px;
     font-weight: 700;
-    line-height: 92px;
+    line-height: 120px;
     position: absolute;
     margin-top: 0;
     top: 50%;
@@ -89,9 +89,9 @@
 }
 
 .section-title {
-    font-size: 48px;
+    font-size: 62px;
     font-weight: 700;
-    line-height: 56px;
+    line-height: 73px;
     text-align: center;
     color: #fff;
     width: 1260px;
@@ -112,7 +112,7 @@
 }
 
 .media-container-title {
-    font-size: 24px;
+    font-size: 31px;
     font-weight: 400;
     text-align: center;
     color: #fff;
@@ -157,10 +157,10 @@
     }
     
     .home .hero h1 {
-        font-size: 48px;
+        font-size: 62px;
         font-style: normal;
         font-weight: 700;
-        line-height: 64px;
+        line-height: 83px;
     }
     
     .hero-indicators {
@@ -174,10 +174,10 @@
     }
     
     .section-title {
-        font-size: 32px;
+        font-size: 42px;
         font-style: normal;
         font-weight: 700;
-        line-height: 44px;
+        line-height: 57px;
         width: 100%;
         padding: 0 20px;
     }

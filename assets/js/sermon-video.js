@@ -8,7 +8,8 @@
     const pageFiles = {
         koreanworship: 'pages/korean-worship.html?v=202601301',
         aba: 'pages/aba.html?v=202601301',
-        avs: 'pages/avs.html?v=202601301'
+        avs: 'pages/avs.html?v=202601301',
+        amibooks: 'pages/ami-books.html?v=202604031000'
     };
 
     /* ========================================
@@ -44,16 +45,20 @@
         // 페이지별 스크립트 설정
         const scriptConfig = {
             koreanworship: {
-                src: '/assets/js/korean-worship.js?v=202512071140',
+                src: '/assets/js/korean-worship.js?v=202602021000',
                 initFunction: 'initKoreanWorship'
             },
             aba: {
-                src: '/assets/js/aba.js?v=202512071140',
+                src: '/assets/js/aba.js?v=202602021000',
                 initFunction: 'initABA'
             },
             avs: {
-                src: '/assets/js/avs.js?v=202512071140',
+                src: '/assets/js/avs.js?v=202602021000',
                 initFunction: 'initAVS'
+            },
+            amibooks: {
+                src: '/assets/js/ami-books.js?v=202604031000',
+                initFunction: 'initAmiBooks'
             }
         };
 

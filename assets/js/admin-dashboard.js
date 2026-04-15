@@ -1,6 +1,6 @@
 // admin-dashboard.js - 모달 기반으로 변경
 import { initializeApp } from "https://www.gstatic.com/firebasejs/12.4.0/firebase-app.js";
-import { getFirestore, collection, getDocs, updateDoc, deleteDoc, doc, query, orderBy, writeBatch } from "https://www.gstatic.com/firebasejs/12.4.0/firebase-firestore.js";
+import { getFirestore, collection, getDocs, updateDoc, deleteDoc, doc, query, where, orderBy, writeBatch } from "https://www.gstatic.com/firebasejs/12.4.0/firebase-firestore.js";
 import { checkAdminSession, logout } from './admin-auth.js';
 
 console.log('📊 admin-dashboard.js 로드됨');
@@ -79,7 +79,7 @@ async function loadDetailCategories() {
         console.log('📂 detailCategories 로드 시작...');
 
         const categoriesRef = collection(db, 'detailCategories');
-        const querySnapshot = await getDocs(categoriesRef);
+        const querySnapshot = await getDocs(query(categoriesRef, where('isActive', '==', true)));
 
         // 초기화
         categoryData.sunday.detailCategories = {
@@ -100,8 +100,6 @@ async function loadDetailCategories() {
 
         querySnapshot.forEach((doc) => {
             const data = doc.data();
-            if (!data.isActive) return;
-
             const subCategory = data.subCategory;
             const categoryName = data.categoryName;
 

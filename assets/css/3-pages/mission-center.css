@@ -19,24 +19,24 @@
 .intro-quote {
     color: #182B8C;
     margin: 30px 0 40px 0;
-    font-size: 32px;
-    font-weight: 700; 
+    font-size: 42px;
+    font-weight: 700;
     line-height: 1.5;
 }
 
 .intro-text-first-line {
-    font-size: 20px;
+    font-size: 26px;
     font-weight: 400;
-    line-height: 1.8; 
-    color: #000; 
+    line-height: 1.8;
+    color: #000;
     margin-bottom: 20px;
 }
 
 .intro-text {
-    font-size: 20px;
+    font-size: 26px;
     font-weight: 400;
-    line-height: 1.8; 
-    color: #000; 
+    line-height: 1.8;
+    color: #000;
     margin-bottom: 40px;
 }
 
@@ -50,10 +50,10 @@
 
 .intro-signature-title {
     display: flex;
-    font-size: 20px;
+    font-size: 26px;
     font-style: normal;
     font-weight: 700;
-    line-height: 32px;
+    line-height: 42px;
     align-items: flex-end;
     color: #000;
     margin-bottom: 0;
@@ -61,7 +61,7 @@
 }
 
 .intro-signature {
-    font-size: 32px;
+    font-size: 42px;
     font-style: normal;
     font-weight: 700;
     line-height: 1;
@@ -94,10 +94,10 @@
 }
 
 .vision-text-overlay p {
-    font-size: 20px;
+    font-size: 26px;
     font-style: normal;
     font-weight: 700;
-    line-height: 32px;
+    line-height: 42px;
     color: #fff;
     margin: 0;
 }
@@ -113,20 +113,20 @@
     } */
     
     .intro-quote {
-        font-size: 24px;
+        font-size: 31px;
         font-style: normal;
         font-weight: 700;
-        line-height: 36px; 
+        line-height: 47px;
         margin: 20px 0 24px 0;
-        padding: 0; 
+        padding: 0;
     }
-    
+
     .intro-text {
-        font-size: 16px;
+        font-size: 21px;
         font-style: normal;
         font-weight: 400;
-        line-height: 24px; 
-        padding: 0; 
+        line-height: 31px;
+        padding: 0;
     }
     
     .vision-image {
@@ -141,10 +141,10 @@
     }
 
     .vision-text-overlay p {
-        font-size: 14px;
+        font-size: 18px;
         font-style: normal;
         font-weight: 700;
-        line-height: 24px;
+        line-height: 31px;
         color: #fff;
         margin: 0;
     }

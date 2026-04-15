@@ -21,18 +21,18 @@
 }
 
 .title-main {
-    font-size: 32px;
+    font-size: 42px;
     font-style: normal;
     font-weight: 700;
-    line-height: 44px;
+    line-height: 57px;
     color: #000;
 }
 
 .title-sub {
-    font-size: 32px;
+    font-size: 42px;
     font-style: normal;
     font-weight: 700;
-    line-height: 44px;
+    line-height: 57px;
     color: #000;
 }
 
@@ -64,10 +64,10 @@
 }
 
 .card-label {
-    font-size: 14px;
+    font-size: 18px;
     font-style: normal;
     font-weight: 700;
-    line-height: 24px;
+    line-height: 31px;
     margin-bottom: 15px;
     border: 1px solid rgba(255, 255, 255, 0.20);
     border-radius: 20px;
@@ -76,7 +76,7 @@
 }
 
 .card-time {
-    font-size: 28px;
+    font-size: 36px;
     font-style: normal;
     font-weight: 700;
     margin-bottom: 8px;
@@ -84,7 +84,7 @@
 }
 
 .card-location {
-    font-size: 16px;
+    font-size: 21px;
     font-style: normal;
     font-weight: 500;
 }
@@ -96,7 +96,7 @@
 }
 
 .donation-section .donation-title h2{
-    font-size: 28px;
+    font-size: 36px;
     font-style: normal;
     font-weight: 700;
     color: #000;
@@ -157,7 +157,7 @@
 }
 
 .bank-text {
-    font-size: 24px;
+    font-size: 31px;
     font-style: normal;
     font-weight: 700;
     color: #000;
@@ -170,14 +170,14 @@
 }
 
 .holder-label {
-    font-size: 16px;
+    font-size: 21px;
     font-style: normal;
     font-weight: 400;
     color: #666;
 }
 
 .holder-name {
-    font-size: 16px;
+    font-size: 21px;
     font-style: normal;
     font-weight: 400;
     color: #666;
@@ -224,10 +224,10 @@
     
     .title-main,
     .title-sub {
-        font-size: 28px;
+        font-size: 36px;
         font-style: normal;
         font-weight: 700;
-        line-height: 40px;
+        line-height: 52px;
         color: #000;
     }
     
@@ -252,28 +252,28 @@
     }
     
     .card-label {
-        font-size: 12px;
+        font-size: 16px;
         font-style: normal;
         font-weight: 700;
-        line-height: 16px;
+        line-height: 21px;
         padding: 4px 14px;
         margin-bottom: 12px;
         border: 1px solid rgba(255,255,255,0.3);
     }
-    
+
     .card-time {
-        font-size: 22px;
+        font-size: 29px;
         font-style: normal;
         font-weight: 700;
-        line-height: 32px;
+        line-height: 42px;
         margin-bottom: 8px;
     }
-    
+
     .card-location {
-        font-size: 14px;
+        font-size: 18px;
         font-style: normal;
         font-weight: 500;
-        line-height: 24px;
+        line-height: 31px;
     }
     
     /* 헌금 안내 */
@@ -308,7 +308,7 @@
     }
     
     .donation-title > h2 {
-        font-size: 24px;
+        font-size: 31px;
         font-weight: 700;
         padding: 0;
         text-align: left;
@@ -333,10 +333,10 @@
     }
     
     .bank-text {
-        font-size: 18px;
+        font-size: 23px;
         font-style: normal;
         font-weight: 700;
-        line-height: 28px;
+        line-height: 36px;
     }
     
     .account-holder {
@@ -345,10 +345,10 @@
     
     .holder-label,
     .holder-name {
-        font-size: 14px;
+        font-size: 18px;
         font-style: normal;
         font-weight: 400;
-        line-height: 24px;
+        line-height: 31px;
     }
 
     /*  ami 이미지 */

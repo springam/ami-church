@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AMI 교회</title>
+    <link rel="stylesheet" href="assets/css/main.css">
+    <link rel="stylesheet" href="assets/css/3-pages/admin.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.min.css" />
+</head>
+<body>
+    <div class="admin-dashboard">
+        <!-- Header -->
+        <header class="admin-header">
+            <div class="admin-header-container">
+                <div class="admin-logo">
+                    <a href="index.html"><img src="assets/images/logo/logo-blue.png" alt="AMI 교회"></a>
+                </div>
+                <nav class="admin-tabs">
+                    <a href="admin-dashboard.html" class="admin-tab">동영상 목록</a>
+                    <a href="admin-add.html" class="admin-tab">동영상 추가</a>
+                    <a href="admin-books.html" class="admin-tab">도서 목록</a>
+                    <a href="admin-book-add.html" class="admin-tab active">도서 추가</a>
+                </nav>
+            </div>
+        </header>
+
+        <!-- Content -->
+        <main class="admin-content">
+            <h1 class="page-title" id="pageTitle">도서 추가하기</h1>
+
+            <form class="video-form" id="bookForm">
+                <div class="video-form-container">
+
+                    <div class="form-row">
+                        <label class="form-label">제목</label>
+                        <input
+                            type="text"
+                            class="form-field"
+                            id="bookTitle"
+                            placeholder="도서 제목을 입력하세요"
+                            required
+                        >
+                    </div>
+
+                    <div class="form-row">
+                        <label class="form-label">책 표지 이미지</label>
+                        <div style="flex: 1;">
+                            <input
+                                type="file"
+                                class="form-field"
+                                id="coverImageFile"
+                                accept="image/*"
+                                style="padding: 4px 16px;"
+                            >
+                            <!-- 업로드 진행 바 -->
+                            <div id="uploadProgress" style="margin-top: 8px; display: none;">
+                                <div style="background: #f0f0f0; border-radius: 4px; overflow: hidden;">
+                                    <div id="progressBar" style="height: 4px; background: #182B8C; width: 0%; transition: width 0.3s;"></div>
+                                </div>
+                                <div id="progressText" style="font-size: 12px; color: #666; margin-top: 4px;">업로드 중...</div>
+                            </div>
+                            <!-- 이미지 미리보기 -->
+                            <div id="imagePreview" style="margin-top: 12px; display: none;">
+                                <img id="previewImg" src="" alt="미리보기" style="max-width: 120px; max-height: 170px; object-fit: cover; border: 1px solid #ddd;">
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="form-row">
+                        <label class="form-label">설명</label>
+                        <textarea
+                            class="form-field"
+                            id="bookDescription"
+                            placeholder="도서 설명을 입력하세요"
+                            rows="6"
+                            style="resize: vertical;"
+                        ></textarea>
+                    </div>
+
+                </div>
+
+                <div class="add-buttons">
+                    <div class="form-actions">
+                        <button type="button" class="form-btn form-btn-cancel" id="cancelBtn">취소하기</button>
+                        <button type="submit" class="form-btn form-btn-submit" id="submitBtn">추가하기</button>
+                    </div>
+                </div>
+            </form>
+        </main>
+
+        <footer class="admin-add-footer">
+            © Copyrights 2025 AMI Missions International. All rights reserved.
+        </footer>
+    </div>
+
+    <!-- 취소 확인 모달 -->
+    <div class="cancel-modal" id="cancelModal">
+        <div class="modal-overlay"></div>
+        <div class="modal-content">
+            <button class="modal-close" id="modalClose">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
+                    <path d="M18 6L6 18M6 6L18 18" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+                </svg>
+            </button>
+            <div class="modal-body">
+                <p class="modal-text">작성중인 내용이 저장되지 않습니다.<br>목록으로 돌아가시겠습니까?</p>
+                <div class="modal-buttons">
+                    <button class="modal-btn modal-btn-confirm" id="confirmCancelBtn">취소하기</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script type="module" src="assets/js/admin-book-add.js"></script>
+</body>
+</html>

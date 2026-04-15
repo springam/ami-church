@@ -162,16 +162,16 @@
 
     .lnb a {
         display: block;
-        padding: 10px 16px;
+        padding: 6px 16px;
         color: #666;
-        font-size: 16px; 
-        font-weight: 500; 
+        font-size: 21px;
+        font-weight: 500;
         text-decoration: none;
-        transition: all 0.3s; 
+        transition: all 0.3s;
         cursor: pointer;
         border-radius: 8px;
-        height: 40px;
-        margin: 20px 0 10px 0; 
+        height: 44px;
+        margin: 20px 0 10px 0;
     }
 
     .lnb a:hover {
@@ -211,10 +211,10 @@
         padding: 16px 20px;
         background: rgba(0, 0, 0, 0.3);
         color: #fff;
-        font-size: 14px;
+        font-size: 18px;
         font-style: normal;
         font-weight: 700;
-        line-height: 20px;
+        line-height: 26px;
         cursor: pointer;
         width: 100%;
         border: none;
@@ -256,7 +256,7 @@
         display: block;
         padding: 16px 20px;
         color: #000;
-        font-size: 16px;
+        font-size: 21px;
         font-weight: 400;
         text-decoration: none;
         background: #fff;

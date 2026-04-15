@@ -28,7 +28,7 @@ header.menu-open {
    로고
    ========================================== */
 header .logo {
-    height: 40px;
+    height: 60px;
 }
 
 header .logo img {
@@ -53,7 +53,7 @@ header nav {
 .nav-link {
     color: #fff;
     text-decoration: none;
-    font-size: 18px;
+    font-size: 27px;
     font-weight: 500;
     transition: opacity 0.3s;
     display: block;
@@ -70,7 +70,7 @@ header nav {
     top: 100%;
     left: 50%;
     transform: translateX(-50%);
-    min-width: 200px;
+    min-width: 240px;
     background-color: rgba(255, 255, 255, 0.5);;
     /* box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15); */
     border-radius: 8px;
@@ -94,7 +94,7 @@ header nav {
     display: block;
     padding: 12px 24px;
     color: #333;
-    font-size: 15px;
+    font-size: 23px;
     font-weight: 400;
     text-decoration: none;
     transition: all 0.2s;
@@ -306,7 +306,7 @@ header nav {
     header {
         position: absolute;
         padding: 10px 20px;
-        height: 68px;
+        height: 88px;
         width: 100vw;
     }
     
@@ -317,8 +317,8 @@ header nav {
     }
 
     header .logo {
-        width: 71px;
-        height: 48px;
+        width: 107px;
+        height: 72px;
     }
     
     header .logo img {

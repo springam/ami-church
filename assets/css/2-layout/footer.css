@@ -47,10 +47,10 @@ footer {
 }
 
 .footer-info {
-    font-size: 16px;
+    font-size: 21px;
     font-style: normal;
     font-weight: 400;
-    line-height: 24px;
+    line-height: 31px;
     color: #000;
 }
 
@@ -66,12 +66,12 @@ footer {
 .footer-nav {
     display: flex;
     justify-content: flex-end;
-    gap: 80px;
+    gap: 65px;
 }
 
 .footer-nav-column h4 {
     color: #000;
-    font-size: 20px;
+    font-size: 26px;
     font-weight: 700;
     margin-bottom: 20px;
 }
@@ -93,7 +93,7 @@ footer {
 .footer-nav-column li a {
     color: #666;
     text-decoration: none;
-    font-size: 16px;
+    font-size: 21px;
     font-weight: 400;
     transition: color 0.3s;
     cursor: pointer;
@@ -185,8 +185,8 @@ footer {
     }
     
     .footer-info p {
-        font-size: 13px;
-        line-height: 20px;
+        font-size: 17px;
+        line-height: 26px;
         margin-bottom: 0;
         color: #000;
     }

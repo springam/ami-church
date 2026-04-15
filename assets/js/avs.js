@@ -35,6 +35,7 @@ let currentPage = 1;
 const itemsPerPage = 9;
 let totalPages = 1;
 let allVideos = [];
+const videosCache = {}; // { subCategory: [...] } — 탭별 캐시
 let currentVideoIndex = -1;
 
 // AVS/AVCK detail-categories (DB에서 로드)
@@ -51,20 +52,16 @@ async function loadDetailCategories() {
         console.log('📂 detailCategories 로드 시작...');
 
         const categoriesRef = collection(db, 'detailCategories');
-        const querySnapshot = await getDocs(categoriesRef);
+        const querySnapshot = await getDocs(query(categoriesRef, where('isActive', '==', true)));
 
-        // 초기화
         DETAIL_CATEGORIES.avs = [];
         DETAIL_CATEGORIES.avck = [];
 
         querySnapshot.forEach((doc) => {
             const data = doc.data();
-            if (!data.isActive) return; // 비활성 카테고리 제외
-
             const subCategory = data.subCategory;
             const categoryName = data.categoryName;
 
-            // AVS 또는 AVCK 카테고리만 처리
             if (subCategory === 'avs') {
                 DETAIL_CATEGORIES.avs.push({
                     name: categoryName,
@@ -186,58 +183,57 @@ async function fetchVideos(subCategory, detailCategory = null) {
     try {
         console.log('=== 데이터 가져오기 시작 ===');
 
-        const videosRef = collection(db, 'video');
+        // 캐시가 없으면 DB에서 조회
+        if (!videosCache[subCategory]) {
+            const videosRef = collection(db, 'video');
+            const q = query(
+                videosRef,
+                where('category', '==', CATEGORY),
+                where('subCategory', '==', subCategory),
+                where('status', '==', 'active')
+            );
+            const querySnapshot = await getDocs(q);
+            const videos = [];
 
-        // category만 필터링
-        let q = query(
-            videosRef,
-            where('category', '==', CATEGORY)
-        );
-
-        const querySnapshot = await getDocs(q);
-        const videos = [];
-
-        querySnapshot.forEach((doc) => {
-            const data = doc.data();
-
-            // 클라이언트 측 필터링
-            if (data.subCategory !== subCategory) return;
-            if (data.status !== 'active') return;
-            if (detailCategory && data.detailCategory !== detailCategory) return;
-
-            videos.push({
-                id: doc.id,
-                title: data.title || '제목 없음',
-                date: formatDate(data.date, data.datePrecision),
-                dateObj: data.date,
-                datePrecision: data.datePrecision,
-                category: data.category,
-                subCategory: data.subCategory || '',
-                detailCategory: data.detailCategory || '',
-                description: data.description || '',
-                thumbnail: data.thumbnail || 'assets/images/thumbnails/default-thumbnail.jpg',
-                videoUrl: data.videoUrl || '',
-                type: data.type || 'video',
-                orderNumber: data.orderNumber || 999999
+            querySnapshot.forEach((doc) => {
+                const data = doc.data();
+                videos.push({
+                    id: doc.id,
+                    title: data.title || '제목 없음',
+                    date: formatDate(data.date, data.datePrecision),
+                    dateObj: data.date,
+                    datePrecision: data.datePrecision,
+                    category: data.category,
+                    subCategory: data.subCategory || '',
+                    detailCategory: data.detailCategory || '',
+                    description: data.description || '',
+                    thumbnail: data.thumbnail || 'assets/images/thumbnails/default-thumbnail.jpg',
+                    videoUrl: data.videoUrl || '',
+                    type: data.type || 'video',
+                    orderNumber: data.orderNumber || 999999
+                });
             });
-        });
 
-        // orderNumber 기준 정렬, 없으면 날짜 역순
-        videos.sort((a, b) => {
-            if (a.orderNumber !== b.orderNumber) {
-                return a.orderNumber - b.orderNumber;
-            }
+            videos.sort((a, b) => {
+                if (a.orderNumber !== b.orderNumber) {
+                    return a.orderNumber - b.orderNumber;
+                }
+                const dateA = a.dateObj?.toDate ? a.dateObj.toDate() : new Date(0);
+                const dateB = b.dateObj?.toDate ? b.dateObj.toDate() : new Date(0);
+                return dateB - dateA;
+            });
 
-            // 날짜 비교 (Timestamp)
-            const dateA = a.dateObj?.toDate ? a.dateObj.toDate() : new Date(0);
-            const dateB = b.dateObj?.toDate ? b.dateObj.toDate() : new Date(0);
-            return dateB - dateA;
-        });
+            videosCache[subCategory] = videos;
+        }
 
-        console.log('최종 변환된 비디오 개수:', videos.length);
+        // 캐시에서 detailCategory 필터링
+        const cached = videosCache[subCategory];
+        const result = detailCategory ? cached.filter(v => v.detailCategory === detailCategory) : cached;
+
+        console.log('최종 변환된 비디오 개수:', result.length);
         console.log('=== 데이터 가져오기 완료 ===\n');
 
-        return videos;
+        return result;
 
     } catch (error) {
         console.error('❌ 오류 발생:', error);
@@ -551,9 +547,6 @@ async function changeSubCategory(subCategory) {
         pagination.innerHTML = '';
     }
 
-    // ⭐ 카테고리 다시 로드 (최신 상태 반영)
-    await loadDetailCategories();
-
     // 데이터 로드
     allVideos = await fetchVideos(subCategory);
     renderVideos(allVideos, currentPage);
@@ -612,6 +605,8 @@ export async function initAVS() {
     currentDetailCategory = null;
     currentPage = 1;
     allVideos = [];
+    delete videosCache.avs;
+    delete videosCache.avck;
     currentVideoIndex = -1;
     console.log('✅ 전역 변수 초기화 완료');
 

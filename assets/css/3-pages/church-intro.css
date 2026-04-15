@@ -3,7 +3,7 @@
    ========================================== */
 
 .content-area h1 {
-    font-size: 48px;
+    font-size: 62px;
     font-weight: 700;
     color: #000;
     margin-bottom: 40px;
@@ -19,10 +19,10 @@
 }
 
 .intro-content .history-title h2 {
-    font-size: 28px;
+    font-size: 36px;
     font-style: normal;
     font-weight: 700;
-    line-height: 40px;
+    line-height: 52px;
     color: #000;
 }
 
@@ -30,10 +30,10 @@
    교회 소개 - 타임라인
    ========================================== */
 .timeline-main {
-    font-size: 18px;
+    font-size: 23px;
     font-style: normal;
     font-weight: 400;
-    line-height: 28px;
+    line-height: 36px;
     color: #000;
 }
 
@@ -53,19 +53,19 @@
 }
 
 .timeline-label {
-    font-size: 18px;
+    font-size: 23px;
     font-style: normal;
     font-weight: 400;
-    line-height: 28px;
+    line-height: 36px;
     color: #000;
     flex-shrink: 0;
 }
 
 .timeline-info {
-    font-size: 18px;
+    font-size: 23px;
     font-style: normal;
     font-weight: 400;
-    line-height: 28px;
+    line-height: 36px;
     color: #000;
     flex: 1;
 }
@@ -77,19 +77,21 @@
 
 .timeline-item {
     display: grid;
-    grid-template-columns: 80px 40px 1fr;
-    gap: 20px;
+    grid-template-columns: 90px 40px 1fr;
+    gap: 15px;
     margin-bottom: 40px;
     position: relative;
 }
 
 .timeline-year {
-    font-size: 28px;
+    font-size: 36px;
     font-style: normal;
     font-weight: 500;
     color: #000;
     text-align: right;
     padding-right: 10px;
+    align-self: start;
+    margin-top: -10px;
 }
 
 .timeline-line {
@@ -132,20 +134,20 @@
 }
 
 .timeline-date {
-    font-size: 18px;
+    font-size: 23px;
     font-style: normal;
     font-weight: 700;
-    line-height: 28px;
+    line-height: 36px;
     color: #999;
     width: 60px;
     margin-right: 12px;
 }
 
 .timeline-text {
-    font-size: 18px;
+    font-size: 23px;
     font-style: normal;
     font-weight: 400;
-    line-height: 28px;
+    line-height: 36px;
     color: #000;
     display: flex;
     flex-direction: column;
@@ -161,7 +163,7 @@
 }
 
 .people-top-title h2 {
-    font-size: 28px !important;
+    font-size: 36px !important;
     font-style: normal;
     font-weight: 700 !important;
 }
@@ -179,10 +181,10 @@
 }
 
 .intro-people-section .ministry-category h3 {
-    font-size: 28px;
+    font-size: 36px;
     font-style: normal;
     font-weight: 400;
-    line-height: 40px;
+    line-height: 52px;
     color: #fff;
 }
 
@@ -192,7 +194,7 @@
 
 .intro-people-section .ministry-row {
     display: grid;
-    grid-template-columns: 80px 1fr;
+    grid-template-columns: 95px 1fr;
     align-items: flex-start;
     gap: 16px;
     padding: 0;
@@ -205,7 +207,7 @@
 }
 
 .intro-people-section .ministry-label {
-    font-size: 16px;
+    font-size: 21px;
     font-weight: 400;
     color: #333;
     padding: 4px 8px;
@@ -220,13 +222,50 @@
 }
 
 .intro-people-section .ministry-names {
-    font-size: 16px;
+    font-size: 21px;
     color: #666;
     line-height: 1.8;
 }
 
 .intro-people-section .ministry-names::before {
     content: '';
+}
+
+/* ==========================================
+   더보기 버튼
+   ========================================== */
+.timeline-more-wrapper {
+    display: flex;
+    justify-content: center;
+    margin: 8px 0 20px;
+}
+
+.timeline-more-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 12px 40px;
+    background: #fff;
+    border: 1px solid #DFDFDF;
+    border-radius: 8px;
+    color: #182B8C;
+    font-size: 18px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: background 0.2s;
+}
+
+.timeline-more-btn:hover {
+    background: #F8F9FA;
+}
+
+.timeline-more-btn svg {
+    transition: transform 0.3s;
+    flex-shrink: 0;
+}
+
+.timeline-more-btn.open svg {
+    transform: rotate(180deg);
 }
 
 /* ==========================================
@@ -239,10 +278,10 @@
     }
 
     .intro-content .history-title h2 {
-        font-size: 24px;
+        font-size: 31px;
         font-style: normal;
         font-weight: 700;
-        line-height: 36px;
+        line-height: 47px;
         color: #000;
         text-align: left;
     }
@@ -256,10 +295,11 @@
     }
 
     .timeline-year {
-        font-size: 20px;
-        line-height: 32px; 
+        font-size: 26px;
+        line-height: 42px;
         color: #000;
         text-align: left;
+        align-self: start;
     }
 
     .timeline-content {
@@ -269,8 +309,8 @@
     }
 
     .timeline-date {
-        font-size: 14px;
-        line-height: 28px;
+        font-size: 18px;
+        line-height: 36px;
         color: #999;
         width: 60px;
         margin-right: 0;
@@ -292,8 +332,8 @@
     }
 
     .timeline-main {
-        font-size: 14px;
-        line-height: 28px;
+        font-size: 18px;
+        line-height: 36px;
         color: #000;
     }
 
@@ -315,8 +355,8 @@
     }
 
     .timeline-info {
-        font-size: 14px;
-        line-height: 28px;
+        font-size: 18px;
+        line-height: 36px;
         color: #000;
         flex: 1;
         text-indent: 50px;
@@ -337,7 +377,7 @@
     }
     
     .people-top-title h2 {
-        font-size: 24px !important;
+        font-size: 31px !important;
         text-align: left;
         padding-left: 0;
     }
@@ -354,10 +394,10 @@
     }
 
     .intro-people-section .ministry-category h3 {
-        font-size: 20px;
+        font-size: 26px;
         font-style: normal;
         font-weight: 400;
-        line-height: 32px;
+        line-height: 42px;
         color: #fff;
     }
 
@@ -373,15 +413,15 @@
     }
 
     .intro-people-section .ministry-label {
-        font-size: 14px;
+        font-size: 18px;
         padding: 4px 8px;
-        line-height: 24px;
+        line-height: 31px;
     }
 
     .intro-people-section .ministry-names {
-        font-size: 14px;
+        font-size: 18px;
         color: #666;
-        line-height: 24px;
+        line-height: 31px;
         padding-left: 0;
     }
 
@@ -402,7 +442,7 @@
     }
     
     .history-title h2 {
-        font-size: 24px;
+        font-size: 31px;
         margin-bottom: 20px;
     }
     
