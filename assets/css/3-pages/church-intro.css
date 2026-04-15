@@ -181,7 +181,7 @@
 }
 
 .intro-people-section .ministry-category h3 {
-    font-size: 36px;
+    font-size: 23px;
     font-style: normal;
     font-weight: 400;
     line-height: 52px;
@@ -359,13 +359,10 @@
         line-height: 36px;
         color: #000;
         flex: 1;
-        text-indent: 50px;
     }
 
-    .timeline-info::before {
-        content: "(임직자)";
-        position: absolute;
-        text-indent:-50px;
+    .timeline-label + .timeline-info::before {
+        content: "(임직자) ";
         color: #000;
     }
 
