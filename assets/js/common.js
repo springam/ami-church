@@ -120,6 +120,22 @@
     }
 })();
 
+// 화면 크기가 PC로 커질 때 모바일 메뉴 자동 닫기
+window.addEventListener('resize', () => {
+    if (window.innerWidth > 1030) {
+        const overlay = document.querySelector('.mobile-menu-overlay');
+        const header = document.querySelector('header');
+        const headerLogo = document.querySelector('header .logo img');
+
+        if (overlay && overlay.classList.contains('active')) {
+            overlay.classList.remove('active');
+            header.classList.remove('menu-open');
+            document.body.style.overflow = '';
+            if (headerLogo) headerLogo.src = 'assets/images/logo/logo-white.png';
+        }
+    }
+});
+
 // 전역 함수들 (HTML onclick에서 사용)
 function toggleMobileMenu() {
     const overlay = document.querySelector('.mobile-menu-overlay');

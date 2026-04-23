@@ -3,22 +3,22 @@
    ========================================== */
 
 /* 1. Base - 기본 스타일 */
-@import url('1-base/reset.css');
+@import url('1-base/reset.css?v=202604231000');
 
 /* 2. Layout - 레이아웃 컴포넌트 */
-@import url('2-layout/header.css');
-@import url('2-layout/footer.css');
-@import url('2-layout/navigation.css');
+@import url('2-layout/header.css?v=202604231000');
+@import url('2-layout/footer.css?v=202604231000');
+@import url('2-layout/navigation.css?v=202604231000');
 
 /* 3. Pages - 페이지별 스타일 */
-@import url('3-pages/home.css');
-@import url('3-pages/church-common.css');
-@import url('3-pages/church-greeting.css');
-@import url('3-pages/church-intro.css');
-@import url('3-pages/church-schedule.css');
-@import url('3-pages/church-location.css');
-@import url('3-pages/mission-center.css');
-@import url('3-pages/center-people.css');
-@import url('3-pages/sermon-video.css');
-@import url('3-pages/ami-books.css');
-@import url('3-pages/admin.css');
+@import url('3-pages/home.css?v=202604231000');
+@import url('3-pages/church-common.css?v=202604231000');
+@import url('3-pages/church-greeting.css?v=202604231000');
+@import url('3-pages/church-intro.css?v=202604231000');
+@import url('3-pages/church-schedule.css?v=202604231000');
+@import url('3-pages/church-location.css?v=202604231000');
+@import url('3-pages/mission-center.css?v=202604231000');
+@import url('3-pages/center-people.css?v=202604231000');
+@import url('3-pages/sermon-video.css?v=202604231100');
+@import url('3-pages/ami-books.css?v=202604231000');
+@import url('3-pages/admin.css?v=202604231000');

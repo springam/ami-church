@@ -36,7 +36,7 @@
 }
 
 .home .hero h1 {
-    font-size: 94px;
+    font-size: 76px;
     font-weight: 700;
     line-height: 120px;
     position: absolute;
@@ -135,7 +135,7 @@
    반응형
    ========================================== */
 
-@media (max-width: 768px) {
+@media (max-width: 1200px) { /* 768px 에서 변경 */
     .home .hero {
         height: 100vh;
         min-height: 729px;

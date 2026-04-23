@@ -50,7 +50,7 @@
 
 .intro-signature-title {
     display: flex;
-    font-size: 26px;
+    font-size: 20px;
     font-style: normal;
     font-weight: 700;
     line-height: 42px;
@@ -61,7 +61,7 @@
 }
 
 .intro-signature {
-    font-size: 42px;
+    font-size: 35px;
     font-style: normal;
     font-weight: 700;
     line-height: 1;

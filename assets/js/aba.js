@@ -313,11 +313,15 @@ function renderPagination() {
         <button class="pagination-btn" onclick="changePage(${currentPage - 1})" ${currentPage === 1 ? 'disabled' : ''}>‹</button>
     `;
 
-    let startPage = Math.max(1, currentPage - 2);
-    let endPage = Math.min(totalPages, startPage + 4);
+    const isMobile = window.innerWidth <= 768;
+    const visibleCount = isMobile ? 2 : 4;
+    const halfVisible = isMobile ? 1 : 2;
 
-    if (endPage - startPage < 4) {
-        startPage = Math.max(1, endPage - 4);
+    let startPage = Math.max(1, currentPage - halfVisible);
+    let endPage = Math.min(totalPages, startPage + visibleCount);
+
+    if (endPage - startPage < visibleCount) {
+        startPage = Math.max(1, endPage - visibleCount);
     }
 
     for (let i = startPage; i <= endPage; i++) {
